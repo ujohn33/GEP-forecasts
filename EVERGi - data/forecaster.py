@@ -2,8 +2,6 @@ import pandas as pd
 import numpy as np
 import datetime as dt
 import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use('pdf')  # Or any other X11 back-end
 import seaborn as sns
 import pickle
 from workalendar.europe import Belgium
@@ -29,7 +27,6 @@ class DeepModelTS():
     """
     def __init__(
         self, 
-        #data: pd.DataFrame,
         data_path: str,
         Y_var: str,
         model_save: str,
@@ -56,8 +53,7 @@ class DeepModelTS():
     ):
         
         self.data_path = data_path
-        self.data = pd.read_csv(data_path, index_col=0)
-        #self.data = data
+        #self.data = pd.read_csv(data_path, index_col=0)
         self.import_file_path = import_file_path
         #self.data_user = pd.read_csv(import_file_path, index_col=0)
         #self.data_user.index = pd.to_datetime(self.data_user.index)
@@ -82,8 +78,7 @@ class DeepModelTS():
         self.train_test_split = train_test_split
         self.n_test = n_test
 
-    @staticmethod
-    def preprocess(dataframe):
+    def preprocess(self, dataframe):
         dataframe.index = pd.to_datetime(dataframe.index)
         cal = Belgium()
         years = list(range(2014, 2025))
@@ -91,6 +86,7 @@ class DeepModelTS():
         for year in years:
             holidays.extend(cal.holidays(year))
         dataframe = dataframe.sort_index()
+        dataframe[self.Y_var] = dataframe.iloc[:,0]
         dataframe['working day'] = dataframe.index.map(cal.is_working_day)
         dataframe['hour of day'] = dataframe.index.hour
         dataframe['day of week'] = dataframe.index.dayofweek
@@ -188,7 +184,6 @@ class DeepModelTS():
                 #ab = list(itertools.chain([ts[i+lag - lag]], [ts[i+lag - lag2]], [holiday[i + lag]], [hour_cos[i + lag]], [hour_sin[i + lag]], [week_cos[i + lag]], [week_sin[i + lag]], [minute_cos[i + lag]], [minute_sin[i + lag]], [month_cos[i + lag]], [month_sin[i + lag]]))
                 ab = list(itertools.chain([ts[i+lag2 - lag]], [ts[i+lag2 - lag2]], [holiday[i + lag2]], [hour_cos[i + lag2]], [hour_sin[i + lag2]], [week_cos[i + lag2]], [week_sin[i + lag2]], [minute_cos[i + lag2]], [minute_sin[i + lag2]], [month_cos[i + lag2]], [month_sin[i + lag2]]))
                 X.append(ab)
-                #X.append(ts[i:(i + lag - 96)] + [holiday[i + lag]] + [hour_cos[i + lag]] + [hour_sin[i + lag]] + )
         
         X, Y = np.array(X), np.array(Y)
 
@@ -277,6 +272,7 @@ class DeepModelTS():
         print("Loaded model from disk")
     
     def LSTModel(self):
+        self.data = pd.read_csv(self.data_path, index_col=0)
         """
         A method to fit the LSTM model 
         """
@@ -421,7 +417,7 @@ class DeepModelTS():
         plt.gca().set(ylabel='Consumption [kWh]', xlabel='timestamp')
         plt.yticks(fontsize=12, alpha=.7)
         plt.title("Consumption forecast in building 1 for given days ahead", fontsize=20)
-        plt.plot(self.data_user.index, self.data_user.loc[:,"Valeur"], color='b', label='user input data', alpha=0.5)
+        plt.plot(self.data_user.index, self.data_user.iloc[:,0], color='b', label='user input data', alpha=0.5)
         plt.plot(test.index, test.iloc[:,0], color='black', linestyle='--', linewidth=3, label='Forecaster model',alpha=0.7)
         plt.legend(prop={'size': 20})
         plt.show()
@@ -474,6 +470,8 @@ class DeepModelTS():
             print('\n')
             print('You decided to train a new model',args.model)
             print('\n')
+            self.data_path = args.imp_dir
+            self.n_test = int(args.steps_test)
             self.model = deep_learner.LSTModel()
             print('Number of timesteps to use in a test dataset: ',args.steps_test)
             print('\n')
@@ -491,14 +489,14 @@ if __name__ == "__main__":
     model_load = "model_B1_complete",
     import_file_path = './building1_input.csv',
     export_file_path = './predictions.csv',
-    # TRAINING SETTINGS
+    # ADVANCED TRAINING SETTINGS
     data_path = './Consumption_15min.csv',
     #data = holidata,
     model_save = "model_B1_complete",
     lag = 96,
     lag2 = 672,
     LSTM_layer_depth = 50,
-    epochs = 200,
+    epochs = 100,
     batch_size = 128,
     train_test_split = 0.15,
     n_test = 3360*2
