@@ -398,7 +398,7 @@ class DeepModelTS():
         predictions = []
         if hasattr('self', 'model') == False:
             self.load_model()
-        for i in tf.range(n_ahead//96):
+        for i in tf.range(n_ahead//96+1):
             y_hat = self.predict_n_ahead(data_temp, self.lag)
             #print(len(y_hat))
             data_temp = data_temp.append(pd.DataFrame(y_hat, columns=['Valeur'], index=pd.date_range(data_temp.index[-1], periods = self.lag+1, freq='15T')[1:]))
@@ -408,9 +408,10 @@ class DeepModelTS():
             #print(predictions)
             #print(data_temp.columns.values)
             predictions.extend(y_hat)
+        predictions = predictions[:n_ahead]
         dates = pd.date_range(self.data_user.index[-1], periods = n_ahead+1, freq='15T')[1:]
         #print(len(dates))
-        #print(len(predictions))
+        print(len(predictions))
         test = pd.DataFrame(predictions)
         test.index = dates
         test.index = pd.to_datetime(test.index)
@@ -455,7 +456,6 @@ class DeepModelTS():
         
         if args.forecast:
             print('The imported csv is: ',args.imp_dir)
-            print('\n')
             print('Number of timesteps ahead to forecast is: ',args.steps_ahead)
             print('\n')
             if args.model:
