@@ -465,6 +465,7 @@ class DeepModelTS():
             print('\n')
             print('You decided to train a new model',args.model)
             print('\n')
+            self.model_load = args.model
             self.data_path = args.imp_dir
             self.n_test = int(args.steps_test)
             self.model = deep_learner.LSTModel()
@@ -479,6 +480,7 @@ class DeepModelTS():
     
 if __name__ == "__main__":
     deep_learner = DeepModelTS(
+    # Here I initialize some settings, these are default ones if no user input
     # USER INPUT SETTINGS
     Y_var = 'Valeur',
     model_load = "model_B1_complete",
