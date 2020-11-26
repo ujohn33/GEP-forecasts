@@ -2,11 +2,8 @@ import pandas as pd
 import numpy as np
 import datetime as dt
 import matplotlib.pyplot as plt
-import seaborn as sns
-import pickle
 from workalendar.europe import Belgium
 import itertools
-import sys
 import argparse
 from argparse import RawTextHelpFormatter
 # Deep learning: 
@@ -16,9 +13,6 @@ from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import CSVLogger
 from tensorflow.keras.models import model_from_json
-import itertools
-from sklearn.preprocessing import MinMaxScaler
-np.set_printoptions(threshold=sys.maxsize)
 
 
 class DeepModelTS():
@@ -81,10 +75,10 @@ class DeepModelTS():
     def preprocess(self, dataframe):
         dataframe.index = pd.to_datetime(dataframe.index)
         cal = Belgium()
-        years = list(range(2014, 2025))
-        holidays = []
-        for year in years:
-            holidays.extend(cal.holidays(year))
+        #years = list(range(2014, 2025))
+        #holidays = []
+        #for year in years:
+        #    holidays.extend(cal.holidays(year))
         dataframe = dataframe.sort_index()
         dataframe[self.Y_var] = dataframe.iloc[:,0]
         dataframe['working day'] = dataframe.index.map(cal.is_working_day)
@@ -450,6 +444,7 @@ class DeepModelTS():
         args = parser.parse_args()
         #print(args)
         
+        # FORECAST
         if args.forecast:
             print('The imported csv is: ',args.imp_dir)
             print('Number of timesteps ahead to forecast is: ',args.steps_ahead)
