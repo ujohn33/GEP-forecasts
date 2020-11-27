@@ -6,8 +6,10 @@ from workalendar.europe import Belgium
 import itertools
 import argparse
 from argparse import RawTextHelpFormatter
-# Deep learning: 
+# Deep learning:
 import tensorflow as tf
+import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.callbacks import EarlyStopping
@@ -20,7 +22,7 @@ class DeepModelTS():
     A class to create a deep time series model
     """
     def __init__(
-        self, 
+        self,
         data_path: str,
         Y_var: str,
         model_save: str,
@@ -29,8 +31,8 @@ class DeepModelTS():
         export_file_path: str,
         lag: int,
         lag2: int,
-        LSTM_layer_depth: int, 
-        epochs=10, 
+        LSTM_layer_depth: int,
+        epochs=10,
         batch_size=256,
         train_test_split=0,
         n_test = 96,
@@ -45,7 +47,7 @@ class DeepModelTS():
         minutes_cos = 'minutes_cos',
 
     ):
-        
+
         self.data_path = data_path
         #self.data = pd.read_csv(data_path, index_col=0)
         self.import_file_path = import_file_path
@@ -54,7 +56,7 @@ class DeepModelTS():
         self.model_save = model_save
         self.model_load = model_load
         self.export_file_path = export_file_path
-        self.Y_var = Y_var 
+        self.Y_var = Y_var
         self.holi_var = holi_var
         self.hour_var_sin = hour_var_sin
         self.hour_var_cos = hour_var_cos
@@ -64,7 +66,7 @@ class DeepModelTS():
         self.month_cos = month_cos
         self.minutes_sin = minutes_sin
         self.minutes_cos = minutes_cos
-        self.lag = lag 
+        self.lag = lag
         self.lag2 = lag2
         self.LSTM_layer_depth = LSTM_layer_depth
         self.batch_size = batch_size
@@ -99,8 +101,8 @@ class DeepModelTS():
         dataframe = dataframe.drop(['hour of day', 'day of week', 'month', 'minutes'], axis=1)
         dataframe = dataframe.fillna(method='ffill')
         return dataframe
-    
-    @staticmethod    
+
+    @staticmethod
     def plot_train_history(model):
         '''
         Convergence plots to have an idea on how the training performs
@@ -115,11 +117,11 @@ class DeepModelTS():
         plt.ylabel('Losses')
         plt.title('Training and validation losses')
         plt.legend()
-        plt.show() 
-    
+        plt.show()
+
     @staticmethod
     def validation(forecasted, real, parameter):
-        ''' 
+        '''
         compute some important parameters to compare forecasting results
         '''
         value = 0
@@ -130,22 +132,22 @@ class DeepModelTS():
             for i in range(len(forecasted)):
                 if real[i] + forecasted[i] == 0:
                     value += 0
-                else: 
+                else:
                     value += ((abs(real[i] - forecasted[i])) / (real[i] + forecasted[i])) * 100
-            final_value = value / len(forecasted)  
+            final_value = value / len(forecasted)
 
         elif parameter == 'MAPE':
             for i in range(len(forecasted)):
                 if real[i] == 0:
                     value += 0
-                else: 
+                else:
                     value += (abs(real[i] - forecasted[i]))/real[i]
             final_value = value / len(forecasted) * 100
 
         elif parameter == 'RMSE':
             for i in range(len(forecasted)):
                 value += (real[i] - forecasted[i]) ** 2
-            final_value = (value / len(forecasted)) ** (1 / 2) 
+            final_value = (value / len(forecasted)) ** (1 / 2)
 
         elif parameter == 'R':
             for i in range(len(forecasted)):
@@ -159,12 +161,12 @@ class DeepModelTS():
                 final_value = (value / ((value_1 ** (1 / 2)) * (value_2 ** (1 / 2))))*100
 
         return final_value
-        
+
     @staticmethod
     def create_X_Y(ts: list, holiday: list, hour_cos: list, hour_sin: list, week_cos: list, week_sin: list, month_cos: list, month_sin: list, minute_cos: list, minute_sin: list, lag: int, lag2: int) -> tuple:
         """
-        A method to create X and Y matrix from a time series list for the training of 
-        deep learning models 
+        A method to create X and Y matrix from a time series list for the training of
+        deep learning models
         """
         X, Y = [], []
 
@@ -178,13 +180,13 @@ class DeepModelTS():
                 #ab = list(itertools.chain([ts[i+lag - lag]], [ts[i+lag - lag2]], [holiday[i + lag]], [hour_cos[i + lag]], [hour_sin[i + lag]], [week_cos[i + lag]], [week_sin[i + lag]], [minute_cos[i + lag]], [minute_sin[i + lag]], [month_cos[i + lag]], [month_sin[i + lag]]))
                 ab = list(itertools.chain([ts[i+lag2 - lag]], [ts[i+lag2 - lag2]], [holiday[i + lag2]], [hour_cos[i + lag2]], [hour_sin[i + lag2]], [week_cos[i + lag2]], [week_sin[i + lag2]], [minute_cos[i + lag2]], [minute_sin[i + lag2]], [month_cos[i + lag2]], [month_sin[i + lag2]]))
                 X.append(ab)
-        
+
         X, Y = np.array(X), np.array(Y)
 
-        # Reshaping the X array to an LSTM input shape 
+        # Reshaping the X array to an LSTM input shape
         X = np.reshape(X, (X.shape[0], 1, X.shape[1]))
 
-        return X, Y         
+        return X, Y
 
     def create_data_for_NN(
         self,
@@ -194,7 +196,7 @@ class DeepModelTS():
         """
         self.data = self.preprocess(self.data)
         #print(self.data.columns.values)
-        
+
         # Extracting the main variable we want to model/forecast
         y = self.data[self.Y_var].tolist()
         y_holiday = self.data[self.holi_var].tolist()
@@ -206,7 +208,7 @@ class DeepModelTS():
         y_month_sin = self.data[self.month_sin].tolist()
         y_minute_cos = self.data[self.minutes_cos].tolist()
         y_minute_sin = self.data[self.minutes_sin].tolist()
-        
+
 
 
 
@@ -223,10 +225,10 @@ class DeepModelTS():
             y_minute_cos = y_minute_cos[-use_last_n:]
             y_minute_sin =  y_minute_sin[-use_last_n:]
 
-        # The X matrix will hold the lags of Y 
+        # The X matrix will hold the lags of Y
         X, Y = self.create_X_Y(y, y_holiday, y_hour_cos, y_hour_sin, y_weekday_cos, y_weekday_sin, y_month_cos, y_month_sin, y_minute_cos, y_minute_sin, self.lag, self.lag2)
 
-        # Creating training and test sets 
+        # Creating training and test sets
         X_train = X
         X_val = []
         X_test = []
@@ -239,7 +241,7 @@ class DeepModelTS():
                 index = round((len(X) - self.n_test) * self.train_test_split)
                 X_train = X[:(len(X) - index)]
                 X_val = X[(len(X) - index):- self.n_test]
-                X_test = X[-self.n_test:]     
+                X_test = X[-self.n_test:]
 
                 Y_train = Y[:(len(X) - index)]
                 Y_val = Y[(len(X) - index):- self.n_test]
@@ -247,14 +249,14 @@ class DeepModelTS():
         #print(X_train.shape)
         #print(Y_train.shape)
         return X_train, X_val, X_test, Y_train, Y_val, Y_test
-   
+
     def save_model(self, model):
         model_json = model.to_json()
         with open(self.model_save+'.json', "w") as json_file:
             json_file.write(model_json)
         # serialize weights to HDF5
         model.save_weights(self.model_save+'.h5')
-          
+
     def load_model(self):
         # load json and create model
         json_file = open(self.model_load+".json", 'r')
@@ -264,27 +266,27 @@ class DeepModelTS():
         # load weights into new model
         self.model.load_weights(self.model_load+".h5")
         print("Loaded model from disk")
-    
+
     def LSTModel(self):
         self.data = pd.read_csv(self.data_path, index_col=0)
         """
-        A method to fit the LSTM model 
+        A method to fit the LSTM model
         """
-        # Getting the data 
+        # Getting the data
         X_train, X_val, X_test, Y_train, Y_val, Y_test = self.create_data_for_NN()
         # Defining the model
         model = Sequential()
         model.add(LSTM(self.LSTM_layer_depth, activation='relu', input_shape=(X_train.shape[1],X_train.shape[2])))
         model.add(Dense(1))
         model.compile(optimizer='adam', loss='msle')
-        
+
         # Setting up early stopping
         earlyStop=EarlyStopping(monitor="val_loss",verbose=1,mode='min',patience=7)
-        
+
         # Saving training history
         csv_logger = CSVLogger('training_B2_25ep.log', separator=',', append=False)
-        
-        # Defining the model parameter dict 
+
+        # Defining the model parameter dict
         keras_dict = {
             'x': X_train,
             'y': Y_train,
@@ -301,19 +303,19 @@ class DeepModelTS():
                 'validation_data': (X_val, Y_val)
             })
 
-        # Fitting the model 
+        # Fitting the model
         model.fit(
             **keras_dict
         )
 
-        # Saving the model to the class 
+        # Saving the model to the class
         self.model = model
         # Plotting train history
         self.plot_train_history(model)
         # Saving the model in json and h5
         self.save_model(self.model)
-        
-        return model  
+
+        return model
 
     def predict(self) -> list:
         """
@@ -322,15 +324,15 @@ class DeepModelTS():
         yhat = []
 
         if(self.train_test_split > 0):
-        
-            # Getting the last n time series 
-            _, _, X_test, _, _, _ = self.create_data_for_NN()        
 
-            # Making the prediction list 
+            # Getting the last n time series
+            _, _, X_test, _, _, _ = self.create_data_for_NN()
+
+            # Making the prediction list
             yhat = [y[0] for y in self.model.predict(X_test)]
 
         return yhat
-    
+
     def plot_test(self):
         yhat = self.predict()# Constructing the forecast dataframe
         fc = self.data.tail(len(yhat)).copy()
@@ -341,17 +343,17 @@ class DeepModelTS():
         print('MAPE: %f %%' % self.validation(predictions,expected, 'MAPE'))
         # Ploting the forecasts
         plt.figure(figsize=(12, 8))
-        for dtype in ['Valeur', 'forecast']:  
+        for dtype in ['Valeur', 'forecast']:
             plt.plot(fc.index, fc[dtype],label=dtype,alpha=0.7)
         plt.legend()
         plt.grid()
 
         plt.gca().set(ylabel='Consumption [kWh]', xlabel='timestamp')
         plt.yticks(fontsize=12, alpha=.7)
-        plt.title("Consumption in building 1 for test data", fontsize=20)
+        plt.title("Consumption for test data", fontsize=20)
 
         plt.show()
-    
+
     def predict_n_ahead(self, data_input, n_ahead: int):
         dates = pd.date_range(data_input.index[-1], periods = n_ahead+1, freq='15T')[1:]
         #data_input.index = pd.to_datetime(data_input.index)
@@ -377,7 +379,7 @@ class DeepModelTS():
         #print(self.model)
         yhat = [y[0] for y in self.model.predict(X)]
         return yhat[-n_ahead:]
-    
+
     def evaluate_n_ahead(self, n_ahead: int):
         self.data_user = pd.read_csv(self.import_file_path, index_col=0)
         self.data_user.index = pd.to_datetime(self.data_user.index)
@@ -406,17 +408,17 @@ class DeepModelTS():
         test.index = dates
         test.index = pd.to_datetime(test.index)
         test.to_csv(self.export_file_path, index=True)
-        plt.figure(figsize=(25, 10))
+        plt.figure(figsize=(10, 4))
         plt.grid()
         plt.gca().set(ylabel='Consumption [kWh]', xlabel='timestamp')
         plt.yticks(fontsize=12, alpha=.7)
         plt.title("Consumption forecast in building 1 for given days ahead", fontsize=20)
         plt.plot(self.data_user.index, self.data_user.iloc[:,0], color='b', label='user input data', alpha=0.5)
         plt.plot(test.index, test.iloc[:,0], color='black', linestyle='--', linewidth=3, label='Forecaster model',alpha=0.7)
-        plt.legend(prop={'size': 20})
+        plt.legend(prop={'size': 15})
         plt.show()
         #return test
-    
+
     def configuration(self):
         epilogue_usage = """
         Use cases examples:
@@ -427,7 +429,7 @@ class DeepModelTS():
         python forecaster.py -F -i './building1_input.csv' -n 196 -e './predictions.csv'\n
         Train the new model "model_B!_new" on the imported data './Consumption_15min.csv' with n steps for test:
         python forecaster.py -T -i './Consumption_15min.csv' -M "model_B!_new" -t 10080\n
-     
+
         """
         parser = argparse.ArgumentParser(description='Make energy consumption forecasts and . Read the example to understand how it works', epilog= epilogue_usage,formatter_class=RawTextHelpFormatter)
 
@@ -443,7 +445,7 @@ class DeepModelTS():
 
         args = parser.parse_args()
         #print(args)
-        
+
         # FORECAST
         if args.forecast:
             print('The imported csv is: ',args.imp_dir)
@@ -458,7 +460,7 @@ class DeepModelTS():
             self.evaluate_n_ahead(int(args.steps_ahead))
             print('The forecasted timeseries is exported to',args.exp_dir)
             #return test
-            
+
         # TRAIN
         if args.train:
             print('The imported csv is: ',args.imp_dir)
@@ -477,7 +479,7 @@ class DeepModelTS():
         print('\n')
         print('The end')
         print('\n')
-    
+
 if __name__ == "__main__":
     deep_learner = DeepModelTS(
     # Here I initialize some settings, these are default ones if no user input
@@ -499,4 +501,3 @@ if __name__ == "__main__":
     n_test = 3360*2
     )
     deep_learner.configuration()
-    
