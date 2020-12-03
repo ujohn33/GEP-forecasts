@@ -415,7 +415,7 @@ class DeepModelTS():
         plt.title("Consumption forecast in building 1 for given days ahead", fontsize=20)
         plt.plot(self.data_user.index, self.data_user.iloc[:,0], color='b', label='user input data', alpha=0.5)
         plt.plot(test.index, test.iloc[:,0], color='black', linestyle='--', linewidth=3, label='Forecaster model',alpha=0.7)
-        plt.legend(prop={'size': 15})
+        plt.legend(prop={'size': 12})
         plt.show()
         #return test
 
