@@ -454,7 +454,7 @@ class DeepModelTS():
             if args.model:
                 print('You decided to use a trained model:',args.model)
                 print('\n')
-                self.model_load = args.model
+                self.model_load = DATA_DIR+args.model
             self.import_file_path = args.imp_dir
             self.export_file_path = args.exp_dir
             self.evaluate_n_ahead(int(args.steps_ahead))
@@ -467,7 +467,7 @@ class DeepModelTS():
             print('\n')
             print('You decided to train a new model',args.model)
             print('\n')
-            self.model_load = args.model
+            self.model_load = DATA_DIR+args.model
             self.data_path = args.imp_dir
             self.n_test = int(args.steps_test)
             self.model = deep_learner.LSTModel()
@@ -481,17 +481,18 @@ class DeepModelTS():
         print('\n')
 
 if __name__ == "__main__":
+    DATA_DIR = os.path.dirname(os.path.abspath(__file__)) + "/../data/"
     deep_learner = DeepModelTS(
     # Here I initialize some settings, these are default ones if no user input
     # USER INPUT SETTINGS
     Y_var = 'Valeur',
-    model_load = "model_B1_complete",
+    model_load = DATA_DIR+"model_B1_complete",
     import_file_path = './building1_input.csv',
     export_file_path = './predictions.csv',
     # ADVANCED TRAINING SETTINGS
     data_path = './Consumption_15min.csv',
     #data = holidata,
-    model_save = "model_B1_complete",
+    model_save = DATA_DIR+"model_B1_complete",
     lag = 96,
     lag2 = 672,
     LSTM_layer_depth = 50,
