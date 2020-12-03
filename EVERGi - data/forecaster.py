@@ -423,11 +423,13 @@ class DeepModelTS():
         epilogue_usage = """
         Use cases examples:
         Import the data './building1_input.csv' and use the preloaded model "model_B!_complete" to predict 672 steps
-        ahead and save to './predictions.csv':
+        ahead and save to './predictions.csv'. The model is loaded from '/../data/model/':
         python forecaster.py -F -i ./building1_input.csv -n 196 -e ./predictions.csv -M model_B1_complete\n
-        Import the data './building1_input.csv' and predict 672 steps ahead and save to './predictions.csv':
+        Import the data './building1_input.csv' and predict 672 steps ahead and save to './predictions.csv'. 
+        The default model is loaded:
         python forecaster.py -F -i ./building1_input.csv -n 196 -e ./predictions.csv\n
-        Train the new model "model_B!_new" on the imported data './Consumption_15min.csv' with n steps for test:
+        Train the new model "model_B!_new" on the imported data './Consumption_15min.csv' with n steps for test.
+        The model is saved to '/../data/model/':
         python forecaster.py -T -i ./Consumption_15min.csv -M model_B!_new -t 10080\n
 
         """
