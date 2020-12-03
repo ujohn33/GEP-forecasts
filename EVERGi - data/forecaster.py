@@ -481,7 +481,7 @@ class DeepModelTS():
         print('\n')
 
 if __name__ == "__main__":
-    DATA_DIR = os.path.dirname(os.path.abspath(__file__)) + "/../data/model"
+    DATA_DIR = os.path.dirname(os.path.abspath(__file__)) + "/../data/model/"
     deep_learner = DeepModelTS(
     # Here I initialize some settings, these are default ones if no user input
     # USER INPUT SETTINGS
