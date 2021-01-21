@@ -29,6 +29,7 @@ class DeepModelTS():
         model_load: str,
         import_file_path: str,
         export_file_path: str,
+        granularity: str,
         lag: int,
         lag2: int,
         LSTM_layer_depth: int,
@@ -45,6 +46,7 @@ class DeepModelTS():
         month_cos = 'month_cos',
         minutes_sin = 'minutes_sin',
         minutes_cos = 'minutes_cos',
+       
 
     ):
 
@@ -268,7 +270,6 @@ class DeepModelTS():
         print("Loaded model from disk")
 
     def LSTModel(self):
-        self.data = pd.read_csv(self.data_path, index_col=0)
         """
         A method to fit the LSTM model
         """
@@ -390,10 +391,10 @@ class DeepModelTS():
         predictions = []
         if hasattr('self', 'model') == False:
             self.load_model()
-        for i in tf.range(n_ahead//96+1):
+        for i in tf.range(n_ahead//self.lag+1):
             y_hat = self.predict_n_ahead(data_temp, self.lag)
             #print(len(y_hat))
-            data_temp = data_temp.append(pd.DataFrame(y_hat, columns=['Valeur'], index=pd.date_range(data_temp.index[-1], periods = self.lag+1, freq='15T')[1:]))
+            data_temp = data_temp.append(pd.DataFrame(y_hat, columns=['Valeur'], index=pd.date_range(data_temp.index[-1], periods = self.lag+1, freq=self.granularity)[1:]))
             #data_temp.resample('15T').interpolate('cubic')
             data_temp.drop(data_temp.head(self.lag).index, inplace=True)
             #print(len(data_temp))
@@ -401,7 +402,7 @@ class DeepModelTS():
             #print(data_temp.columns.values)
             predictions.extend(y_hat)
         predictions = predictions[:n_ahead]
-        dates = pd.date_range(self.data_user.index[-1], periods = n_ahead+1, freq='15T')[1:]
+        dates = pd.date_range(self.data_user.index[-1], periods = n_ahead+1, freq=self.granularity)[1:]
         #print(len(dates))
         print(len(predictions))
         test = pd.DataFrame(predictions)
@@ -425,12 +426,10 @@ class DeepModelTS():
         Import the data './building1_input.csv' and use the preloaded model "model_B!_complete" to predict 672 steps
         ahead and save to './predictions.csv'. The model is loaded from '/../data/model/':
         python forecaster.py -F -i ./building1_input.csv -n 196 -e ./predictions.csv -M model_B1_complete\n
-        Import the data './building1_input.csv' and predict 672 steps ahead and save to './predictions.csv'. 
-        The default model is loaded:
+        Import the data './building1_input.csv' and predict 672 steps ahead and save to './predictions.csv'. The default model is loaded:
         python forecaster.py -F -i ./building1_input.csv -n 196 -e ./predictions.csv\n
-        Train the new model "model_B!_new" on the imported data './Consumption_15min.csv' with n steps for test.
-        The model is saved to '/../data/model/':
-        python forecaster.py -T -i ./Consumption_15min.csv -M model_B!_new -t 10080\n
+        Train the new model "model_B1_new" on the imported data './Consumption_15min.csv' with n steps for test. The model is saved to '/../data/model/':
+        python forecaster.py -T -i ./Consumption_15min.csv -M model_B1_new -t 10080\n
 
         """
         parser = argparse.ArgumentParser(description='Make energy consumption forecasts and . Read the example to understand how it works', epilog= epilogue_usage,formatter_class=RawTextHelpFormatter)
@@ -472,6 +471,17 @@ class DeepModelTS():
             self.model_load = DATA_DIR+args.model
             self.data_path = args.imp_dir
             self.n_test = int(args.steps_test)
+            self.data = pd.read_csv(self.data_path, index_col=0)
+            self.data.index = pd.to_datetime(self.data.index)
+            self.granularity = self.data.index.inferred_freq
+            print('Data granularity is ',granularity)
+            print('\n')
+            if self.granularity == '15T':
+                self.lag = 96
+                self.lag2 = 672
+            if self.granularity == '1H':
+                self.lag = 24
+                self.lag2 = 168
             self.model = deep_learner.LSTModel()
             print('Number of timesteps to use in a test dataset: ',args.steps_test)
             print('\n')
