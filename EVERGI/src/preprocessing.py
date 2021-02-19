@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 from workalendar.usa import Texas
 from workalendar.europe import Belgium
+from workalendar.usa import Texas
+from workalendar.usa import UnitedStates
 
 
 DAYS_IN_YEAR = 365
@@ -40,7 +42,7 @@ def normalize(self, tensor):
     tensor = self.scaler.fit_transform(tensor)
     return tensor
 
-def preprocess(dataframe):
+def preprocess(dataframe, country: str):
     dataframe.index = pd.to_datetime(dataframe.index)
     # Removing duplicates
     dataframe = dataframe[~dataframe.index.duplicated()]
@@ -48,8 +50,16 @@ def preprocess(dataframe):
     #Filling NaN values
     dataframe = dataframe.interpolate()
 
-    # Setting the calendar holidats
-    cal = Belgium()
+    # Setting the calendar holiday dates
+    if country == 'Belgium':
+        cal = Belgium()
+    elif country in ['Texas', 'texas']:
+        cal = Texas()
+    elif country in ['United States', 'US', 'United States of America', 'us', 'usa', 'USA']:
+        cal = UnitedStates()
+    else:
+        raise TypeError("No country is input to the preprocessing function") 
+    
     years = list(range(2014, 2025))
     holidays = []
     for year in years:
@@ -57,13 +67,8 @@ def preprocess(dataframe):
 
     dataframe = dataframe.sort_index()
 
-    #print('preprocess:')
-    #print(dataframe.columns)
     # Rename the target column to 'Valeur' for convenience
     dataframe.rename(columns={dataframe.columns[0]: 'value'}, inplace=True)
-
-    # Logarithmic transform add 1 for non-negative data (zeros in the series)
-    #dataframe[self.Y_var] = log(dataframe[self.Y_var] + 1)
 
     #working day {0,1}
     dataframe['working day'] = dataframe.index.map(cal.is_working_day).astype(np.float32)

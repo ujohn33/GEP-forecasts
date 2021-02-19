@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import os
 from collections import UserDict
 
@@ -36,12 +37,12 @@ def create_evaluation_df(predictions, test_inputs, H, scaler):
     return eval_df
 
 # convert series to supervised learning
-def series_to_supervised(data, dropnan=True):
+def series_to_supervised(data, dropnan=True, lag=24, lag2=168):
     n_vars = 1
     df = pd.DataFrame(data)
     cols, names = list(), list()
     # input sequence (t-n, ... t-1)
-    for i in [24, 168]:
+    for i in [lag, lag2]:
         cols.append(df['value'].shift(i))
         names += [('value'+'(t-%d)' % (i))]
     # put it all together
@@ -51,6 +52,64 @@ def series_to_supervised(data, dropnan=True):
     if dropnan:
         agg.dropna(inplace=True)
     return agg 
+
+def plot_train_history(model):
+    '''
+    Convergence plots to have an idea on how the training performs
+    '''
+    loss = model.history.history['loss']
+    val_loss = model.history.history['val_loss']
+    plt.figure()
+    plt.plot(range(len(loss)), loss, 'b', label='Training loss')
+    plt.plot(range(len(val_loss)), val_loss, 'r', label='Validation loss')
+    #plt.yscale("log")
+    plt.xlabel('Epochs')
+    plt.ylabel('Losses')
+    plt.title('Training and validation losses')
+    plt.legend()
+    plt.show() 
+    
+def validation(forecasted, real, parameter):
+    ''' 
+    compute some important parameters to compare forecasting results
+    '''
+    value = 0
+    value_1 = 0
+    value_2 = 0
+
+    if parameter == 'SMAPE':
+        for i in range(len(forecasted)):
+            if real[i] + forecasted[i] == 0:
+                value += 0
+            else: 
+                value += ((abs(real[i] - forecasted[i])) / (real[i] + forecasted[i])) * 100
+        final_value = value / len(forecasted)  
+
+    elif parameter == 'MAPE':
+        for i in range(len(forecasted)):
+            if real[i] == 0:
+                value += 0
+            else: 
+                value += (abs(real[i] - forecasted[i]))/real[i]
+        final_value = value / len(forecasted) * 100
+
+    elif parameter == 'RMSE':
+        for i in range(len(forecasted)):
+            value += (real[i] - forecasted[i]) ** 2
+        final_value = (value / len(forecasted)) ** (1 / 2) 
+
+    elif parameter == 'R':
+        for i in range(len(forecasted)):
+            value += (real[i] - np.mean(real)) * (forecasted[i] - np.mean(forecasted))
+            value_1 += (real[i] - np.mean(real)) ** 2
+            value_2 += (forecasted[i] - np.mean(forecasted)) ** 2
+
+        if value_1 == 0 or value_2 == 0:
+            final_value = 100
+        else:
+            final_value = (value / ((value_1 ** (1 / 2)) * (value_2 ** (1 / 2))))*100
+
+    return final_value
 
 
 class TimeSeriesTensor(UserDict):
