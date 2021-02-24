@@ -111,6 +111,14 @@ def validation(forecasted, real, parameter):
 
     return final_value
 
+def save_model(model, i, name: str):
+    model_json = model.to_json()
+    with open('./models/'+name+ str(i) +'`.json', "w") as json_file:
+        json_file.write(model_json)
+    # serialize weights to HDF5
+    model.save_weights('./models/'+name+ str(i) +'.h5')
+    print("Model saved to disk")
+
 
 class TimeSeriesTensor(UserDict):
     """A dictionary of tensors for input into the RNN model.
