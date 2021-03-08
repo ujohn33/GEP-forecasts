@@ -2,8 +2,9 @@ import pandas as pd
 import numpy as np
 from workalendar.usa import Texas
 from workalendar.europe import Belgium
-from workalendar.usa import Texas
 from workalendar.usa import UnitedStates
+from workalendar.america import Canada
+
 
 
 DAYS_IN_YEAR = 365
@@ -51,12 +52,14 @@ def preprocess(dataframe, country: str):
     dataframe = dataframe.interpolate()
 
     # Setting the calendar holiday dates
-    if country == 'Belgium':
+    if country in ['Belgium', 'belgium']:
         cal = Belgium()
     elif country in ['Texas', 'texas']:
         cal = Texas()
     elif country in ['United States', 'US', 'United States of America', 'us', 'usa', 'USA']:
         cal = UnitedStates()
+    elif country in ['Canada', 'canada']:
+        cal = Canada()    
     else:
         raise TypeError("No country is input to the preprocessing function") 
     
