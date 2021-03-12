@@ -98,6 +98,11 @@ def validation(forecasted, real, parameter):
             value += (real[i] - forecasted[i]) ** 2
         final_value = (value / len(forecasted)) ** (1 / 2) 
 
+    elif parameter == 'MAE':
+        for i in range(len(forecasted)):
+            value += abs(real[i] - forecasted[i])
+        final_value = value / len(forecasted)
+        
     elif parameter == 'R':
         for i in range(len(forecasted)):
             value += (real[i] - np.mean(real)) * (forecasted[i] - np.mean(forecasted))
