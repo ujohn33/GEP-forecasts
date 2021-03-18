@@ -6,6 +6,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from pandas.tseries.frequencies import to_offset
 import tensorflow as tf
 import argparse
 
@@ -22,7 +23,7 @@ from src.functions import plot_train_history, validation, save_model, load_model
 np.set_printoptions(threshold=sys.maxsize)
 
 DATA_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/data/"
-MODEL_DIR = DATA_DIR+ "/model/"
+MODEL_DIR = os.path.dirname(os.path.abspath(__file__))+'/models'
 
 class Forecaster():
     """
@@ -64,7 +65,7 @@ class Forecaster():
         self.BATCHSIZE = BATCHSIZE
         self.train_val_split = train_val_split
         self.n_test = n_test
-    
+
     def train_test_split(self, df):
         test_df = df.copy()[-self.n_test:]
         train_df = df.copy()[:len(test_df)]
@@ -83,7 +84,7 @@ class Forecaster():
         train_inputs = TimeSeriesTensor(train_df, 'value', self.HORIZON, tensor_structure)
         test_inputs = TimeSeriesTensor(test_df, 'value', self.HORIZON, tensor_structure)
         return train_inputs, test_inputs, y_scaler
-    
+
     def MIMO_forecastdata_preparation(self, df):
         df = src.preprocessing.preprocess(df, 'Belgium')
         df = df.merge(series_to_supervised(df), how='right', left_index=True, right_index=True)
@@ -94,7 +95,7 @@ class Forecaster():
         tensor_structure = {'X':(range(-self.N_lags+1, 1), df.columns)}
         test_inputs = TimeSeriesTensor(df, 'value', self.HORIZON, tensor_structure)
         return test_inputs, y_scaler
-    
+
     def forecast(self, df):
         test_inputs, y_scaler = self.MIMO_forecastdata_preparation(df)
         predictions = self.model.predict(self.test_inputs['X'])
@@ -102,7 +103,7 @@ class Forecaster():
         mape = validation(eval_df['prediction'], eval_df['actual'], 'MAPE')
         rmse = validation(eval_df['prediction'], eval_df['actual'], 'RMSE')
         return eval_df, mape, rmse
-    
+
     def LSTMIMO_train(self):
         train_inputs, test_inputs, y_scaler = self.MIMO_fulldata_preparation(self.data)
 
@@ -119,7 +120,7 @@ class Forecaster():
                               callbacks=[early_stopping], verbose=1)
         save_model(LSTMIMO, self.model_save)
         return LSTMIMO, test_inputs, y_scaler
-        
+
     def forecast_test(self):
         #model, test_inputs, y_scaler = LSTMIMO_train()
         predictions = self.model.predict(self.test_inputs['X'])
@@ -129,22 +130,23 @@ class Forecaster():
         #print('rmse {}'.format(rmse))
         #print('mae {}'.format(mae))
         return eval_df, mape, rmse
-    
+
     @staticmethod
     def format_output(df):
         df['h'] = df['h'].str.extract('(\d+)', expand=False).astype(int)
         pivot = pd.pivot_table(df, values='prediction', index=['timestamp'], columns=['h'])
         pivot = pivot.add_prefix('Consumer_0_forec_h_')
         return pivot
-        
+
     def configuration(self):
         epilogue_usage = """
         Use cases examples:
-        Import the data './building1_input.csv' and use the preloaded model "model_B1_complete" to predict 672 steps ahead and save to './predictions.csv'. The model is loaded from '/../data/model/':
-        python forecaster.py -F -i /example_mordor/environment/sauron_eye_consumer_24h.csv -n 196 -e ./predictions.csv -M model_mordor\n
+        Import the data './building1_input.csv' and use the preloaded model "model_B1_complete" to generate day-ahead forecast values and save to './predictions.csv'. The model is loaded from '/../data/model/':
+        python forecaster_ver02.py -F -i /example_mordor/environment/sauron_eye_consumer_24h.csv -e ./forecast.csv -M model_mordor\n
 
-        Train the new model "model_B1_new" on the imported data './Consumption_15min.csv' with n steps for test. The model is saved to '/../data/model/':
-        python forecaster.py -T -i /example_mordor/environment/sauron_eye_consumer_24h.csv -M model_mordor -t 1008\n
+        Train the new model "model_B1_new" on the imported data './Consumption_15min.csv' with n steps for test. The model is saved to './models'.
+        The forecasted values are saved to './predictions.csv':
+        python forecaster_ver02.py -T -i /example_mordor/environment/sauron_eye_consumer_24h.csv -M model_mordor -t 1008 -e ./forecast.csv\n
 
         """
         parser = argparse.ArgumentParser(description='Make energy consumption forecasts and . Read the example to understand how it works', epilog= epilogue_usage,formatter_class=RawTextHelpFormatter)
@@ -168,7 +170,7 @@ class Forecaster():
             if args.model:
                 print('You decided to use a trained model:',args.model)
                 print('\n')
-                self.model= load_model(DATA_DIR+'model/'+args.model)
+                self.model= load_model(args.model)
             self.import_file_path = DATA_DIR+args.imp_dir
             self.input_data = pd.read_csv(self.import_file_path, index_col=0)
             self.export_file_path = args.exp_dir
@@ -183,10 +185,11 @@ class Forecaster():
             print('\n')
             print('You decided to train a new model',args.model)
             print('\n')
-            self.model_load = DATA_DIR+'model/'+args.model
+            self.model_save = args.model
             self.data_path = DATA_DIR[:-1]+args.imp_dir
             self.n_test = int(args.steps_test)
             self.data = pd.read_csv(self.data_path, index_col=0)
+            self.data.index = pd.to_datetime(self.data.index)
             self.data = self.data.asfreq(self.data.index.freq or to_offset(self.data.index[1] - self.data.index[0]).freqstr)
             self.granularity = self.data.index.inferred_freq
             print('Data granularity is ',self.granularity)
@@ -201,18 +204,18 @@ class Forecaster():
             print('\n')
             print('Number of timesteps to use in a test dataset: ',args.steps_test)
             # get error metrics
-            output, mape, rmse = forecast_test()
+            output, mape, rmse = self.forecast_test()
             print('rmse {}'.format(rmse))
             print('mape {}'.format(mape))
-            formatted = format_output(output)
+            formatted = self.format_output(output)
             formatted.to_csv(self.export_file_path)
 
 
         print('\n')
         print('The end')
-        print('\n')    
-        
-        
+        print('\n')
+
+
 if __name__ == "__main__":
     deep_learner = Forecaster(
     data_path = '../data/Dieteren_case/Consumption_15min.csv',
@@ -232,4 +235,4 @@ if __name__ == "__main__":
     train_val_split = 0.15,
     n_test = 4380,
     )
-    deep_learner.configuration()        
+    deep_learner.configuration()
