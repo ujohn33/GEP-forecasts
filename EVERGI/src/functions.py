@@ -22,11 +22,6 @@ def load_data(data_dir):
     return energy
 
 
-def mape(predictions, actuals):
-    """Mean absolute percentage error"""
-    return ((predictions - actuals).abs() / actuals).mean()
-
-
 def create_evaluation_df(predictions, test_inputs, H, scaler):
     """Create a data frame for easy evaluation"""
     eval_df = pd.DataFrame(predictions, columns=['t+'+str(t) for t in range(1, H+1)])
@@ -52,6 +47,25 @@ def series_to_supervised(data, dropnan=True, lag=24, lag2=168):
     if dropnan:
         agg.dropna(inplace=True)
     return agg 
+
+def save_model(model, model_save):
+    model_json = model.to_json()
+    with open('./models/'+model_save+'.json', "w") as json_file:
+        json_file.write(model_json)
+    # serialize weights to HDF5
+    model.save_weights('./models/'+model_save+'.h5')
+    print("Model is saved to disk")
+
+def load_model(model_load):
+    # load json and create model
+    json_file = open('./models/'+model_load+".json", 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    model = model_from_json(loaded_model_json)
+    # load weights into new model
+    model.load_weights('./models/'+model_load+".h5")
+    print("Loaded model from disk")
+    return model
 
 def plot_train_history(model):
     '''
@@ -115,14 +129,6 @@ def validation(forecasted, real, parameter):
             final_value = (value / ((value_1 ** (1 / 2)) * (value_2 ** (1 / 2))))*100
 
     return final_value
-
-def save_model(model, i, name: str):
-    model_json = model.to_json()
-    with open('./models/'+name+ str(i) +'`.json', "w") as json_file:
-        json_file.write(model_json)
-    # serialize weights to HDF5
-    model.save_weights('./models/'+name+ str(i) +'.h5')
-    print("Model saved to disk")
 
 
 class TimeSeriesTensor(UserDict):
