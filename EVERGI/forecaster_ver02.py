@@ -140,7 +140,7 @@ class Forecaster():
     def configuration(self):
         epilogue_usage = """
         Use cases examples:
-        Import the data './building1_input.csv' and use the preloaded model "model_B!_complete" to predict 672 steps ahead and save to './predictions.csv'. The model is loaded from '/../data/model/':
+        Import the data './building1_input.csv' and use the preloaded model "model_B1_complete" to predict 672 steps ahead and save to './predictions.csv'. The model is loaded from '/../data/model/':
         python forecaster.py -F -i /example_mordor/environment/sauron_eye_consumer_24h.csv -n 196 -e ./predictions.csv -M model_mordor\n
 
         Train the new model "model_B1_new" on the imported data './Consumption_15min.csv' with n steps for test. The model is saved to '/../data/model/':
