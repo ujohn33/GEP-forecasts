@@ -48,6 +48,9 @@ def preprocess(dataframe, country: str):
     # Removing duplicates
     dataframe = dataframe[~dataframe.index.duplicated()]
     
+    # resample to 1 H granularity
+    dataframe = dataframe.resample('H').sum()
+    
     #Filling NaN values
     dataframe = dataframe.interpolate()
 
