@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from collections import UserDict
+from tensorflow.keras.models import model_from_json
 
 def load_data(data_dir):
     """Load the GEFCom 2014 energy load data"""
@@ -179,6 +180,8 @@ class TimeSeriesTensor(UserDict):
         for name, structure in self.tensor_structure.items():
             rng = structure[0]
             dataset_cols = structure[1]
+            #print(rng)
+            #print(dataset_cols)
 
             for col in dataset_cols:
 
