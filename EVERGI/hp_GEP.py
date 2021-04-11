@@ -89,7 +89,7 @@ if __name__ == '__main__':
     
     working = pname+'models/'+dset+'_models/'+building
     tuner = MyTuner(build_model,objective=Objective('val_mse',direction='min'),max_trials=60,num_initial_points=4,directory=working,project_name=net+'_trials',overwrite=True)
-    tuner.search(scaled_x,scaled_y,epochs=10000,validation_data=(val_x,val_y),callbacks=[es],verbose=0)
+    tuner.search(scaled_x,scaled_y,epochs=100,validation_data=(val_x,val_y),callbacks=[es],verbose=0)
     best_hps = tuner.get_best_hyperparameters(1)[0]
     print('Best HPs for'+net,':',best_hps.values)
     # Fit best model
