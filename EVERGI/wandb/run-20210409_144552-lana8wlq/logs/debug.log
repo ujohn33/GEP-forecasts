@@ -1,0 +1,72 @@
+2021-04-09 14:45:52,071 INFO    MainThread:921080 [wandb_setup.py:_flush():69] setting env: {}
+2021-04-09 14:45:52,071 INFO    MainThread:921080 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-04-09 14:45:52,071 INFO    MainThread:921080 [wandb_setup.py:_flush():69] setting login settings: {'api_key': '4e022d9a965c0e513287d998fbd6fd1d46056300'}
+2021-04-09 14:45:52,071 INFO    MainThread:921080 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-04-09 14:45:52,071 INFO    MainThread:921080 [wandb_setup.py:_flush():69] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x7f456829c4c0>
+2021-04-09 14:45:52,071 INFO    MainThread:921080 [wandb_init.py:_log_setup():319] Logging user logs to /home/ubuntu/evgeny/GEP-forecasts/EVERGI/wandb/run-20210409_144552-lana8wlq/logs/debug.log
+2021-04-09 14:45:52,071 INFO    MainThread:921080 [wandb_init.py:_log_setup():320] Logging internal logs to /home/ubuntu/evgeny/GEP-forecasts/EVERGI/wandb/run-20210409_144552-lana8wlq/logs/debug-internal.log
+2021-04-09 14:45:52,071 INFO    MainThread:921080 [wandb_init.py:init():352] calling init triggers
+2021-04-09 14:45:52,071 INFO    MainThread:921080 [wandb_init.py:init():357] wandb.init called with sweep_config: {}
+config: {'batch_size': 1500, 'architecture': 'RNN with forward lags for temporal', 'dataset': 'Columbia', 'epochs': 100, 'patience': 10}
+2021-04-09 14:45:52,071 INFO    MainThread:921080 [wandb_init.py:init():372] re-initializing run, found existing run on stack: 120v0kv9
+2021-04-09 14:45:52,074 INFO    MainThread:921080 [wandb_run.py:finish():1078] finishing run ujohn33/3days_forcast/120v0kv9
+2021-04-09 14:45:52,075 INFO    MainThread:921080 [wandb_run.py:_atexit_cleanup():1392] got exitcode: 0
+2021-04-09 14:45:52,075 INFO    MainThread:921080 [wandb_run.py:_restore():1364] restore
+2021-04-09 14:45:52,321 INFO    MainThread:921080 [wandb_run.py:_wait_for_finish():1515] got exit ret: file_counts {
+  wandb_count: 2
+}
+pusher_stats {
+  uploaded_bytes: 22418
+  total_bytes: 22418
+}
+
+2021-04-09 14:45:54,330 INFO    MainThread:921080 [wandb_run.py:_wait_for_finish():1515] got exit ret: done: true
+exit_result {
+}
+file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 25624
+  total_bytes: 25624
+}
+
+2021-04-09 14:45:55,778 INFO    MainThread:921080 [wandb_run.py:_show_files():1737] logging synced files
+2021-04-09 14:45:55,784 INFO    MainThread:921080 [wandb_init.py:init():401] starting backend
+2021-04-09 14:45:55,784 INFO    MainThread:921080 [backend.py:_multiprocessing_setup():69] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2021-04-09 14:45:55,787 INFO    MainThread:921080 [backend.py:ensure_launched():123] starting backend process...
+2021-04-09 14:45:56,005 INFO    MainThread:921080 [backend.py:ensure_launched():127] started backend process with pid: 938631
+2021-04-09 14:45:56,008 INFO    MainThread:921080 [wandb_init.py:init():406] backend started and connected
+2021-04-09 14:45:56,031 INFO    MainThread:921080 [wandb_init.py:init():446] updated telemetry
+2021-04-09 14:45:56,033 INFO    MainThread:921080 [wandb_init.py:init():465] communicating current version
+2021-04-09 14:45:57,101 INFO    MainThread:921080 [wandb_init.py:init():470] got version response upgrade_message: "wandb version 0.10.25 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2021-04-09 14:45:57,103 INFO    MainThread:921080 [wandb_init.py:init():478] communicating run to backend with 30 second timeout
+2021-04-09 14:45:57,360 INFO    MainThread:921080 [wandb_init.py:init():503] starting run threads in backend
+2021-04-09 14:45:58,948 INFO    MainThread:921080 [wandb_run.py:_console_start():1422] atexit reg
+2021-04-09 14:45:58,949 INFO    MainThread:921080 [wandb_run.py:_redirect():1285] redirect: SettingsConsole.WRAP
+2021-04-09 14:45:58,949 INFO    MainThread:921080 [wandb_run.py:_redirect():1320] Wrapping output streams.
+2021-04-09 14:45:58,949 INFO    MainThread:921080 [wandb_run.py:_redirect():1336] Redirects installed.
+2021-04-09 14:45:58,949 INFO    MainThread:921080 [wandb_init.py:init():527] run started, returning control to user process
+2021-04-09 15:15:50,612 INFO    MainThread:921080 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 15:16:34,844 INFO    MainThread:921080 [wandb_init.py:_resume_backend():245] resuming backend
+2021-04-09 15:18:34,922 INFO    MainThread:921080 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 15:21:40,457 INFO    MainThread:921080 [wandb_init.py:_resume_backend():245] resuming backend
+2021-04-09 15:25:23,404 INFO    MainThread:921080 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 15:25:25,451 INFO    MainThread:921080 [wandb_init.py:_resume_backend():245] resuming backend
+2021-04-09 15:29:07,988 INFO    MainThread:921080 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 15:29:20,057 INFO    MainThread:921080 [wandb_init.py:_resume_backend():245] resuming backend
+2021-04-09 15:32:59,747 INFO    MainThread:921080 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 15:44:20,508 INFO    MainThread:921080 [wandb_init.py:_resume_backend():245] resuming backend
+2021-04-09 15:46:18,807 INFO    MainThread:921080 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 15:46:22,927 INFO    MainThread:921080 [wandb_init.py:_resume_backend():245] resuming backend
+2021-04-09 15:46:22,943 INFO    MainThread:921080 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 15:46:37,163 INFO    MainThread:921080 [wandb_init.py:_resume_backend():245] resuming backend
+2021-04-09 15:46:37,219 INFO    MainThread:921080 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 15:46:45,772 INFO    MainThread:921080 [wandb_init.py:_resume_backend():245] resuming backend
+2021-04-09 15:46:45,785 INFO    MainThread:921080 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 15:49:33,813 INFO    MainThread:921080 [wandb_init.py:_resume_backend():245] resuming backend
+2021-04-09 15:49:33,825 INFO    MainThread:921080 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 15:51:20,773 INFO    MainThread:921080 [wandb_run.py:_atexit_cleanup():1392] got exitcode: 0
+2021-04-09 15:51:20,773 INFO    MainThread:921080 [wandb_run.py:_restore():1364] restore
+2021-04-09 15:51:20,775 INFO    MainThread:921080 [wandb_run.py:_restore():1364] restore

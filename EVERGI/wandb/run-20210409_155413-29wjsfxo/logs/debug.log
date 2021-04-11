@@ -1,0 +1,41 @@
+2021-04-09 15:54:13,373 INFO    MainThread:939686 [wandb_setup.py:_flush():69] setting env: {}
+2021-04-09 15:54:13,373 INFO    MainThread:939686 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-04-09 15:54:13,373 INFO    MainThread:939686 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-04-09 15:54:13,373 INFO    MainThread:939686 [wandb_setup.py:_flush():69] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x7f6e5442caf0>
+2021-04-09 15:54:13,374 INFO    MainThread:939686 [wandb_init.py:_log_setup():319] Logging user logs to /home/ubuntu/evgeny/GEP-forecasts/EVERGI/wandb/run-20210409_155413-29wjsfxo/logs/debug.log
+2021-04-09 15:54:13,374 INFO    MainThread:939686 [wandb_init.py:_log_setup():320] Logging internal logs to /home/ubuntu/evgeny/GEP-forecasts/EVERGI/wandb/run-20210409_155413-29wjsfxo/logs/debug-internal.log
+2021-04-09 15:54:13,374 INFO    MainThread:939686 [wandb_init.py:init():352] calling init triggers
+2021-04-09 15:54:13,374 INFO    MainThread:939686 [wandb_init.py:init():357] wandb.init called with sweep_config: {}
+config: {'batch_size': 1500, 'architecture': 'RNN with forward lags for temporal', 'dataset': 'Columbia', 'epochs': 12, 'patience': 10}
+2021-04-09 15:54:13,374 INFO    MainThread:939686 [wandb_init.py:init():401] starting backend
+2021-04-09 15:54:13,375 INFO    MainThread:939686 [backend.py:_multiprocessing_setup():69] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2021-04-09 15:54:13,531 INFO    MainThread:939686 [backend.py:ensure_launched():123] starting backend process...
+2021-04-09 15:54:13,669 INFO    MainThread:939686 [backend.py:ensure_launched():127] started backend process with pid: 939796
+2021-04-09 15:54:13,671 INFO    MainThread:939686 [wandb_init.py:init():406] backend started and connected
+2021-04-09 15:54:13,697 INFO    MainThread:939686 [wandb_init.py:init():446] updated telemetry
+2021-04-09 15:54:13,699 INFO    MainThread:939686 [wandb_init.py:init():465] communicating current version
+2021-04-09 15:54:14,642 INFO    MainThread:939686 [wandb_init.py:init():470] got version response upgrade_message: "wandb version 0.10.25 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2021-04-09 15:54:14,643 INFO    MainThread:939686 [wandb_init.py:init():478] communicating run to backend with 30 second timeout
+2021-04-09 15:54:14,931 INFO    MainThread:939686 [wandb_init.py:init():503] starting run threads in backend
+2021-04-09 15:54:16,365 INFO    MainThread:939686 [wandb_run.py:_console_start():1422] atexit reg
+2021-04-09 15:54:16,366 INFO    MainThread:939686 [wandb_run.py:_redirect():1285] redirect: SettingsConsole.WRAP
+2021-04-09 15:54:16,367 INFO    MainThread:939686 [wandb_run.py:_redirect():1320] Wrapping output streams.
+2021-04-09 15:54:16,367 INFO    MainThread:939686 [wandb_run.py:_redirect():1336] Redirects installed.
+2021-04-09 15:54:16,367 INFO    MainThread:939686 [wandb_init.py:init():527] run started, returning control to user process
+2021-04-09 16:12:19,830 INFO    MainThread:939686 [wandb_init.py:_pause_backend():240] pausing backend
+2021-04-09 16:17:20,088 INFO    MainThread:939686 [wandb_init.py:_resume_backend():245] resuming backend
+2021-04-09 16:19:45,582 INFO    MainThread:939686 [wandb_setup.py:_flush():69] setting env: {}
+2021-04-09 16:19:45,582 INFO    MainThread:939686 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-04-09 16:19:45,582 INFO    MainThread:939686 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-04-09 16:19:45,582 INFO    MainThread:939686 [wandb_setup.py:_flush():69] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x7f6e5442caf0>
+2021-04-09 16:19:45,582 INFO    MainThread:939686 [wandb_init.py:_log_setup():319] Logging user logs to /home/ubuntu/evgeny/GEP-forecasts/EVERGI/wandb/run-20210409_161945-3bhbbzbg/logs/debug.log
+2021-04-09 16:19:45,582 INFO    MainThread:939686 [wandb_init.py:_log_setup():320] Logging internal logs to /home/ubuntu/evgeny/GEP-forecasts/EVERGI/wandb/run-20210409_161945-3bhbbzbg/logs/debug-internal.log
+2021-04-09 16:19:45,582 INFO    MainThread:939686 [wandb_init.py:init():352] calling init triggers
+2021-04-09 16:19:45,583 INFO    MainThread:939686 [wandb_init.py:init():357] wandb.init called with sweep_config: {}
+config: {'batch_size': 1500, 'architecture': 'RNN with forward lags for temporal', 'dataset': 'Columbia', 'epochs': 100, 'patience': 100}
+2021-04-09 16:19:45,583 INFO    MainThread:939686 [wandb_init.py:init():372] re-initializing run, found existing run on stack: 29wjsfxo
+2021-04-09 16:19:45,586 INFO    MainThread:939686 [wandb_run.py:finish():1078] finishing run ujohn33/3days_forcast/29wjsfxo
+2021-04-09 16:19:45,586 INFO    MainThread:939686 [wandb_init.py:_jupyter_teardown():250] cleaning up jupyter logic
+2021-04-09 16:19:45,591 INFO    MainThread:939686 [jupyter.py:save_history():237] saving 5 cells to _session_history.ipynb
+2021-04-09 16:19:45,593 INFO    MainThread:939686 [wandb_run.py:_config_callback():669] config_cb None None {'batch_size': 1500, 'architecture': 'RNN with forward lags for temporal', 'dataset': 'Columbia', 'epochs': 12, 'patience': 10, '_wandb': {'session_history': 'code/_session_history.ipynb'}}
