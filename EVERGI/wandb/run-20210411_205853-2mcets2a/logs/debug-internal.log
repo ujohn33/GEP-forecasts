@@ -1,0 +1,18 @@
+2021-04-11 20:58:54,681 INFO    MainThread:85762 [internal.py:wandb_internal():64] W&B internal server running at pid: 85762
+2021-04-11 20:58:54,682 DEBUG   HandlerThread:85762 [handler.py:handle_request():55] handle_request: check_version
+2021-04-11 20:58:54,682 INFO    WriterThread:85762 [datastore.py:open_for_write():77] open: /Users/eugengenov/Documents/GitHub/GEP-forecasts/EVERGI/wandb/run-20210411_205853-2mcets2a/run-2mcets2a.wandb
+2021-04-11 20:58:54,683 DEBUG   SenderThread:85762 [sender.py:send():117] send: header
+2021-04-11 20:58:54,683 DEBUG   SenderThread:85762 [sender.py:send():117] send: request
+2021-04-11 20:58:54,683 DEBUG   SenderThread:85762 [sender.py:send_request():126] send_request: check_version
+2021-04-11 20:58:54,686 DEBUG   Thread-4  :85762 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): pypi.org:443
+2021-04-11 20:58:54,795 DEBUG   Thread-4  :85762 [connectionpool.py:_make_request():461] https://pypi.org:443 "GET /pypi/wandb/json HTTP/1.1" 200 55912
+2021-04-11 20:58:54,837 DEBUG   SenderThread:85762 [sender.py:send():117] send: run
+2021-04-11 20:58:54,842 DEBUG   SenderThread:85762 [cmd.py:execute():722] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/Users/eugengenov/Documents/GitHub/GEP-forecasts, universal_newlines=False, shell=None, istream=None)
+2021-04-11 20:58:54,878 DEBUG   SenderThread:85762 [cmd.py:execute():722] Popen(['git', 'cat-file', '--batch-check'], cwd=/Users/eugengenov/Documents/GitHub/GEP-forecasts, universal_newlines=False, shell=None, istream=<valid stream>)
+2021-04-11 20:58:54,907 DEBUG   SenderThread:85762 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-04-11 20:58:55,149 DEBUG   SenderThread:85762 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-04-11 20:58:55,165 INFO    SenderThread:85762 [dir_watcher.py:__init__():165] watching files in: /Users/eugengenov/Documents/GitHub/GEP-forecasts/EVERGI/wandb/run-20210411_205853-2mcets2a/files
+2021-04-11 20:58:55,166 INFO    SenderThread:85762 [sender.py:_start_run_threads():596] run started: 2mcets2a with start time 1618167533
+2021-04-11 20:58:55,166 DEBUG   SenderThread:85762 [sender.py:send():117] send: summary
+2021-04-11 20:58:55,166 INFO    SenderThread:85762 [sender.py:_save_file():682] saving file wandb-summary.json with policy end
+2021-04-11 20:58:55,168 DEBUG   HandlerThread:85762 [handler.py:handle_request():55] handle_request: run_start

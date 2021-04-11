@@ -9,12 +9,11 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.models import Sequential
 from tensorflow.keras import Input, Model
 from sklearn.preprocessing import MinMaxScaler
+from kerastuner import HyperModel,HyperParameters,BayesianOptimization,Objective
 
 import src.preprocessing_3days
 from src.preprocessing_3days import series_to_supervised, preprocess
 from src.functions import load_data, TimeSeriesTensor, create_evaluation_df, plot_train_history, validation, save_model, load_model
-
-HORIZON = 72
 
 def train_test_split(df, n_test):
     if len(df) < 8760:
@@ -69,6 +68,9 @@ def build_model(hp):
     
 if __name__ == '__main__':
     # FETCH THE DATASETS
+    dset = 'GEP'
+    net = 'stlf'
+    HORIZON = 72
     GEP1 = pd.read_csv('../data/GEP/Consumption_1H.csv', index_col=0, header=0, names=['value'])
     GEP4 = pd.read_csv('../data/GEP/B4_Consumption_1H.csv', index_col=0, header=0, names=['value'])
     datasets = [GEP1, GEP4]
@@ -80,17 +82,46 @@ if __name__ == '__main__':
     dX_scaler = []
     for i,df in enumerate(datasets):
         train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON)
-        dX_train.append(train_inputs['X'])
+        dX_train.append(tf.concat([train_inputs['X'],train_inputs['X2']], axis=2))
         dT_train.append(train_inputs['target'])
         dX_test.append(test_inputs)
         dX_scaler.append(y_scaler)
     global_inputs_X = tf.concat(dX_train, 0)
     global_inputs_T = tf.concat(dT_train, 0)
-    
-    working = pname+'models/'+dset+'_models/'+building
+    print('done with data')
+    working = '.models/'+dset+'_models/global/trials'
     tuner = MyTuner(build_model,objective=Objective('val_mse',direction='min'),max_trials=60,num_initial_points=4,directory=working,project_name=net+'_trials',overwrite=True)
-    tuner.search(scaled_x,scaled_y,epochs=100,validation_data=(val_x,val_y),callbacks=[es],verbose=0)
+    # You can print a summary of the search space:
+    tuner.search_space_summary()
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, mode='min')
+    tuner.search(global_inputs_X,global_inputs_T,batch_size=None,epochs=50,validation_split=0.15, callbacks=[early_stopping],verbose=0)
     best_hps = tuner.get_best_hyperparameters(1)[0]
-    print('Best HPs for'+net,':',best_hps.values)
+    print('Best HPs are',':',best_hps.values)
     # Fit best model
     model = tuner.hypermodel.build(best_hps)
+    history = model.fit(global_inputs_X,global_inputs_T,epochs=50,validation_split=0.15, callbacks=[early_stopping],verbose=0)
+    
+    val_acc_per_epoch = history.history['val_accuracy']
+    best_epoch = val_acc_per_epoch.index(max(val_acc_per_epoch)) + 1
+    print('Best epoch: %d' % (best_epoch,))
+
+    hypermodel = tuner.hypermodel.build(best_hps)
+
+    # Retrain the model
+    hypermodel.fit(global_inputs_X,global_inputs_T,epochs=best_epoch,validation_split=0.15, callbacks=[early_stopping],verbose=0)
+
+    
+    model_path = '.models/'+dset+'_models/global'
+    model.save(model_path)
+    
+    metrics = pd.DataFrame(columns=['mae','mape', 'rmse', 'B'], index=range(28))
+    for i,df in enumerate(datasets):
+        concat_input = tf.concat([dX_test[i]['X'],dX_test[i]['X2']], axis=2)
+        FD_predictions = FULL_LSTMIMO.predict(concat_input)
+        FD_eval_df = create_evaluation_df(FD_predictions, dX_test[i], HORIZON, dX_scaler[i])
+        mae = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'MAE')
+        mape = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'MAPE')
+        rmse = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'RMSE')
+        #print('rmse {}'.format(rmse))
+        metrics.loc[i] = pd.Series({'mae':mae, 'mape':mape, 'rmse':rmse, 'B': names[i]})
+    metrics.to_csv('./results/GEP/global/3days/LSTM_hp.csv')

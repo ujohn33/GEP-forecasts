@@ -1,0 +1,15 @@
+(51050, 72, 14)
+Traceback (most recent call last):
+  File "sweep_tune_GEP.py", line 150, in <module>
+    wandb.agent(sweep_id, function=train(inputs=global_inputs_X, outputs=global_inputs_T))
+  File "sweep_tune_GEP.py", line 85, in train
+    FULL_LSTMIMO = model.fit(inputs, outputs, batch_size=config.batchsize, epochs=config.epochs, validation_split=0.15, callbacks=[early_stopping, WandbCallback()])
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/integration/keras/keras.py", line 321, in __init__
+    wandb.save("model-best.h5")
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 1033, in save
+    self._backend.interface.publish_files(files_dict)
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/interface/interface.py", line 571, in publish_files
+    self._publish(rec)
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/interface/interface.py", line 457, in _publish
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown

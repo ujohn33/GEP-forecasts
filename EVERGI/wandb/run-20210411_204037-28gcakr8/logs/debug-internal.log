@@ -1,0 +1,18 @@
+2021-04-11 20:40:38,045 INFO    MainThread:85641 [internal.py:wandb_internal():64] W&B internal server running at pid: 85641
+2021-04-11 20:40:38,047 DEBUG   HandlerThread:85641 [handler.py:handle_request():55] handle_request: check_version
+2021-04-11 20:40:38,047 DEBUG   SenderThread:85641 [sender.py:send():117] send: header
+2021-04-11 20:40:38,047 DEBUG   SenderThread:85641 [sender.py:send():117] send: request
+2021-04-11 20:40:38,047 DEBUG   SenderThread:85641 [sender.py:send_request():126] send_request: check_version
+2021-04-11 20:40:38,047 INFO    WriterThread:85641 [datastore.py:open_for_write():77] open: /Users/eugengenov/Documents/GitHub/GEP-forecasts/EVERGI/wandb/run-20210411_204037-28gcakr8/run-28gcakr8.wandb
+2021-04-11 20:40:38,050 DEBUG   Thread-4  :85641 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): pypi.org:443
+2021-04-11 20:40:38,163 DEBUG   Thread-4  :85641 [connectionpool.py:_make_request():461] https://pypi.org:443 "GET /pypi/wandb/json HTTP/1.1" 200 55912
+2021-04-11 20:40:38,200 DEBUG   SenderThread:85641 [sender.py:send():117] send: run
+2021-04-11 20:40:38,204 DEBUG   SenderThread:85641 [cmd.py:execute():722] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/Users/eugengenov/Documents/GitHub/GEP-forecasts, universal_newlines=False, shell=None, istream=None)
+2021-04-11 20:40:38,229 DEBUG   SenderThread:85641 [cmd.py:execute():722] Popen(['git', 'cat-file', '--batch-check'], cwd=/Users/eugengenov/Documents/GitHub/GEP-forecasts, universal_newlines=False, shell=None, istream=<valid stream>)
+2021-04-11 20:40:38,261 DEBUG   SenderThread:85641 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-04-11 20:40:38,522 DEBUG   SenderThread:85641 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-04-11 20:40:38,539 INFO    SenderThread:85641 [dir_watcher.py:__init__():165] watching files in: /Users/eugengenov/Documents/GitHub/GEP-forecasts/EVERGI/wandb/run-20210411_204037-28gcakr8/files
+2021-04-11 20:40:38,540 INFO    SenderThread:85641 [sender.py:_start_run_threads():596] run started: 28gcakr8 with start time 1618166437
+2021-04-11 20:40:38,540 DEBUG   SenderThread:85641 [sender.py:send():117] send: summary
+2021-04-11 20:40:38,540 INFO    SenderThread:85641 [sender.py:_save_file():682] saving file wandb-summary.json with policy end
+2021-04-11 20:40:38,543 DEBUG   HandlerThread:85641 [handler.py:handle_request():55] handle_request: run_start

@@ -1,0 +1,58 @@
+2021-04-11 20:58:53,527 INFO    MainThread:85753 [wandb_setup.py:_flush():70] setting env: {}
+2021-04-11 20:58:53,532 INFO    MainThread:85753 [wandb_setup.py:_flush():70] multiprocessing start_methods=fork,spawn,forkserver
+2021-04-11 20:58:53,532 INFO    MainThread:85753 [wandb_setup.py:_flush():70] setting login settings: {}
+2021-04-11 20:58:53,532 INFO    MainThread:85753 [wandb_setup.py:_flush():70] setting login settings: {}
+2021-04-11 20:58:53,532 INFO    MainThread:85753 [wandb_setup.py:_flush():70] setting login settings: {}
+2021-04-11 20:58:53,533 INFO    MainThread:85753 [wandb_init.py:_log_setup():318] Logging user logs to /Users/eugengenov/Documents/GitHub/GEP-forecasts/EVERGI/wandb/run-20210411_205853-2mcets2a/logs/debug.log
+2021-04-11 20:58:53,533 INFO    MainThread:85753 [wandb_init.py:_log_setup():319] Logging internal logs to /Users/eugengenov/Documents/GitHub/GEP-forecasts/EVERGI/wandb/run-20210411_205853-2mcets2a/logs/debug-internal.log
+2021-04-11 20:59:00,200 INFO    MainThread:85753 [wandb_run.py:_console_start():1396] atexit reg
+2021-04-11 20:59:00,202 INFO    MainThread:85753 [wandb_run.py:_redirect():1259] redirect: SettingsConsole.REDIRECT
+2021-04-11 20:59:00,210 INFO    MainThread:85753 [wandb_run.py:_redirect():1264] Redirecting console.
+2021-04-11 20:59:00,211 INFO    MainThread:85753 [redirect.py:install():213] install start
+2021-04-11 20:59:00,213 INFO    MainThread:85753 [redirect.py:install():228] install stop
+2021-04-11 20:59:00,213 INFO    MainThread:85753 [redirect.py:install():213] install start
+2021-04-11 20:59:00,213 INFO    MainThread:85753 [redirect.py:install():228] install stop
+2021-04-11 20:59:00,213 INFO    MainThread:85753 [wandb_run.py:_redirect():1310] Redirects installed.
+2021-04-11 20:59:00,599 INFO    MainThread:85753 [wandb_run.py:_atexit_cleanup():1366] got exitcode: 1
+2021-04-11 20:59:00,599 INFO    MainThread:85753 [wandb_run.py:_restore():1338] restore
+2021-04-11 20:59:00,599 ERROR   stderr    :85753 [redirect.py:_pipe_relay():139] problem in pipe relay
+Traceback (most recent call last):
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/lib/redirect.py", line 137, in _pipe_relay
+    cb(name, data)
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 723, in _console_callback
+    self._backend.interface.publish_output(name, data)
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/interface/interface.py", line 153, in publish_output
+    self._publish_output(o)
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/interface/interface.py", line 158, in _publish_output
+    self._publish(rec)
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/interface/interface.py", line 457, in _publish
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+2021-04-11 20:59:00,599 INFO    MainThread:85753 [redirect.py:uninstall():232] uninstall start
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:_stop():287] _stop: stdout
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:_stop():293] _stop closed: stdout
+2021-04-11 20:59:00,600 INFO    stdout    :85753 [redirect.py:_pipe_relay():129] relay done saw last write: stdout
+2021-04-11 20:59:00,600 INFO    stdout    :85753 [redirect.py:_pipe_relay():145] relay done done: stdout
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:_stop():299] _stop joined: stdout
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:_stop():301] _stop rd closed: stdout
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:uninstall():236] uninstall done
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:uninstall():232] uninstall start
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:_stop():287] _stop: stderr
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:_stop():293] _stop closed: stderr
+2021-04-11 20:59:00,600 INFO    stderr    :85753 [redirect.py:_pipe_relay():129] relay done saw last write: stderr
+2021-04-11 20:59:00,600 INFO    stderr    :85753 [redirect.py:_pipe_relay():145] relay done done: stderr
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:_stop():299] _stop joined: stderr
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:_stop():301] _stop rd closed: stderr
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [redirect.py:uninstall():236] uninstall done
+2021-04-11 20:59:00,600 INFO    MainThread:85753 [wandb_run.py:_restore():1338] restore
+2021-04-11 20:59:06,208 ERROR   MainThread:85753 [wandb_run.py:_atexit_cleanup():1384] Problem finishing run
+Traceback (most recent call last):
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 1374, in _atexit_cleanup
+    self._on_finish()
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 1532, in _on_finish
+    self._backend.interface.publish_telemetry(self._telemetry_obj)
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/interface/interface.py", line 184, in publish_telemetry
+    self._publish(rec)
+  File "/Users/eugengenov/opt/anaconda3/envs/py37/lib/python3.7/site-packages/wandb/sdk/interface/interface.py", line 457, in _publish
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown

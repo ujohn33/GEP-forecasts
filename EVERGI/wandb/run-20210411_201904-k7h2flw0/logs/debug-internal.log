@@ -1,0 +1,17 @@
+2021-04-11 20:19:05,339 INFO    MainThread:85405 [internal.py:wandb_internal():64] W&B internal server running at pid: 85405
+2021-04-11 20:19:05,340 DEBUG   HandlerThread:85405 [handler.py:handle_request():55] handle_request: check_version
+2021-04-11 20:19:05,340 INFO    WriterThread:85405 [datastore.py:open_for_write():77] open: /Users/eugengenov/Documents/GitHub/GEP-forecasts/EVERGI/wandb/run-20210411_201904-k7h2flw0/run-k7h2flw0.wandb
+2021-04-11 20:19:05,341 DEBUG   SenderThread:85405 [sender.py:send():117] send: header
+2021-04-11 20:19:05,341 DEBUG   SenderThread:85405 [sender.py:send():117] send: request
+2021-04-11 20:19:05,341 DEBUG   SenderThread:85405 [sender.py:send_request():126] send_request: check_version
+2021-04-11 20:19:05,344 DEBUG   Thread-4  :85405 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): pypi.org:443
+2021-04-11 20:19:05,459 DEBUG   Thread-4  :85405 [connectionpool.py:_make_request():461] https://pypi.org:443 "GET /pypi/wandb/json HTTP/1.1" 200 55912
+2021-04-11 20:19:05,498 DEBUG   SenderThread:85405 [sender.py:send():117] send: run
+2021-04-11 20:19:05,504 DEBUG   SenderThread:85405 [cmd.py:execute():722] Popen(['git', 'cat-file', '--batch-check'], cwd=/Users/eugengenov/Documents/GitHub/GEP-forecasts, universal_newlines=False, shell=None, istream=<valid stream>)
+2021-04-11 20:19:05,542 DEBUG   SenderThread:85405 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-04-11 20:19:05,782 DEBUG   SenderThread:85405 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-04-11 20:19:05,792 INFO    SenderThread:85405 [dir_watcher.py:__init__():165] watching files in: /Users/eugengenov/Documents/GitHub/GEP-forecasts/EVERGI/wandb/run-20210411_201904-k7h2flw0/files
+2021-04-11 20:19:05,792 INFO    SenderThread:85405 [sender.py:_start_run_threads():596] run started: k7h2flw0 with start time 1618165144
+2021-04-11 20:19:05,792 DEBUG   SenderThread:85405 [sender.py:send():117] send: summary
+2021-04-11 20:19:05,792 INFO    SenderThread:85405 [sender.py:_save_file():682] saving file wandb-summary.json with policy end
+2021-04-11 20:19:05,793 DEBUG   HandlerThread:85405 [handler.py:handle_request():55] handle_request: run_start
