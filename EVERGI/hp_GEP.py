@@ -68,7 +68,7 @@ def build_model(hp):
             # Shape => [batch, time, features]
             tf.keras.layers.Dense(HORIZON)
         ])
-    opt = keras.optimizers.Adam(learning_rate=lr)
+    opt = tf.keras.optimizers.Adam(learning_rate=lr)
     # Compile model
     model.compile(loss='mse', optimizer=opt,metrics=['mse', 'mape'])
     return model
