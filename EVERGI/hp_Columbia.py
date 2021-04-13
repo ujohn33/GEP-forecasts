@@ -8,8 +8,16 @@ import tensorflow as tf
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.models import Sequential
 from tensorflow.keras import Input, Model
+
+# Import mlcompute module to use the optional set_mlc_device API for device selection with ML Compute.
+from tensorflow.python.compiler.mlcompute import mlcompute
+# Select CPU device.
+mlcompute.set_mlc_device(device_name='any') # Available options are 'cpu', 'gpu', and 'any'.
+
+
 from sklearn.preprocessing import MinMaxScaler
 from kerastuner import HyperModel,HyperParameters,BayesianOptimization,Objective
+from tqdm import tqdm
 
 import src.preprocessing_3days
 from src.preprocessing_3days import series_to_supervised, preprocess
@@ -24,7 +32,7 @@ def train_test_split(df, n_test):
 
 def MIMO_fulldata_preparation(df, n_test=4380, T=72, HORIZON=72):
     df = df.merge(series_to_supervised(df), how='right', left_index=True, right_index=True)
-    df = preprocess(df, 'Belgium')
+    df = preprocess(df, 'Canada')
     train_df, test_df = train_test_split(df, n_test)
     y_scaler = MinMaxScaler()
     y_scaler.fit(train_df[['value']])
@@ -68,26 +76,29 @@ def build_model(hp):
             # Shape => [batch, time, features]
             tf.keras.layers.Dense(HORIZON)
         ])
-    opt = keras.optimizers.Adam(learning_rate=lr)
+    opt = tf.keras.optimizers.Adam(learning_rate=lr)
     # Compile model
     model.compile(loss='mse', optimizer=opt,metrics=['mse', 'mape'])
     return model
 
 if __name__ == '__main__':
     # FETCH THE DATASETS
-    dset = 'GEP'
+    dset = 'Columbia'
     net = 'stlf'
     HORIZON = 72
-    GEP1 = pd.read_csv('../data/GEP/Consumption_1H.csv', index_col=0, header=0, names=['value'])
-    GEP4 = pd.read_csv('../data/GEP/B4_Consumption_1H.csv', index_col=0, header=0, names=['value'])
-    datasets = [GEP1, GEP4]
-    names = ['GEP1', 'GEP4']
+    datasets = []
+    names = []
+    for i in range(1,29):
+        filename = '../data/Columbia_clean/Residential_'+str(i)+'.csv'
+        df = pd.read_csv(filename, index_col=0)
+        datasets.append(df)
+        names.append('B'+str(i))
 
     dX_train = []
     dT_train = []
     dX_test = []
     dX_scaler = []
-    for i,df in enumerate(datasets):
+    for df in tqdm(datasets):
         train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON)
         dX_train.append(tf.concat([train_inputs['X'],train_inputs['X2']], axis=2))
         dT_train.append(train_inputs['target'])
@@ -97,11 +108,11 @@ if __name__ == '__main__':
     global_inputs_T = tf.concat(dT_train, 0)
     print('done with data')
     working = '.models/'+dset+'_models/global/trials'
-    tuner = MyTuner(build_model,objective=Objective('val_mse',direction='min'),max_trials=20,num_initial_points=4,directory=working,project_name=net+'_trials',overwrite=True)
+    tuner = MyTuner(build_model,objective=Objective('val_mse',direction='min'),max_trials=30,num_initial_points=4,directory=working,project_name=net+'_trials',overwrite=True)
     # You can print a summary of the search space:
     tuner.search_space_summary()
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, mode='min')
-    tuner.search(global_inputs_X,global_inputs_T,batch_size=None,epochs=50,validation_split=0.15, callbacks=[early_stopping],verbose=0)
+    tuner.search(global_inputs_X,global_inputs_T,epochs=10,validation_split=0.15, callbacks=[early_stopping],verbose=0)
     best_hps = tuner.get_best_hyperparameters(1)[0]
     print('Best HPs are',':',best_hps.values)
     # Fit best model
@@ -116,6 +127,7 @@ if __name__ == '__main__':
 
     # Retrain the model
     hypermodel.fit(global_inputs_X,global_inputs_T,epochs=best_epoch ,verbose=0)
+
 
     model_path = '.models/'+dset+'_models/global'
     model.save(model_path)

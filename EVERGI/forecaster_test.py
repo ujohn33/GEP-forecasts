@@ -8,8 +8,18 @@ import tensorflow as tf
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.models import Sequential
 from tensorflow.keras import Input, Model
+
+import wandb
+from wandb.keras import WandbCallback
+wandb.login()
+
+# Import mlcompute module to use the optional set_mlc_device API for device selection with ML Compute.
+from tensorflow.python.compiler.mlcompute import mlcompute
+# Select CPU device.
+mlcompute.set_mlc_device(device_name='any') # Available options are 'cpu', 'gpu', and 'any'.
+
 from sklearn.preprocessing import MinMaxScaler
-from kerastuner import HyperModel,HyperParameters,BayesianOptimization,Objective
+from tqdm import tqdm
 
 import src.preprocessing_3days
 from src.preprocessing_3days import series_to_supervised, preprocess
@@ -22,9 +32,9 @@ def train_test_split(df, n_test):
     train_df = df.copy()[:-(len(test_df)-71)]
     return train_df, test_df
 
-def MIMO_fulldata_preparation(df, n_test=4380, T=72, HORIZON=72):
+def MIMO_fulldata_preparation(df, n_test=4380, T=72, HORIZON=72, country='Canada'):
     df = df.merge(series_to_supervised(df), how='right', left_index=True, right_index=True)
-    df = preprocess(df, 'Belgium')
+    df = preprocess(df, country)
     train_df, test_df = train_test_split(df, n_test)
     y_scaler = MinMaxScaler()
     y_scaler.fit(train_df[['value']])
@@ -36,24 +46,7 @@ def MIMO_fulldata_preparation(df, n_test=4380, T=72, HORIZON=72):
     test_inputs = TimeSeriesTensor(test_df, 'value', HORIZON, tensor_structure)
     return train_inputs, test_inputs, y_scaler
 
-class MyTuner(BayesianOptimization):
-    def run_trial(self, trial, *args, **kwargs):
-        # You can add additional HyperParameters for preprocessing and custom training loops
-        # via overriding `run_trial`
-        kwargs['batch_size'] = trial.hyperparameters.Int('batch_size', 1500, 2000, step=100)
-        super(MyTuner, self).run_trial(trial, *args, **kwargs)# Uses same arguments as the BayesianOptimization Tuner.
-
-def build_model(hp):
-    l = hp.Int('layers',1,2)
-    drop = hp.Float('dropout',min_value=0.1,max_value=0.3,step=0.1)
-    n = hp.Int('neurons',32,256,step=32)
-    lr = hp.Float(
-        'learning_rate',
-        min_value=1e-5,
-        max_value=1e-2,
-        sampling='LOG',
-        default=1e-3
-    )
+def build_model(l, drop, n, lr):
     if l==1:
         model = tf.keras.models.Sequential([
             tf.keras.layers.LSTM(n, input_shape=(HORIZON, 14)),
@@ -68,27 +61,40 @@ def build_model(hp):
             # Shape => [batch, time, features]
             tf.keras.layers.Dense(HORIZON)
         ])
-    opt = keras.optimizers.Adam(learning_rate=lr)
+    opt = tf.keras.optimizers.Adam(learning_rate=lr)
     # Compile model
     model.compile(loss='mse', optimizer=opt,metrics=['mse', 'mape'])
     return model
 
 if __name__ == '__main__':
     # FETCH THE DATASETS
-    dset = 'GEP'
+    dset = 'Columbia'
+    country = 'Canada'
     net = 'stlf'
+    LAYERS = 1
+    DROPOUT = 0.1
+    NEURONS = 64
+    LR = 1e-3
+    BATCHSIZE = 1600
+
+    MAX_EPOCHS = 20
+    PATIENCE = 5
+
     HORIZON = 72
-    GEP1 = pd.read_csv('../data/GEP/Consumption_1H.csv', index_col=0, header=0, names=['value'])
-    GEP4 = pd.read_csv('../data/GEP/B4_Consumption_1H.csv', index_col=0, header=0, names=['value'])
-    datasets = [GEP1, GEP4]
-    names = ['GEP1', 'GEP4']
+    datasets = []
+    names = []
+    for i in range(1,29):
+        filename = '../data/Columbia_clean/Residential_'+str(i)+'.csv'
+        df = pd.read_csv(filename, index_col=0)
+        datasets.append(df)
+        names.append('B'+str(i))
 
     dX_train = []
     dT_train = []
     dX_test = []
     dX_scaler = []
-    for i,df in enumerate(datasets):
-        train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON)
+    for df in tqdm(datasets):
+        train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON, country=country)
         dX_train.append(tf.concat([train_inputs['X'],train_inputs['X2']], axis=2))
         dT_train.append(train_inputs['target'])
         dX_test.append(test_inputs)
@@ -97,25 +103,44 @@ if __name__ == '__main__':
     global_inputs_T = tf.concat(dT_train, 0)
     print('done with data')
     working = '.models/'+dset+'_models/global/trials'
-    tuner = MyTuner(build_model,objective=Objective('val_mse',direction='min'),max_trials=20,num_initial_points=4,directory=working,project_name=net+'_trials',overwrite=True)
-    # You can print a summary of the search space:
-    tuner.search_space_summary()
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, mode='min')
-    tuner.search(global_inputs_X,global_inputs_T,batch_size=None,epochs=50,validation_split=0.15, callbacks=[early_stopping],verbose=0)
-    best_hps = tuner.get_best_hyperparameters(1)[0]
-    print('Best HPs are',':',best_hps.values)
+
+
+    # 1️⃣ Start a new run, tracking config metadata
+    run = wandb.init(project="3days_forcast", config={
+        'layers': LAYERS,
+        'dropout': DROPOUT,
+        'neurons': NEURONS,
+        'learning rate': LR,
+        'batch_size': BATCHSIZE,
+
+        "architecture": "RNN with forward lags for temporal",
+        "dataset": "Columbia",
+        "epochs": MAX_EPOCHS,
+        'patience': PATIENCE
+    })
+    config = wandb.config
+
+    # full data LSTM MIMO compilation and fit
+    LSTMIMO = build_model(l=LAYERS, drop=DROPOUT, n=NEURONS, lr=LR)
+
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=PATIENCE, mode='min')
+
+    history = LSTMIMO.fit(global_inputs_X, global_inputs_T, batch_size=BATCHSIZE, epochs=MAX_EPOCHS,
+                          validation_split=0.15,
+                          callbacks=[early_stopping, WandbCallback()], verbose=1)
+
     # Fit best model
-    model = tuner.hypermodel.build(best_hps)
     history = model.fit(global_inputs_X,global_inputs_T,epochs=50,verbose=0)
 
     val_acc_per_epoch = history.history['val_accuracy']
     best_epoch = val_acc_per_epoch.index(max(val_acc_per_epoch)) + 1
     print('Best epoch: %d' % (best_epoch,))
 
-    hypermodel = tuner.hypermodel.build(best_hps)
+    #hypermodel = tuner.hypermodel.build(best_hps)
 
     # Retrain the model
-    hypermodel.fit(global_inputs_X,global_inputs_T,epochs=best_epoch ,verbose=0)
+    #hypermodel.fit(global_inputs_X,global_inputs_T,epochs=best_epoch ,verbose=0)
+
 
     model_path = '.models/'+dset+'_models/global'
     model.save(model_path)
@@ -130,4 +155,8 @@ if __name__ == '__main__':
         rmse = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'RMSE')
         #print('rmse {}'.format(rmse))
         metrics.loc[i] = pd.Series({'mae':mae, 'mape':mape, 'rmse':rmse, 'B': names[i]})
+    wandb.log({"mape": metrics.mape.mean()})
+    wandb.log({"rmse": metrics.rmse.mean()})
+    wandb.log({"mae": metrics.mae.mean()})
+    run.finish()
     metrics.to_csv('./results/'+dset+'/global/3days/LSTM_hp.csv')
