@@ -101,7 +101,7 @@ if __name__ == '__main__':
     # You can print a summary of the search space:
     tuner.search_space_summary()
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, mode='min')
-    tuner.search(global_inputs_X,global_inputs_T,batch_size=None,epochs=50,validation_split=0.15, callbacks=[early_stopping],verbose=0)
+    tuner.search(global_inputs_X,global_inputs_T,batch_size=None,epochs=10,validation_split=0.15, callbacks=[early_stopping],verbose=0)
     best_hps = tuner.get_best_hyperparameters(1)[0]
     print('Best HPs are',':',best_hps.values)
     # Fit best model
