@@ -1,0 +1,73 @@
+diff --git a/EVERGI/forecaster_test.py b/EVERGI/forecaster_test.py
+index 8987279..f940cd4 100644
+--- a/EVERGI/forecaster_test.py
++++ b/EVERGI/forecaster_test.py
+@@ -71,9 +71,9 @@ if __name__ == '__main__':
+     dset = 'GEP'
+     country = 'Belgium'
+     net = 'stlf'
+-    LAYERS = 2
+-    DROPOUT = 0.3
+-    NEURONS = 128
++    LAYERS = 1
++    DROPOUT = 0
++    NEURONS = 64
+     LR = 1e-3
+     BATCHSIZE = 1500
+ 
+@@ -84,16 +84,18 @@ if __name__ == '__main__':
+     datasets = []
+     names = []
+     
+-    GEP1 = pd.read_csv('../data/GEP/Consumption_1H.csv', index_col=0, header=0, names=['value'])
+-    GEP4 = pd.read_csv('../data/GEP/B4_Consumption_1H.csv', index_col=0, header=0, names=['value'])
+-    datasets = [GEP1, GEP4]
+-    names = ['GEP1', 'GEP4']
+-    #for i in range(1,29):
+-    #    filename = '../data/Columbia_clean/Residential_'+str(i)+'.csv'
+-    #    df = pd.read_csv(filename, index_col=0)
+-    #    datasets.append(df)
+-    #    names.append('B'+str(i))
+-
++    if dset == 'GEP':
++        GEP1 = pd.read_csv('../data/GEP/Consumption_1H.csv', index_col=0, header=0, names=['value'])
++        GEP4 = pd.read_csv('../data/GEP/B4_Consumption_1H.csv', index_col=0, header=0, names=['value'])
++        datasets = [GEP1, GEP4]
++        names = ['GEP1', 'GEP4']
++    if dset == 'Columbia':
++        for i in range(1,29):
++            filename = '../data/Columbia_clean/Residential_'+str(i)+'.csv'
++            df = pd.read_csv(filename, index_col=0)
++            datasets.append(df)
++            names.append('B'+str(i))
++        
+     dX_train = []
+     dT_train = []
+     dX_test = []
+diff --git a/EVERGI/wandb/debug-internal.log b/EVERGI/wandb/debug-internal.log
+index 54b9011..e922cbe 120000
+--- a/EVERGI/wandb/debug-internal.log
++++ b/EVERGI/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210414_122831-1u01joca/logs/debug-internal.log
+\ No newline at end of file
++run-20210414_141653-2gow68ss/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/debug.log b/EVERGI/wandb/debug.log
+index b69dd72..bde7530 120000
+--- a/EVERGI/wandb/debug.log
++++ b/EVERGI/wandb/debug.log
+@@ -1 +1 @@
+-run-20210414_122831-1u01joca/logs/debug.log
+\ No newline at end of file
++run-20210414_141653-2gow68ss/logs/debug.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/latest-run b/EVERGI/wandb/latest-run
+index 4e8c18f..0db4bb6 120000
+--- a/EVERGI/wandb/latest-run
++++ b/EVERGI/wandb/latest-run
+@@ -1 +1 @@
+-run-20210414_122831-1u01joca
+\ No newline at end of file
++run-20210414_141653-2gow68ss
+\ No newline at end of file
