@@ -68,8 +68,8 @@ def build_model(l, drop, n, lr):
 
 if __name__ == '__main__':
     # FETCH THE DATASETS
-    dset = 'GEP'
-    country = 'Belgium'
+    dset = 'Columbia'
+    country = 'Canada'
     net = 'stlf'
     LAYERS = 2
     DROPOUT = 0.3
@@ -83,16 +83,11 @@ if __name__ == '__main__':
     HORIZON = 72
     datasets = []
     names = []
-    
-    GEP1 = pd.read_csv('../data/GEP/Consumption_1H.csv', index_col=0, header=0, names=['value'])
-    GEP4 = pd.read_csv('../data/GEP/B4_Consumption_1H.csv', index_col=0, header=0, names=['value'])
-    datasets = [GEP1, GEP4]
-    names = ['GEP1', 'GEP4']
-    #for i in range(1,29):
-    #    filename = '../data/Columbia_clean/Residential_'+str(i)+'.csv'
-    #    df = pd.read_csv(filename, index_col=0)
-    #    datasets.append(df)
-    #    names.append('B'+str(i))
+    for i in range(1,29):
+        filename = '../data/Columbia_clean/Residential_'+str(i)+'.csv'
+        df = pd.read_csv(filename, index_col=0)
+        datasets.append(df)
+        names.append('B'+str(i))
 
     dX_train = []
     dT_train = []
@@ -158,4 +153,4 @@ if __name__ == '__main__':
     metrics.to_csv('./results/'+dset+'/global/3days/LSTM_'+wandb.run.name+'.csv')
     model_path = '.models/'+dset+'_models/global_'+wandb.run.name
     run.finish()
-    LSTMIMO.save(model_path)
+    final_model.save(model_path)
