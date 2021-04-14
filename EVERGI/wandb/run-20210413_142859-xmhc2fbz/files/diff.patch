@@ -1,0 +1,208 @@
+diff --git a/EVERGI/.models/GEP_models/global/trials/stlf_trials/oracle.json b/EVERGI/.models/GEP_models/global/trials/stlf_trials/oracle.json
+index f6b1c4d..b36c205 100644
+--- a/EVERGI/.models/GEP_models/global/trials/stlf_trials/oracle.json
++++ b/EVERGI/.models/GEP_models/global/trials/stlf_trials/oracle.json
+@@ -1 +1 @@
+-{"ongoing_trials": {"tuner0": "2fe6ba26c3ac31d0130ba85ea374776e"}, "hyperparameters": {"space": [{"class_name": "Int", "config": {"name": "layers", "default": null, "min_value": 1, "max_value": 2, "step": 1, "sampling": null}}, {"class_name": "Float", "config": {"name": "dropout", "default": 0.1, "min_value": 0.1, "max_value": 0.3, "step": 0.1, "sampling": null}}, {"class_name": "Int", "config": {"name": "neurons", "default": null, "min_value": 32, "max_value": 256, "step": 32, "sampling": null}}], "values": {"layers": 1, "dropout": 0.1, "neurons": 32}}, "num_initial_points": 4, "alpha": 0.0001, "beta": 2.6, "seed": 6936, "seed_state": 6939, "tried_so_far": ["ed64160eda003694e33bd99996865146"], "max_collisions": 20}
+\ No newline at end of file
++{"ongoing_trials": {"tuner0": "43d17eb50a8f6721618f2794bdb598a5"}, "hyperparameters": {"space": [{"class_name": "Int", "config": {"name": "layers", "default": null, "min_value": 1, "max_value": 2, "step": 1, "sampling": null}}, {"class_name": "Float", "config": {"name": "dropout", "default": 0.1, "min_value": 0.1, "max_value": 0.3, "step": 0.1, "sampling": null}}, {"class_name": "Int", "config": {"name": "neurons", "default": null, "min_value": 32, "max_value": 256, "step": 32, "sampling": null}}, {"class_name": "Float", "config": {"name": "learning_rate", "default": 0.001, "min_value": 1e-05, "max_value": 0.01, "step": null, "sampling": "log"}}, {"class_name": "Int", "config": {"name": "batch_size", "default": null, "min_value": 1500, "max_value": 2000, "step": 100, "sampling": null}}], "values": {"layers": 1, "dropout": 0.1, "neurons": 32, "learning_rate": 0.001, "batch_size": 1500}}, "num_initial_points": 4, "alpha": 0.0001, "beta": 2.6, "seed": 5266, "seed_state": 5285, "tried_so_far": ["2fa1788151f68dff3a353b4a460f86d5", "a66d48bebc7f512160d73076f9aac606", "a948bf4a57ba3961c41e8926d4571345", "028abd9b92b506a20f93f7b239158d53"], "max_collisions": 20}
+\ No newline at end of file
+diff --git a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint b/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint
+deleted file mode 100644
+index 5be71fc..0000000
+--- a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint
++++ /dev/null
+@@ -1,2 +0,0 @@
+-model_checkpoint_path: "checkpoint"
+-all_model_checkpoint_paths: "checkpoint"
+diff --git a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.data-00000-of-00001 b/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.data-00000-of-00001
+deleted file mode 100644
+index 1c40cb2..0000000
+Binary files a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.data-00000-of-00001 and /dev/null differ
+diff --git a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.index b/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.index
+deleted file mode 100644
+index 9e7b129..0000000
+Binary files a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.index and /dev/null differ
+diff --git a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/trial.json b/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/trial.json
+deleted file mode 100644
+index ebd6c7f..0000000
+--- a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/trial.json
++++ /dev/null
+@@ -1 +0,0 @@
+-{"trial_id": "2fe6ba26c3ac31d0130ba85ea374776e", "hyperparameters": {"space": [{"class_name": "Int", "config": {"name": "layers", "default": null, "min_value": 1, "max_value": 2, "step": 1, "sampling": null}}, {"class_name": "Float", "config": {"name": "dropout", "default": 0.1, "min_value": 0.1, "max_value": 0.3, "step": 0.1, "sampling": null}}, {"class_name": "Int", "config": {"name": "neurons", "default": null, "min_value": 32, "max_value": 256, "step": 32, "sampling": null}}], "values": {"layers": 1, "dropout": 0.2, "neurons": 224}}, "metrics": {"metrics": {}}, "score": null, "best_step": null, "status": "RUNNING"}
+\ No newline at end of file
+diff --git a/EVERGI/3days_Columbia_LSTM_models_global.ipynb b/EVERGI/3days_Columbia_LSTM_models_global.ipynb
+index 3c2a1d6..40b5ab5 100644
+--- a/EVERGI/3days_Columbia_LSTM_models_global.ipynb
++++ b/EVERGI/3days_Columbia_LSTM_models_global.ipynb
+@@ -3,7 +3,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "organic-aruba",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -39,7 +38,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "comic-capture",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -51,7 +49,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "leading-rhythm",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -66,7 +63,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 3,
+-   "id": "thick-ozone",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -92,7 +88,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 57,
+-   "id": "hawaiian-might",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -111,7 +106,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 64,
+-   "id": "adaptive-tutorial",
+    "metadata": {},
+    "outputs": [
+     {
+@@ -147,7 +141,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "traditional-filing",
+    "metadata": {},
+    "outputs": [
+     {
+@@ -332,7 +325,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "minimal-method",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -408,7 +400,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 15,
+-   "id": "lightweight-quilt",
+    "metadata": {},
+    "outputs": [
+     {
+@@ -565,7 +556,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 4,
+-   "id": "racial-sacrifice",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -600,7 +590,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "reserved-gathering",
+    "metadata": {},
+    "outputs": [],
+    "source": []
+@@ -608,7 +597,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "crazy-belly",
+    "metadata": {},
+    "outputs": [],
+    "source": []
+@@ -616,7 +604,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "laden-teacher",
+    "metadata": {},
+    "outputs": [],
+    "source": []
+@@ -638,7 +625,7 @@
+    "name": "python",
+    "nbconvert_exporter": "python",
+    "pygments_lexer": "ipython3",
+-   "version": "3.8.8"
++   "version": "3.8.6"
+   }
+  },
+  "nbformat": 4,
+diff --git a/EVERGI/forecaster_test.py b/EVERGI/forecaster_test.py
+index b88aa69..c67af0f 100644
+--- a/EVERGI/forecaster_test.py
++++ b/EVERGI/forecaster_test.py
+@@ -63,7 +63,7 @@ def build_model(l, drop, n, lr):
+         ])
+     opt = tf.keras.optimizers.Adam(learning_rate=lr)
+     # Compile model
+-    model.compile(loss='mse', optimizer=opt,metrics=['mse', 'mape'])
++    model.compile(loss='mse', optimizer=opt,metrics=['mse'])
+     return model
+ 
+ if __name__ == '__main__':
+@@ -129,26 +129,17 @@ if __name__ == '__main__':
+                           validation_split=0.15,
+                           callbacks=[early_stopping, WandbCallback()], verbose=1)
+ 
+-    # Fit best model
+-    history = model.fit(global_inputs_X,global_inputs_T,epochs=50,verbose=0)
+-
+-    val_acc_per_epoch = history.history['val_accuracy']
+-    best_epoch = val_acc_per_epoch.index(max(val_acc_per_epoch)) + 1
++    val_acc_per_epoch = history.history['val_loss']
++    best_epoch = val_acc_per_epoch.index(min(val_acc_per_epoch)) + 1
+     print('Best epoch: %d' % (best_epoch,))
+ 
+-    #hypermodel = tuner.hypermodel.build(best_hps)
+-
+-    # Retrain the model
+-    #hypermodel.fit(global_inputs_X,global_inputs_T,epochs=best_epoch ,verbose=0)
+-
+-
+-    model_path = '.models/'+dset+'_models/global'
+-    model.save(model_path)
++    # Fit best model
++    final_model = LSTMIMO.fit(global_inputs_X,global_inputs_T,epochs=best_epoch,batch_size=BATCHSIZE,verbose=0)
+ 
+     metrics = pd.DataFrame(columns=['mae','mape', 'rmse', 'B'], index=range(28))
+     for i,df in enumerate(datasets):
+         concat_input = tf.concat([dX_test[i]['X'],dX_test[i]['X2']], axis=2)
+-        FD_predictions = FULL_LSTMIMO.predict(concat_input)
++        FD_predictions = LSTMIMO.predict(concat_input)
+         FD_eval_df = create_evaluation_df(FD_predictions, dX_test[i], HORIZON, dX_scaler[i])
+         mae = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'MAE')
+         mape = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'MAPE')
+@@ -160,3 +151,6 @@ if __name__ == '__main__':
+     wandb.log({"mae": metrics.mae.mean()})
+     run.finish()
+     metrics.to_csv('./results/'+dset+'/global/3days/LSTM_hp.csv')
++    
++    model_path = '.models/'+dset+'_models/global'
++    final_model.save(model_path)
+diff --git a/EVERGI/src/__pycache__/functions.cpython-38.pyc b/EVERGI/src/__pycache__/functions.cpython-38.pyc
+index b839f2a..a647a57 100644
+Binary files a/EVERGI/src/__pycache__/functions.cpython-38.pyc and b/EVERGI/src/__pycache__/functions.cpython-38.pyc differ
+diff --git a/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc b/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc
+index 5e3cde9..263aa85 100644
+Binary files a/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc and b/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc differ

@@ -1,0 +1,25 @@
+Epoch 1/20
+  1/263 [..............................] - ETA: 0s - loss: 0.0571 - mse: 0.0571 - mape: 2239805.7500  2/263 [..............................] - ETA: 1:48 - loss: 0.0534 - mse: 0.0534 - mape: 1937754.1250  3/263 [..............................] - ETA: 2:18 - loss: 0.0505 - mse: 0.0505 - mape: 1832575.3750  4/263 [..............................] - ETA: 2:25 - loss: 0.0478 - mse: 0.0478 - mape: 1756288.6250  5/263 [..............................] - ETA: 2:37 - loss: 0.0455 - mse: 0.0455 - mape: 1775389.5000  6/263 [..............................] - ETA: 2:46 - loss: 0.0432 - mse: 0.0432 - mape: 1692292.7500  7/263 [..............................] - ETA: 2:50 - loss: 0.0413 - mse: 0.0413 - mape: 1660309.2500  8/263 [..............................] - ETA: 2:52 - loss: 0.0395 - mse: 0.0395 - mape: 1595013.7500  9/263 [>.............................] - ETA: 2:52 - loss: 0.0380 - mse: 0.0380 - mape: 1595790.7500 10/263 [>.............................] - ETA: 2:54 - loss: 0.0365 - mse: 0.0365 - mape: 1575270.2500 11/263 [>.............................] - ETA: 2:54 - loss: 0.0352 - mse: 0.0352 - mape: 1564832.3750 12/263 [>.............................] - ETA: 2:55 - loss: 0.0341 - mse: 0.0341 - mape: 1558107.1250 13/263 [>.............................] - ETA: 2:55 - loss: 0.0330 - mse: 0.0330 - mape: 1548416.7500 14/263 [>.............................] - ETA: 2:55 - loss: 0.0321 - mse: 0.0321 - mape: 1551368.6250 15/263 [>.............................] - ETA: 2:53 - loss: 0.0312 - mse: 0.0312 - mape: 1544038.0000Traceback (most recent call last):
+  File "forecaster_test.py", line 128, in <module>
+    history = LSTMIMO.fit(global_inputs_X, global_inputs_T, batch_size=BATCHSIZE, epochs=MAX_EPOCHS,
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/wandb/integration/keras/keras.py", line 119, in new_v2
+    return old_v2(*args, **kwargs)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/keras/engine/training.py", line 108, in _method_wrapper
+    return method(self, *args, **kwargs)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/keras/engine/training.py", line 1098, in fit
+    tmp_logs = train_function(iterator)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/def_function.py", line 780, in __call__
+    result = self._call(*args, **kwds)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/def_function.py", line 807, in _call
+    return self._stateless_fn(*args, **kwds)  # pylint: disable=not-callable
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/function.py", line 2829, in __call__
+    return graph_function._filtered_call(args, kwargs)  # pylint: disable=protected-access
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/function.py", line 1843, in _filtered_call
+    return self._call_flat(
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/function.py", line 1923, in _call_flat
+    return self._build_call_outputs(self._inference_function.call(
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/function.py", line 545, in call
+    outputs = execute.execute(
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/execute.py", line 59, in quick_execute
+    tensors = pywrap_tfe.TFE_Py_Execute(ctx._handle, device_name, op_name,
+KeyboardInterrupt

@@ -1,0 +1,82 @@
+diff --git a/EVERGI/.models/GEP_models/global/trials/stlf_trials/oracle.json b/EVERGI/.models/GEP_models/global/trials/stlf_trials/oracle.json
+index f6b1c4d..571eab7 100644
+--- a/EVERGI/.models/GEP_models/global/trials/stlf_trials/oracle.json
++++ b/EVERGI/.models/GEP_models/global/trials/stlf_trials/oracle.json
+@@ -1 +1 @@
+-{"ongoing_trials": {"tuner0": "2fe6ba26c3ac31d0130ba85ea374776e"}, "hyperparameters": {"space": [{"class_name": "Int", "config": {"name": "layers", "default": null, "min_value": 1, "max_value": 2, "step": 1, "sampling": null}}, {"class_name": "Float", "config": {"name": "dropout", "default": 0.1, "min_value": 0.1, "max_value": 0.3, "step": 0.1, "sampling": null}}, {"class_name": "Int", "config": {"name": "neurons", "default": null, "min_value": 32, "max_value": 256, "step": 32, "sampling": null}}], "values": {"layers": 1, "dropout": 0.1, "neurons": 32}}, "num_initial_points": 4, "alpha": 0.0001, "beta": 2.6, "seed": 6936, "seed_state": 6939, "tried_so_far": ["ed64160eda003694e33bd99996865146"], "max_collisions": 20}
+\ No newline at end of file
++{"ongoing_trials": {"tuner0": "03dfe7d46509a713515ba5179a5fa8da"}, "hyperparameters": {"space": [{"class_name": "Int", "config": {"name": "layers", "default": null, "min_value": 1, "max_value": 2, "step": 1, "sampling": null}}, {"class_name": "Float", "config": {"name": "dropout", "default": 0.1, "min_value": 0.1, "max_value": 0.3, "step": 0.1, "sampling": null}}, {"class_name": "Int", "config": {"name": "neurons", "default": null, "min_value": 32, "max_value": 256, "step": 32, "sampling": null}}, {"class_name": "Float", "config": {"name": "learning_rate", "default": 0.001, "min_value": 1e-05, "max_value": 0.01, "step": null, "sampling": "log"}}, {"class_name": "Int", "config": {"name": "batch_size", "default": null, "min_value": 1500, "max_value": 2000, "step": 100, "sampling": null}}], "values": {"layers": 1, "dropout": 0.1, "neurons": 32, "learning_rate": 0.001, "batch_size": 1500}}, "num_initial_points": 4, "alpha": 0.0001, "beta": 2.6, "seed": 5266, "seed_state": 5285, "tried_so_far": ["2fa1788151f68dff3a353b4a460f86d5", "a66d48bebc7f512160d73076f9aac606", "a948bf4a57ba3961c41e8926d4571345", "028abd9b92b506a20f93f7b239158d53"], "max_collisions": 20}
+\ No newline at end of file
+diff --git a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint b/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint
+deleted file mode 100644
+index 5be71fc..0000000
+--- a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint
++++ /dev/null
+@@ -1,2 +0,0 @@
+-model_checkpoint_path: "checkpoint"
+-all_model_checkpoint_paths: "checkpoint"
+diff --git a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.data-00000-of-00001 b/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.data-00000-of-00001
+deleted file mode 100644
+index 1c40cb2..0000000
+Binary files a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.data-00000-of-00001 and /dev/null differ
+diff --git a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.index b/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.index
+deleted file mode 100644
+index 9e7b129..0000000
+Binary files a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/checkpoints/epoch_0/checkpoint.index and /dev/null differ
+diff --git a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/trial.json b/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/trial.json
+deleted file mode 100644
+index ebd6c7f..0000000
+--- a/EVERGI/.models/GEP_models/global/trials/stlf_trials/trial_2fe6ba26c3ac31d0130ba85ea374776e/trial.json
++++ /dev/null
+@@ -1 +0,0 @@
+-{"trial_id": "2fe6ba26c3ac31d0130ba85ea374776e", "hyperparameters": {"space": [{"class_name": "Int", "config": {"name": "layers", "default": null, "min_value": 1, "max_value": 2, "step": 1, "sampling": null}}, {"class_name": "Float", "config": {"name": "dropout", "default": 0.1, "min_value": 0.1, "max_value": 0.3, "step": 0.1, "sampling": null}}, {"class_name": "Int", "config": {"name": "neurons", "default": null, "min_value": 32, "max_value": 256, "step": 32, "sampling": null}}], "values": {"layers": 1, "dropout": 0.2, "neurons": 224}}, "metrics": {"metrics": {}}, "score": null, "best_step": null, "status": "RUNNING"}
+\ No newline at end of file
+diff --git a/EVERGI/forecaster_test.py b/EVERGI/forecaster_test.py
+index b88aa69..617c413 100644
+--- a/EVERGI/forecaster_test.py
++++ b/EVERGI/forecaster_test.py
+@@ -63,7 +63,7 @@ def build_model(l, drop, n, lr):
+         ])
+     opt = tf.keras.optimizers.Adam(learning_rate=lr)
+     # Compile model
+-    model.compile(loss='mse', optimizer=opt,metrics=['mse', 'mape'])
++    model.compile(loss='mse', optimizer=opt,metrics=['mse'])
+     return model
+ 
+ if __name__ == '__main__':
+@@ -129,18 +129,12 @@ if __name__ == '__main__':
+                           validation_split=0.15,
+                           callbacks=[early_stopping, WandbCallback()], verbose=1)
+ 
+-    # Fit best model
+-    history = model.fit(global_inputs_X,global_inputs_T,epochs=50,verbose=0)
+-
+     val_acc_per_epoch = history.history['val_accuracy']
+     best_epoch = val_acc_per_epoch.index(max(val_acc_per_epoch)) + 1
+     print('Best epoch: %d' % (best_epoch,))
+ 
+-    #hypermodel = tuner.hypermodel.build(best_hps)
+-
+-    # Retrain the model
+-    #hypermodel.fit(global_inputs_X,global_inputs_T,epochs=best_epoch ,verbose=0)
+-
++    # Fit best model
++    history = LSTMIMO.fit(global_inputs_X,global_inputs_T,epochs=best_epoch,batch_size=BATCHSIZE,verbose=0)
+ 
+     model_path = '.models/'+dset+'_models/global'
+     model.save(model_path)
+@@ -148,7 +142,7 @@ if __name__ == '__main__':
+     metrics = pd.DataFrame(columns=['mae','mape', 'rmse', 'B'], index=range(28))
+     for i,df in enumerate(datasets):
+         concat_input = tf.concat([dX_test[i]['X'],dX_test[i]['X2']], axis=2)
+-        FD_predictions = FULL_LSTMIMO.predict(concat_input)
++        FD_predictions = LSTMIMO.predict(concat_input)
+         FD_eval_df = create_evaluation_df(FD_predictions, dX_test[i], HORIZON, dX_scaler[i])
+         mae = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'MAE')
+         mape = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'MAPE')
+diff --git a/EVERGI/src/__pycache__/functions.cpython-38.pyc b/EVERGI/src/__pycache__/functions.cpython-38.pyc
+index b839f2a..a647a57 100644
+Binary files a/EVERGI/src/__pycache__/functions.cpython-38.pyc and b/EVERGI/src/__pycache__/functions.cpython-38.pyc differ
+diff --git a/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc b/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc
+index 5e3cde9..263aa85 100644
+Binary files a/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc and b/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc differ
