@@ -63,7 +63,7 @@ def build_model(l, drop, n, lr):
         ])
     opt = tf.keras.optimizers.Adam(learning_rate=lr)
     # Compile model
-    model.compile(loss='mse', optimizer=opt,metrics=['mse', 'mape'])
+    model.compile(loss='mse', optimizer=opt,metrics=['mse'])
     return model
 
 if __name__ == '__main__':
