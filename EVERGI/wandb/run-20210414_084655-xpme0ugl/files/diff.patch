@@ -1,0 +1,42 @@
+diff --git a/EVERGI/forecaster_test.py b/EVERGI/forecaster_test.py
+index 1325e16..d90ff56 100644
+--- a/EVERGI/forecaster_test.py
++++ b/EVERGI/forecaster_test.py
+@@ -149,8 +149,8 @@ if __name__ == '__main__':
+     wandb.log({"mape": metrics.mape.mean()})
+     wandb.log({"rmse": metrics.rmse.mean()})
+     wandb.log({"mae": metrics.mae.mean()})
+-    run.finish()
+-    metrics.to_csv('./results/'+dset+'/global/3days/LSTM_'+wandb.run.name+'.csv')
+     
++    metrics.to_csv('./results/'+dset+'/global/3days/LSTM_'+wandb.run.name+'.csv')
+     model_path = '.models/'+dset+'_models/global_'+wandb.run.name
++    run.finish()
+     final_model.save(model_path)
+diff --git a/EVERGI/wandb/debug-internal.log b/EVERGI/wandb/debug-internal.log
+index eca0087..1deba01 120000
+--- a/EVERGI/wandb/debug-internal.log
++++ b/EVERGI/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210413_215057-mt9nvlxa/logs/debug-internal.log
+\ No newline at end of file
++run-20210414_084655-xpme0ugl/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/debug.log b/EVERGI/wandb/debug.log
+index b06820e..726b0b8 120000
+--- a/EVERGI/wandb/debug.log
++++ b/EVERGI/wandb/debug.log
+@@ -1 +1 @@
+-run-20210413_215057-mt9nvlxa/logs/debug.log
+\ No newline at end of file
++run-20210414_084655-xpme0ugl/logs/debug.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/latest-run b/EVERGI/wandb/latest-run
+index cb6d31f..9c2b86a 120000
+--- a/EVERGI/wandb/latest-run
++++ b/EVERGI/wandb/latest-run
+@@ -1 +1 @@
+-run-20210413_215057-mt9nvlxa
+\ No newline at end of file
++run-20210414_084655-xpme0ugl
+\ No newline at end of file
