@@ -51,10 +51,10 @@ def series_to_supervised(data, dropnan=True, lag=24, lag2=168):
 
 def save_model(model, model_save):
     model_json = model.to_json()
-    with open('./models/'+model_save+'.json', "w") as json_file:
+    with open(model_save+'.json', "w") as json_file:
         json_file.write(model_json)
     # serialize weights to HDF5
-    model.save_weights('./models/'+model_save+'.h5')
+    model.save_weights(model_save+'.h5')
     print("Model is saved to disk")
 
 def load_model(model_load):

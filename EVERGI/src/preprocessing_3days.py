@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from workalendar.usa import Texas
-from workalendar.europe import Belgium
+from workalendar.europe import Belgium, UnitedKingdom
 from workalendar.usa import UnitedStates
 from workalendar.america import Canada
 
@@ -82,6 +82,8 @@ def preprocess(dataframe, country: str):
     # Setting the calendar holiday dates
     if country in ['Belgium', 'belgium']:
         cal = Belgium()
+    elif country in ['England', 'UK', 'uk', 'United Kingdom']:
+        cal = UnitedKingdom()      
     elif country in ['Texas', 'texas']:
         cal = Texas()
     elif country in ['United States', 'US', 'United States of America', 'us', 'usa', 'USA']:

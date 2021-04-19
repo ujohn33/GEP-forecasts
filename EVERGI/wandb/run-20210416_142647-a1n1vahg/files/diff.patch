@@ -1,0 +1,195 @@
+diff --git a/EVERGI/3days_Columbia_LSTM-MIMO-forecaster.ipynb b/EVERGI/3days_Columbia_LSTM-MIMO-forecaster.ipynb
+index 81640c0..80f4e6b 100644
+--- a/EVERGI/3days_Columbia_LSTM-MIMO-forecaster.ipynb
++++ b/EVERGI/3days_Columbia_LSTM-MIMO-forecaster.ipynb
+@@ -3,7 +3,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 9,
+-   "id": "spanish-crazy",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -32,7 +31,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 27,
+-   "id": "seasonal-abraham",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -51,7 +49,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 28,
+-   "id": "perfect-toilet",
+    "metadata": {},
+    "outputs": [
+     {
+@@ -83,7 +80,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 29,
+-   "id": "chemical-cambodia",
+    "metadata": {},
+    "outputs": [
+     {
+@@ -1328,7 +1324,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "dense-correspondence",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -1370,7 +1365,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "center-chile",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -1416,7 +1410,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 24,
+-   "id": "classified-wrist",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -1431,7 +1424,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 25,
+-   "id": "pursuant-client",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -1466,7 +1458,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": 26,
+-   "id": "cognitive-young",
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -1488,7 +1479,6 @@
+   {
+    "cell_type": "code",
+    "execution_count": null,
+-   "id": "arbitrary-penetration",
+    "metadata": {},
+    "outputs": [],
+    "source": []
+@@ -1510,7 +1500,7 @@
+    "name": "python",
+    "nbconvert_exporter": "python",
+    "pygments_lexer": "ipython3",
+-   "version": "3.7.5"
++   "version": "3.8.6"
+   }
+  },
+  "nbformat": 4,
+diff --git a/EVERGI/forecaster_test.py b/EVERGI/forecaster_test.py
+index f940cd4..2677d01 100644
+--- a/EVERGI/forecaster_test.py
++++ b/EVERGI/forecaster_test.py
+@@ -68,16 +68,17 @@ def build_model(l, drop, n, lr):
+ 
+ if __name__ == '__main__':
+     # FETCH THE DATASETS
+-    dset = 'GEP'
+-    country = 'Belgium'
++    tf.random.set_seed(0)
++    dset = 'London'
++    country = 'UK'
+     net = 'stlf'
+     LAYERS = 1
+-    DROPOUT = 0
++    DROPOUT = 0.3
+     NEURONS = 64
+     LR = 1e-3
+     BATCHSIZE = 1500
+ 
+-    MAX_EPOCHS = 20
++    MAX_EPOCHS = 40
+     PATIENCE = 5
+ 
+     HORIZON = 72
+@@ -95,6 +96,12 @@ if __name__ == '__main__':
+             df = pd.read_csv(filename, index_col=0)
+             datasets.append(df)
+             names.append('B'+str(i))
++    if dset == 'London':
++        hourly = pd.read_csv('../data/London_smart_meters/London_hourly_all.csv', index_col='tstp')
++        for house in hourly['LCLid'].unique():
++            temp = hourly.loc[hourly['LCLid'] == house]
++            datasets.append(temp)
++            names.append(house)
+         
+     dX_train = []
+     dT_train = []
+@@ -126,6 +133,10 @@ if __name__ == '__main__':
+         'patience': PATIENCE
+     })
+     config = wandb.config
++    if not os.path.exists('./results/'+dset+'/global/3days'):
++        os.makedirs('./results/'+dset+'/global/3days')
++    if not os.path.exists('./models/'+dset+'_models'):
++        os.makedirs('./models/'+dset+'_models')
+ 
+     # full data LSTM MIMO compilation and fit
+     LSTMIMO = build_model(l=LAYERS, drop=DROPOUT, n=NEURONS, lr=LR)
+diff --git a/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc b/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc
+index 263aa85..ff84ffd 100644
+Binary files a/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc and b/EVERGI/src/__pycache__/preprocessing_3days.cpython-38.pyc differ
+diff --git a/EVERGI/src/preprocessing_3days.py b/EVERGI/src/preprocessing_3days.py
+index de41039..7ad9814 100644
+--- a/EVERGI/src/preprocessing_3days.py
++++ b/EVERGI/src/preprocessing_3days.py
+@@ -1,7 +1,7 @@
+ import pandas as pd
+ import numpy as np
+ from workalendar.usa import Texas
+-from workalendar.europe import Belgium
++from workalendar.europe import Belgium, UnitedKingdom
+ from workalendar.usa import UnitedStates
+ from workalendar.america import Canada
+ 
+@@ -82,6 +82,8 @@ def preprocess(dataframe, country: str):
+     # Setting the calendar holiday dates
+     if country in ['Belgium', 'belgium']:
+         cal = Belgium()
++    elif country in ['England', 'UK', 'uk', 'United Kingdom']:
++        cal = UnitedKingdom()      
+     elif country in ['Texas', 'texas']:
+         cal = Texas()
+     elif country in ['United States', 'US', 'United States of America', 'us', 'usa', 'USA']:
+diff --git a/EVERGI/wandb/debug-internal.log b/EVERGI/wandb/debug-internal.log
+index e922cbe..7b696d7 120000
+--- a/EVERGI/wandb/debug-internal.log
++++ b/EVERGI/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210414_141653-2gow68ss/logs/debug-internal.log
+\ No newline at end of file
++run-20210416_142647-a1n1vahg/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/debug.log b/EVERGI/wandb/debug.log
+index bde7530..a196402 120000
+--- a/EVERGI/wandb/debug.log
++++ b/EVERGI/wandb/debug.log
+@@ -1 +1 @@
+-run-20210414_141653-2gow68ss/logs/debug.log
+\ No newline at end of file
++run-20210416_142647-a1n1vahg/logs/debug.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/latest-run b/EVERGI/wandb/latest-run
+index 0db4bb6..6275a7f 120000
+--- a/EVERGI/wandb/latest-run
++++ b/EVERGI/wandb/latest-run
+@@ -1 +1 @@
+-run-20210414_141653-2gow68ss
+\ No newline at end of file
++run-20210416_142647-a1n1vahg
+\ No newline at end of file
