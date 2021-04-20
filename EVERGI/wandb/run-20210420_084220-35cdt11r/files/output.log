@@ -1,0 +1,14 @@
+  0%|                                                                                                                  | 0/2 [00:10<?, ?it/s]
+Traceback (most recent call last):
+  File "forecaster_buildings.py", line 143, in <module>
+    concat_input = tf.concat([train_inputs['X'],train_inputs['X2']], axis=2)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py", line 201, in wrapper
+    return target(*args, **kwargs)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/ops/array_ops.py", line 1654, in concat
+    return gen_array_ops.concat_v2(values=values, axis=axis, name=name)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/ops/gen_array_ops.py", line 1207, in concat_v2
+    _ops.raise_from_not_ok_status(e, name)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/framework/ops.py", line 6843, in raise_from_not_ok_status
+    six.raise_from(core._status_to_exception(e.code, message), None)
+  File "<string>", line 3, in raise_from
+tensorflow.python.framework.errors_impl.InvalidArgumentError: ConcatOp : Dimensions of inputs should match: shape[0] = [39805,24,1] vs. shape[1] = [39805,72,13] [Op:ConcatV2] name: concat

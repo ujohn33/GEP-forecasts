@@ -1,0 +1,25 @@
+  7%|███████▍                                                                                                | 2/28 [03:32<46:04, 106.34s/it]
+Traceback (most recent call last):
+  File "forecaster_buildings.py", line 144, in <module>
+    history = LSTMIMO.fit(concat_input, train_inputs['target'], batch_size=BATCHSIZE, epochs=MAX_EPOCHS,
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/wandb/integration/keras/keras.py", line 119, in new_v2
+    return old_v2(*args, **kwargs)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/keras/engine/training.py", line 108, in _method_wrapper
+    return method(self, *args, **kwargs)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/keras/engine/training.py", line 1098, in fit
+    tmp_logs = train_function(iterator)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/def_function.py", line 780, in __call__
+    result = self._call(*args, **kwds)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/def_function.py", line 807, in _call
+    return self._stateless_fn(*args, **kwds)  # pylint: disable=not-callable
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/function.py", line 2829, in __call__
+    return graph_function._filtered_call(args, kwargs)  # pylint: disable=protected-access
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/function.py", line 1843, in _filtered_call
+    return self._call_flat(
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/function.py", line 1923, in _call_flat
+    return self._build_call_outputs(self._inference_function.call(
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/function.py", line 545, in call
+    outputs = execute.execute(
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/tensorflow/python/eager/execute.py", line 59, in quick_execute
+    tensors = pywrap_tfe.TFE_Py_Execute(ctx._handle, device_name, op_name,
+KeyboardInterrupt
