@@ -59,15 +59,6 @@ def series_to_supervised(data, dropnan=True, lag2=168):
         agg.dropna(inplace=True)
     return agg 
 
-def create_evaluation_df(predictions, test_inputs, H, scaler):
-    """Create a data frame for easy evaluation"""
-    eval_df = pd.DataFrame(predictions, columns=['t+'+str(t) for t in range(1, H+1)])
-    eval_df['timestamp'] = test_inputs.dataframe.index[::24]
-    eval_df = pd.melt(eval_df, id_vars='timestamp', value_name='prediction', var_name='h')
-    eval_df['actual'] = np.transpose(test_inputs['target'][::24]).ravel()
-    eval_df[['prediction', 'actual']] = scaler.inverse_transform(eval_df[['prediction', 'actual']])
-    return eval_df
-
 def preprocess(dataframe, country: str):
     dataframe.index = pd.to_datetime(dataframe.index)
     # Removing duplicates
