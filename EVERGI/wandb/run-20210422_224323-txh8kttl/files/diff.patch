@@ -1,0 +1,56 @@
+diff --git a/EVERGI/forecaster_buildings.py b/EVERGI/forecaster_buildings.py
+index d17c27a..74cd3b9 100644
+--- a/EVERGI/forecaster_buildings.py
++++ b/EVERGI/forecaster_buildings.py
+@@ -69,8 +69,8 @@ def build_model(l, drop, n, lr):
+ if __name__ == '__main__':
+     # FETCH THE DATASETS
+     tf.random.set_seed(0)
+-    dset = 'London'
+-    country = 'UK'
++    dset = 'Columbia'
++    country = 'Canada'
+     net = 'stlf'
+     HORIZON = 24
+     
+@@ -159,7 +159,11 @@ if __name__ == '__main__':
+         save_model(LSTMIMO, model_path)
+         runname = wandb.run.name
+         i += 1
+-        run.finish()        
+-    metrics.to_csv('./results/'+dset+'/local/3days/LSTM_'+runname+'.csv')
++        run.finish()
++    if HORIZON == 72:
++        metrics.to_csv('./results/'+dset+'/local/3days/LSTM_'+runname+'.csv')
++    if HORIZON == 24:
++        metrics.to_csv('./results/'+dset+'/local/dayahead/LSTM_'+runname+'.csv')
++    
+ 
+ 
+diff --git a/EVERGI/wandb/debug-internal.log b/EVERGI/wandb/debug-internal.log
+index bac3b9e..8998332 120000
+--- a/EVERGI/wandb/debug-internal.log
++++ b/EVERGI/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210422_090836-1820ebfp/logs/debug-internal.log
+\ No newline at end of file
++run-20210422_224323-txh8kttl/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/debug.log b/EVERGI/wandb/debug.log
+index 13e835a..24a0705 120000
+--- a/EVERGI/wandb/debug.log
++++ b/EVERGI/wandb/debug.log
+@@ -1 +1 @@
+-run-20210422_090836-1820ebfp/logs/debug.log
+\ No newline at end of file
++run-20210422_224323-txh8kttl/logs/debug.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/latest-run b/EVERGI/wandb/latest-run
+index 15bc8f5..f0afbc5 120000
+--- a/EVERGI/wandb/latest-run
++++ b/EVERGI/wandb/latest-run
+@@ -1 +1 @@
+-run-20210422_090836-1820ebfp
+\ No newline at end of file
++run-20210422_224323-txh8kttl
+\ No newline at end of file

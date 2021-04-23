@@ -68,10 +68,10 @@ def build_model(l, drop, n, lr):
 
 if __name__ == '__main__':
     # FETCH THE DATASETS
-    tf.random.set_seed(2)
-    dset = 'London'
-    country = 'UK'
-    HORIZON = 24
+    tf.random.set_seed(0)
+    dset = 'Columbia'
+    country = 'Canada'
+    HORIZON = 72
 
     
     net = 'stlf'

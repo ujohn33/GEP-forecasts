@@ -1,0 +1,29 @@
+2021-04-22 22:43:23,111 INFO    MainThread:1196878 [wandb_setup.py:_flush():69] setting env: {}
+2021-04-22 22:43:23,111 INFO    MainThread:1196878 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-04-22 22:43:23,111 INFO    MainThread:1196878 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-04-22 22:43:23,112 INFO    MainThread:1196878 [wandb_init.py:_log_setup():319] Logging user logs to /home/ubuntu/evgeny/GEP-forecasts/EVERGI/wandb/run-20210422_224323-txh8kttl/logs/debug.log
+2021-04-22 22:43:23,112 INFO    MainThread:1196878 [wandb_init.py:_log_setup():320] Logging internal logs to /home/ubuntu/evgeny/GEP-forecasts/EVERGI/wandb/run-20210422_224323-txh8kttl/logs/debug-internal.log
+2021-04-22 22:43:23,112 INFO    MainThread:1196878 [wandb_init.py:init():352] calling init triggers
+2021-04-22 22:43:23,112 INFO    MainThread:1196878 [wandb_init.py:init():357] wandb.init called with sweep_config: {}
+config: {'layers': 1, 'dropout': 0.3, 'neurons': 64, 'learning rate': 0.001, 'batch_size': 1500, 'architecture': 'local', 'dataset': 'Columbia', 'building': 'B23', 'epochs': 40, 'patience': 5}
+2021-04-22 22:43:23,112 INFO    MainThread:1196878 [wandb_init.py:init():401] starting backend
+2021-04-22 22:43:23,112 INFO    MainThread:1196878 [backend.py:_multiprocessing_setup():69] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2021-04-22 22:43:23,115 INFO    MainThread:1196878 [backend.py:ensure_launched():123] starting backend process...
+2021-04-22 22:43:23,144 INFO    MainThread:1196878 [backend.py:ensure_launched():127] started backend process with pid: 1200837
+2021-04-22 22:43:23,147 INFO    MainThread:1196878 [wandb_init.py:init():406] backend started and connected
+2021-04-22 22:43:23,150 INFO    MainThread:1196878 [wandb_init.py:init():446] updated telemetry
+2021-04-22 22:43:23,151 INFO    MainThread:1196878 [wandb_init.py:init():465] communicating current version
+2021-04-22 22:43:23,988 INFO    MainThread:1196878 [wandb_init.py:init():470] got version response upgrade_message: "wandb version 0.10.27 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2021-04-22 22:43:23,989 INFO    MainThread:1196878 [wandb_init.py:init():478] communicating run to backend with 30 second timeout
+2021-04-22 22:43:24,275 INFO    MainThread:1196878 [wandb_init.py:init():503] starting run threads in backend
+2021-04-22 22:43:25,817 INFO    MainThread:1196878 [wandb_run.py:_console_start():1422] atexit reg
+2021-04-22 22:43:25,817 INFO    MainThread:1196878 [wandb_run.py:_redirect():1285] redirect: SettingsConsole.REDIRECT
+2021-04-22 22:43:25,818 INFO    MainThread:1196878 [wandb_run.py:_redirect():1290] Redirecting console.
+2021-04-22 22:43:25,818 INFO    MainThread:1196878 [redirect.py:install():213] install start
+2021-04-22 22:43:25,818 INFO    MainThread:1196878 [redirect.py:install():228] install stop
+2021-04-22 22:43:25,818 INFO    MainThread:1196878 [redirect.py:install():213] install start
+2021-04-22 22:43:25,819 INFO    MainThread:1196878 [redirect.py:install():228] install stop
+2021-04-22 22:43:25,819 INFO    MainThread:1196878 [wandb_run.py:_redirect():1336] Redirects installed.
+2021-04-22 22:43:25,819 INFO    MainThread:1196878 [wandb_init.py:init():527] run started, returning control to user process
+2021-04-22 22:44:08,291 INFO    MainThread:1196878 [wandb_run.py:finish():1078] finishing run ujohn33/dayahead/txh8kttl
