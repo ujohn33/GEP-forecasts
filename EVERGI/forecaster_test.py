@@ -66,6 +66,24 @@ def build_model(l, drop, n, lr):
     model.compile(loss='mse', optimizer=opt,metrics=['mse'])
     return model
 
+def format_output(df):
+    df['h'] = df['h'].str.extract('(\d+)', expand=False).astype(int)
+    ppivot = pd.pivot_table(df, values='prediction', index=['timestamp'], columns=['h'])
+    ppivot = ppivot.add_prefix('h_')
+    ppivot.index = pd.to_datetime(ppivot.index)
+    apivot = pd.pivot_table(df, values='actual', index=['timestamp'], columns=['h'])
+    apivot = apivot.add_prefix('h_')
+    apivot.index = pd.to_datetime(ppivot.index)
+    return ppivot, apivot
+
+def flatten(data):
+    flat_list = []
+    # iterating over the data
+    for item in data:
+        # appending elements to the flat_list
+        flat_list += item
+    return flat
+
 if __name__ == '__main__':
     # FETCH THE DATASETS
     tf.random.set_seed(0)
@@ -73,7 +91,7 @@ if __name__ == '__main__':
     country = 'Canada'
     HORIZON = 72
 
-    
+
     net = 'stlf'
     LAYERS = 1
     DROPOUT = 0.3
@@ -85,7 +103,7 @@ if __name__ == '__main__':
     PATIENCE = 10
     datasets = []
     names = []
-    
+
     if dset == 'GEP':
         GEP1 = pd.read_csv('../data/GEP/Consumption_1H.csv', index_col=0, header=0, names=['value'])
         GEP4 = pd.read_csv('../data/GEP/B4_Consumption_1H.csv', index_col=0, header=0, names=['value'])
@@ -103,7 +121,7 @@ if __name__ == '__main__':
             temp = hourly.loc[hourly['LCLid'] == house]
             datasets.append(temp)
             names.append(house)
-        
+
     dX_train = []
     dT_train = []
     dX_test = []
@@ -167,12 +185,16 @@ if __name__ == '__main__':
         concat_input = tf.concat([dX_test[i]['X'],dX_test[i]['X2']], axis=2)
         FD_predictions = LSTMIMO.predict(concat_input)
         FD_eval_df = create_evaluation_df(FD_predictions, dX_test[i], HORIZON, dX_scaler[i])
-        FD_eval_df.index = pd.to_datetime(FD_eval_df['timestamp'])
-        FD_eval_df = FD_eval_df[np.where(FD_eval_df.index.hour == 0)[0][0]:][::24]
-        FD_eval_df.to_csv('./results/'+dset+'/'+wandb.run.name+'_'+str(i)+'.csv')
-        mae = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'MAE')
-        mape = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'MAPE')
-        rmse = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'RMSE')
+        preds, actuals = format_output(FD_eval_df)
+        preds = preds[np.where(preds.index.hour == 0)[0][0]:][::24]
+        actuals = actuals[np.where(actuals.index.hour == 0)[0][0]:][::24]
+        full = actuals.merge(preds, how='inner', left_index=True, right_index=True, suffixes=('_actuals', '_preds'))
+        full.to_csv('./results/'+dset+'/'+wandb.run.name+'_'+str(i)+'.csv')
+        preds = flatten(preds.values.tolist())
+        actuals = flatten(actuals.values.tolist())
+        mae = validation(preds, actuals, 'MAE')
+        mape = validation(preds, actuals, 'MAPE')
+        rmse = validation(preds, actuals, 'RMSE')
         #print('rmse {}'.format(rmse))
         metrics.loc[i] = pd.Series({'mae':mae, 'mape':mape, 'rmse':rmse, 'B': names[i]})
     wandb.log({"mape": metrics.mape.mean()})
