@@ -1,0 +1,119 @@
+diff --git a/EVERGI/forecaster_buildings.py b/EVERGI/forecaster_buildings.py
+index 07678be..eadae20 100644
+--- a/EVERGI/forecaster_buildings.py
++++ b/EVERGI/forecaster_buildings.py
+@@ -66,13 +66,31 @@ def build_model(l, drop, n, lr):
+     model.compile(loss='mse', optimizer=opt,metrics=['mse'])
+     return model
+ 
++def format_output(df):
++    df['h'] = df['h'].str.extract('(\d+)', expand=False).astype(int)
++    ppivot = pd.pivot_table(df, values='prediction', index=['timestamp'], columns=['h'])
++    ppivot = ppivot.add_prefix('h_')
++    ppivot.index = pd.to_datetime(ppivot.index)
++    apivot = pd.pivot_table(df, values='actual', index=['timestamp'], columns=['h'])
++    apivot = apivot.add_prefix('h_')
++    apivot.index = pd.to_datetime(ppivot.index)
++    return ppivot, apivot
++
++def flatten(data):
++    flat_list = []
++    # iterating over the data
++    for item in data:
++        # appending elements to the flat_list
++        flat_list += item
++    return flat_list
++
+ if __name__ == '__main__':
+     # FETCH THE DATASETS
+     tf.random.set_seed(0)
+     dset = 'Columbia'
+     country = 'Canada'
+     net = 'stlf'
+-    HORIZON = 24
++    HORIZON = 72
+     
+     LAYERS = 1
+     DROPOUT = 0.3
+@@ -116,8 +134,8 @@ if __name__ == '__main__':
+             os.makedirs('./models/'+dset+'_models/local')
+     if HORIZON == 24:
+         proj_name = 'dayahead'
+-        if not os.path.exists('./results/'+dset+'/local/3days'):
+-            os.makedirs('./results/'+dset+'/local/3days')
++        if not os.path.exists('./results/'+dset+'/local/dayahead'):
++            os.makedirs('./results/'+dset+'/local/dayahead')
+         if not os.path.exists('./models/'+dset+'_models/local'):
+             os.makedirs('./models/'+dset+'_models/local')    
+     i = 0
+@@ -147,12 +165,16 @@ if __name__ == '__main__':
+         concat_input = tf.concat([test_inputs['X'],test_inputs['X2']], axis=2)
+         FD_predictions = LSTMIMO.predict(concat_input)
+         FD_eval_df = create_evaluation_df(FD_predictions, test_inputs, HORIZON, y_scaler)
+-        FD_eval_df.index = pd.to_datetime(FD_eval_df['timestamp'])
+-        FD_eval_df = FD_eval_df[np.where(FD_eval_df.index.hour == 0)[0][0]:][::24]
+-        FD_eval_df.to_csv('./results/'+dset+'/local/'+wandb.run.name+'_'+str(i)+'.csv')
+-        mae = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'MAE')
+-        mape = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'MAPE')
+-        rmse = validation(FD_eval_df['prediction'], FD_eval_df['actual'], 'RMSE')
++        preds, actuals = format_output(FD_eval_df)
++        preds = preds[np.where(preds.index.hour == 0)[0][0]:][::24]
++        actuals = actuals[np.where(actuals.index.hour == 0)[0][0]:][::24]
++        full = actuals.merge(preds, how='inner', left_index=True, right_index=True, suffixes=('_actuals', '_preds'))
++        full.to_csv('./results/'+dset+'/'+wandb.run.name+'_'+str(i)+'.csv')
++        preds = flatten(preds.values.tolist())
++        actuals = flatten(actuals.values.tolist())
++        mae = validation(preds, actuals, 'MAE')
++        mape = validation(preds, actuals, 'MAPE')
++        rmse = validation(preds, actuals, 'RMSE')
+         #print('rmse {}'.format(rmse))
+         metrics.loc[i] = pd.Series({'mae':mae, 'mape':mape, 'rmse':rmse, 'B': names[i]})
+         wandb.log({"mape": metrics.mape.mean()})
+diff --git a/EVERGI/forecaster_test.py b/EVERGI/forecaster_test.py
+index 9328510..67d113e 100644
+--- a/EVERGI/forecaster_test.py
++++ b/EVERGI/forecaster_test.py
+@@ -82,14 +82,14 @@ def flatten(data):
+     for item in data:
+         # appending elements to the flat_list
+         flat_list += item
+-    return flat
++    return flat_list
+ 
+ if __name__ == '__main__':
+     # FETCH THE DATASETS
+     tf.random.set_seed(0)
+     dset = 'Columbia'
+     country = 'Canada'
+-    HORIZON = 72
++    HORIZON = 24
+ 
+ 
+     net = 'stlf'
+diff --git a/EVERGI/wandb/debug-internal.log b/EVERGI/wandb/debug-internal.log
+index 7ed6483..175f65f 120000
+--- a/EVERGI/wandb/debug-internal.log
++++ b/EVERGI/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210423_133111-kt99uwnj/logs/debug-internal.log
+\ No newline at end of file
++run-20210426_062842-16qd5gll/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/debug.log b/EVERGI/wandb/debug.log
+index 865f88c..b33cd4e 120000
+--- a/EVERGI/wandb/debug.log
++++ b/EVERGI/wandb/debug.log
+@@ -1 +1 @@
+-run-20210423_133111-kt99uwnj/logs/debug.log
+\ No newline at end of file
++run-20210426_062842-16qd5gll/logs/debug.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/latest-run b/EVERGI/wandb/latest-run
+index 6880dde..1a23d64 120000
+--- a/EVERGI/wandb/latest-run
++++ b/EVERGI/wandb/latest-run
+@@ -1 +1 @@
+-run-20210423_133111-kt99uwnj
+\ No newline at end of file
++run-20210426_062842-16qd5gll
+\ No newline at end of file
