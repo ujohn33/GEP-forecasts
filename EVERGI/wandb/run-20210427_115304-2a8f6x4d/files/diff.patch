@@ -1,0 +1,256 @@
+diff --git a/EVERGI/forecaster_buildings.py b/EVERGI/forecaster_buildings.py
+index 2bf6832..400bffa 100644
+--- a/EVERGI/forecaster_buildings.py
++++ b/EVERGI/forecaster_buildings.py
+@@ -87,8 +87,8 @@ def flatten(data):
+ if __name__ == '__main__':
+     # FETCH THE DATASETS
+     tf.random.set_seed(0)
+-    dset = 'GEP'
+-    country = 'Belgium'
++    dset = 'London'
++    country = 'UK'
+     net = 'stlf'
+     HORIZON = 72
+     
+@@ -169,7 +169,7 @@ if __name__ == '__main__':
+         preds = preds[np.where(preds.index.hour == 0)[0][0]:][::24]
+         actuals = actuals[np.where(actuals.index.hour == 0)[0][0]:][::24]
+         full = actuals.merge(preds, how='inner', left_index=True, right_index=True, suffixes=('_actuals', '_preds'))
+-        full.to_csv('./results/'+dset+'/'+wandb.run.name+'_'+str(i)+'.csv')
++        #full.to_csv('./results/'+dset+'/'+wandb.run.name+'_'+str(i)+'.csv')
+         preds = flatten(preds.values.tolist())
+         actuals = flatten(actuals.values.tolist())
+         mae = validation(preds, actuals, 'MAE')
+diff --git a/EVERGI/model conversion.ipynb b/EVERGI/model conversion.ipynb
+index be24b44..ddcd42b 100644
+--- a/EVERGI/model conversion.ipynb	
++++ b/EVERGI/model conversion.ipynb	
+@@ -153,7 +153,7 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": null,
++   "execution_count": 37,
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -187,7 +187,7 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 31,
++   "execution_count": 38,
+    "metadata": {},
+    "outputs": [
+     {
+@@ -220,37 +220,37 @@
+        "  <tbody>\n",
+        "    <tr>\n",
+        "      <th>0</th>\n",
+-       "      <td>0.142703</td>\n",
+-       "      <td>55.1483</td>\n",
+-       "      <td>0.233879</td>\n",
++       "      <td>0.131583</td>\n",
++       "      <td>47.6225</td>\n",
++       "      <td>0.22736</td>\n",
+        "      <td>MAC000020</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+        "      <th>1</th>\n",
+-       "      <td>0.0946562</td>\n",
+-       "      <td>73.3898</td>\n",
+-       "      <td>0.171266</td>\n",
++       "      <td>0.0905566</td>\n",
++       "      <td>67.3195</td>\n",
++       "      <td>0.168249</td>\n",
+        "      <td>MAC001814</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+        "      <th>2</th>\n",
+-       "      <td>0.0830018</td>\n",
+-       "      <td>78.3001</td>\n",
+-       "      <td>0.116079</td>\n",
++       "      <td>0.0809991</td>\n",
++       "      <td>74.1025</td>\n",
++       "      <td>0.113524</td>\n",
+        "      <td>MAC003721</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+        "      <th>3</th>\n",
+-       "      <td>0.152296</td>\n",
+-       "      <td>42.945</td>\n",
+-       "      <td>0.248323</td>\n",
++       "      <td>0.148538</td>\n",
++       "      <td>40.9636</td>\n",
++       "      <td>0.246479</td>\n",
+        "      <td>MAC003341</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+        "      <th>4</th>\n",
+-       "      <td>0.0485388</td>\n",
+-       "      <td>62.7109</td>\n",
+-       "      <td>0.0705173</td>\n",
++       "      <td>0.048963</td>\n",
++       "      <td>63.947</td>\n",
++       "      <td>0.0722627</td>\n",
+        "      <td>MAC001688</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+@@ -262,37 +262,37 @@
+        "    </tr>\n",
+        "    <tr>\n",
+        "      <th>85</th>\n",
+-       "      <td>0.113</td>\n",
+-       "      <td>79.7984</td>\n",
+-       "      <td>0.251225</td>\n",
++       "      <td>0.112996</td>\n",
++       "      <td>79.8493</td>\n",
++       "      <td>0.256048</td>\n",
+        "      <td>MAC003618</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+        "      <th>86</th>\n",
+-       "      <td>0.297379</td>\n",
+-       "      <td>68.4857</td>\n",
+-       "      <td>0.470528</td>\n",
++       "      <td>0.283427</td>\n",
++       "      <td>61.4328</td>\n",
++       "      <td>0.469732</td>\n",
+        "      <td>MAC001611</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+        "      <th>87</th>\n",
+-       "      <td>0.330143</td>\n",
+-       "      <td>80.6212</td>\n",
+-       "      <td>0.500765</td>\n",
++       "      <td>0.326917</td>\n",
++       "      <td>85.0468</td>\n",
++       "      <td>0.501918</td>\n",
+        "      <td>MAC003622</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+        "      <th>88</th>\n",
+-       "      <td>0.273642</td>\n",
+-       "      <td>62.6549</td>\n",
+-       "      <td>0.413132</td>\n",
++       "      <td>0.27822</td>\n",
++       "      <td>65.4824</td>\n",
++       "      <td>0.407986</td>\n",
+        "      <td>MAC002385</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+        "      <th>89</th>\n",
+-       "      <td>0.235204</td>\n",
+-       "      <td>86.2149</td>\n",
+-       "      <td>0.421642</td>\n",
++       "      <td>0.211333</td>\n",
++       "      <td>72.4751</td>\n",
++       "      <td>0.412336</td>\n",
+        "      <td>MAC002195</td>\n",
+        "    </tr>\n",
+        "  </tbody>\n",
+@@ -302,22 +302,22 @@
+       ],
+       "text/plain": [
+        "          mae     mape       rmse          B\n",
+-       "0    0.142703  55.1483   0.233879  MAC000020\n",
+-       "1   0.0946562  73.3898   0.171266  MAC001814\n",
+-       "2   0.0830018  78.3001   0.116079  MAC003721\n",
+-       "3    0.152296   42.945   0.248323  MAC003341\n",
+-       "4   0.0485388  62.7109  0.0705173  MAC001688\n",
++       "0    0.131583  47.6225    0.22736  MAC000020\n",
++       "1   0.0905566  67.3195   0.168249  MAC001814\n",
++       "2   0.0809991  74.1025   0.113524  MAC003721\n",
++       "3    0.148538  40.9636   0.246479  MAC003341\n",
++       "4    0.048963   63.947  0.0722627  MAC001688\n",
+        "..        ...      ...        ...        ...\n",
+-       "85      0.113  79.7984   0.251225  MAC003618\n",
+-       "86   0.297379  68.4857   0.470528  MAC001611\n",
+-       "87   0.330143  80.6212   0.500765  MAC003622\n",
+-       "88   0.273642  62.6549   0.413132  MAC002385\n",
+-       "89   0.235204  86.2149   0.421642  MAC002195\n",
++       "85   0.112996  79.8493   0.256048  MAC003618\n",
++       "86   0.283427  61.4328   0.469732  MAC001611\n",
++       "87   0.326917  85.0468   0.501918  MAC003622\n",
++       "88    0.27822  65.4824   0.407986  MAC002385\n",
++       "89   0.211333  72.4751   0.412336  MAC002195\n",
+        "\n",
+        "[90 rows x 4 columns]"
+       ]
+      },
+-     "execution_count": 31,
++     "execution_count": 38,
+      "metadata": {},
+      "output_type": "execute_result"
+     }
+@@ -328,7 +328,7 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 33,
++   "execution_count": 39,
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -340,14 +340,14 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 34,
++   "execution_count": 40,
+    "metadata": {},
+    "outputs": [
+     {
+      "name": "stdout",
+      "output_type": "stream",
+      "text": [
+-      "0.32281072733376137\n"
++      "0.3270023862973313\n"
+      ]
+     }
+    ],
+@@ -357,14 +357,14 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 35,
++   "execution_count": 41,
+    "metadata": {},
+    "outputs": [
+     {
+      "name": "stdout",
+      "output_type": "stream",
+      "text": [
+-      "82.21196991935187\n"
++      "80.50297365607194\n"
+      ]
+     }
+    ],
+diff --git a/EVERGI/wandb/debug-internal.log b/EVERGI/wandb/debug-internal.log
+index d9a4cc0..2c7bf74 120000
+--- a/EVERGI/wandb/debug-internal.log
++++ b/EVERGI/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210427_073656-10lphqko/logs/debug-internal.log
+\ No newline at end of file
++run-20210427_115304-2a8f6x4d/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/debug.log b/EVERGI/wandb/debug.log
+index ac96da7..ceacc4d 120000
+--- a/EVERGI/wandb/debug.log
++++ b/EVERGI/wandb/debug.log
+@@ -1 +1 @@
+-run-20210427_073656-10lphqko/logs/debug.log
+\ No newline at end of file
++run-20210427_115304-2a8f6x4d/logs/debug.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/latest-run b/EVERGI/wandb/latest-run
+index aabef05..7a09c9b 120000
+--- a/EVERGI/wandb/latest-run
++++ b/EVERGI/wandb/latest-run
+@@ -1 +1 @@
+-run-20210427_073656-10lphqko
+\ No newline at end of file
++run-20210427_115304-2a8f6x4d
+\ No newline at end of file

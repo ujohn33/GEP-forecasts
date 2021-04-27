@@ -87,10 +87,10 @@ def flatten(data):
 if __name__ == '__main__':
     # FETCH THE DATASETS
     tf.random.set_seed(0)
-    dset = 'GEP'
-    country = 'Belgium'
+    dset = 'London'
+    country = 'UK'
     net = 'stlf'
-    HORIZON = 72
+    HORIZON = 24
     
     LAYERS = 1
     DROPOUT = 0.3
@@ -169,7 +169,7 @@ if __name__ == '__main__':
         preds = preds[np.where(preds.index.hour == 0)[0][0]:][::24]
         actuals = actuals[np.where(actuals.index.hour == 0)[0][0]:][::24]
         full = actuals.merge(preds, how='inner', left_index=True, right_index=True, suffixes=('_actuals', '_preds'))
-        full.to_csv('./results/'+dset+'/'+wandb.run.name+'_'+str(i)+'.csv')
+        #full.to_csv('./results/'+dset+'/'+wandb.run.name+'_'+str(i)+'.csv')
         preds = flatten(preds.values.tolist())
         actuals = flatten(actuals.values.tolist())
         mae = validation(preds, actuals, 'MAE')
