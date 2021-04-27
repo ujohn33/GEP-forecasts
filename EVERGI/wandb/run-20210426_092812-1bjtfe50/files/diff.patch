@@ -1,0 +1,625 @@
+diff --git a/EVERGI/Tinkering stuff.ipynb b/EVERGI/Tinkering stuff.ipynb
+index da4cf14..c6a192a 100644
+--- a/EVERGI/Tinkering stuff.ipynb	
++++ b/EVERGI/Tinkering stuff.ipynb	
+@@ -2,7 +2,7 @@
+  "cells": [
+   {
+    "cell_type": "code",
+-   "execution_count": 2,
++   "execution_count": 1,
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -125,533 +125,82 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 15,
++   "execution_count": 5,
+    "metadata": {},
+    "outputs": [
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      "  0%|          | 0/28 [00:00<?, ?it/s]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      "  4%|▎         | 1/28 [00:01<00:48,  1.81s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      "  7%|▋         | 2/28 [00:03<00:50,  1.94s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 11%|█         | 3/28 [00:05<00:46,  1.86s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 14%|█▍        | 4/28 [00:07<00:42,  1.77s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 18%|█▊        | 5/28 [00:08<00:39,  1.71s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 21%|██▏       | 6/28 [00:10<00:37,  1.71s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 25%|██▌       | 7/28 [00:12<00:34,  1.64s/it]"
+-     ]
+-    },
+     {
+      "name": "stdout",
+      "output_type": "stream",
+      "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 29%|██▊       | 8/28 [00:13<00:32,  1.64s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 32%|███▏      | 9/28 [00:15<00:30,  1.63s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 36%|███▌      | 10/28 [00:17<00:30,  1.68s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      " 39%|███▉      | 11/28 [00:19<00:29,  1.74s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\n"
+-     ]
+-    },
+-    {
+-     "ename": "KeyboardInterrupt",
+-     "evalue": "",
+-     "output_type": "error",
+-     "traceback": [
+-      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+-      "\u001b[0;31mKeyboardInterrupt\u001b[0m                         Traceback (most recent call last)",
+-      "\u001b[0;32m<ipython-input-15-ca93d4cea90e>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0mdX_scaler\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0mdf\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mtqdm\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdatasets\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 6\u001b[0;31m     \u001b[0mtrain_inputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtest_inputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0my_scaler\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mMIMO_fulldata_preparation\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdf\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mn_test\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;36m4380\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mT\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mHORIZON\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mHORIZON\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mHORIZON\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcountry\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mcountry\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      7\u001b[0m     \u001b[0mdX_train\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtf\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconcat\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mtrain_inputs\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'X'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mtrain_inputs\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'X2'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;36m2\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      8\u001b[0m     \u001b[0mdT_train\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtrain_inputs\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'target'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m<ipython-input-14-8d9dd3274805>\u001b[0m in \u001b[0;36mMIMO_fulldata_preparation\u001b[0;34m(df, n_test, T, HORIZON, country)\u001b[0m\n\u001b[1;32m     17\u001b[0m     \u001b[0mtrain_df\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mtrain_df\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcolumns\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mlong_scaler\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfit_transform\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtrain_df\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     18\u001b[0m     \u001b[0mtensor_structure\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m{\u001b[0m\u001b[0;34m'X'\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mrange\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m-\u001b[0m\u001b[0mT\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtrain_df\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcolumns\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'X2'\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mrange\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mHORIZON\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtrain_df\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcolumns\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m}\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 19\u001b[0;31m     \u001b[0mtrain_inputs\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mTimeSeriesTensor\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtrain_df\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'value'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mHORIZON\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtensor_structure\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     20\u001b[0m     \u001b[0mtest_inputs\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mTimeSeriesTensor\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtest_df\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'value'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mHORIZON\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtensor_structure\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     21\u001b[0m     \u001b[0;32mreturn\u001b[0m \u001b[0mtrain_inputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtest_inputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0my_scaler\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/evgeny/GEP-forecasts/EVERGI/src/functions.py\u001b[0m in \u001b[0;36m__init__\u001b[0;34m(self, dataset, target, H, tensor_structure, freq, drop_incomplete)\u001b[0m\n\u001b[1;32m    160\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtensor_names\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mlist\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtensor_structure\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mkeys\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    161\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 162\u001b[0;31m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdataframe\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_shift_data\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mH\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfreq\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdrop_incomplete\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    163\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdata\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_df2tensors\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdataframe\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    164\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/evgeny/GEP-forecasts/EVERGI/src/functions.py\u001b[0m in \u001b[0;36m_shift_data\u001b[0;34m(self, H, freq, drop_incomplete)\u001b[0m\n\u001b[1;32m    197\u001b[0m                         \u001b[0mperiod\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m't'\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0msign\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mshift\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    198\u001b[0m                         \u001b[0mshifted_col\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mname\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m'_'\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mcol\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m'_'\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mperiod\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 199\u001b[0;31m                         \u001b[0mdf\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mshifted_col\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdf\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mcol\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mshift\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mt\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0;34m-\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfreq\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mfreq\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    200\u001b[0m                         \u001b[0midx_tuples\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mname\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcol\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mperiod\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    201\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m__setitem__\u001b[0;34m(self, key, value)\u001b[0m\n\u001b[1;32m   3038\u001b[0m         \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3039\u001b[0m             \u001b[0;31m# set column\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3040\u001b[0;31m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_set_item\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3041\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3042\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0m_setitem_slice\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mkey\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mslice\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m_set_item\u001b[0;34m(self, key, value)\u001b[0m\n\u001b[1;32m   3114\u001b[0m         \"\"\"\n\u001b[1;32m   3115\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_ensure_valid_index\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3116\u001b[0;31m         \u001b[0mvalue\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_sanitize_column\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3117\u001b[0m         \u001b[0mNDFrame\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_set_item\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mkey\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3118\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m_sanitize_column\u001b[0;34m(self, key, value, broadcast)\u001b[0m\n\u001b[1;32m   3738\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3739\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvalue\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mSeries\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3740\u001b[0;31m             \u001b[0mvalue\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mreindexer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3741\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3742\u001b[0m         \u001b[0;32melif\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvalue\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mDataFrame\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36mreindexer\u001b[0;34m(value)\u001b[0m\n\u001b[1;32m   3718\u001b[0m             \u001b[0;31m# reindex if necessary\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3719\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3720\u001b[0;31m             \u001b[0;32mif\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mequals\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mor\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0mlen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3721\u001b[0m                 \u001b[0mvalue\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_values\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcopy\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3722\u001b[0m             \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/indexes/datetimelike.py\u001b[0m in \u001b[0;36mequals\u001b[0;34m(self, other)\u001b[0m\n\u001b[1;32m    150\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    151\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 152\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0marray_equal\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0masi8\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mother\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0masi8\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    153\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    154\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mAppender\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mIndex\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m__contains__\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m__doc__\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m<__array_function__ internals>\u001b[0m in \u001b[0;36marray_equal\u001b[0;34m(*args, **kwargs)\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/numpy/core/numeric.py\u001b[0m in \u001b[0;36marray_equal\u001b[0;34m(a1, a2)\u001b[0m\n\u001b[1;32m   2323\u001b[0m     \u001b[0;32mexcept\u001b[0m \u001b[0mException\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2324\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2325\u001b[0;31m     \u001b[0;32mif\u001b[0m \u001b[0ma1\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mshape\u001b[0m \u001b[0;34m!=\u001b[0m \u001b[0ma2\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mshape\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   2326\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2327\u001b[0m     \u001b[0;32mreturn\u001b[0m \u001b[0mbool\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0masarray\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ma1\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0ma2\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mall\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;31mKeyboardInterrupt\u001b[0m: "
++      "0.7188642826751517\n",
++      "66.34746604955036\n"
+      ]
+     }
+    ],
+    "source": [
+-    "dX_train = []\n",
+-    "dT_train = []\n",
+-    "dX_test = []\n",
+-    "dX_scaler = []\n",
+-    "for df in tqdm(datasets):\n",
+-    "    train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON, country=country)\n",
+-    "    dX_train.append(tf.concat([train_inputs['X'],train_inputs['X2']], axis=2))\n",
+-    "    dT_train.append(train_inputs['target'])\n",
+-    "    dX_test.append(test_inputs)\n",
+-    "    dX_scaler.append(y_scaler)\n",
+-    "global_inputs_X = tf.concat(dX_train, 0)\n",
+-    "global_inputs_T = tf.concat(dT_train, 0)"
++    "local = pd.read_csv('./results/Columbia/local/3days/LSTM_ethereal-yogurt-276.csv')\n",
++    "print(local['rmse'].mean())\n",
++    "print(local['mape'].mean())"
+    ]
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 20,
++   "execution_count": 10,
+    "metadata": {},
+    "outputs": [
+     {
+-     "data": {
+-      "text/plain": [
+-       "<tf.Tensor: shape=(24, 14), dtype=float64, numpy=\n",
+-       "array([[0.05011316, 0.11542192, 0.04393689, 0.99809971, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.07492726, 0.03516004, 0.08786856, 0.99239908, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.06894601, 0.04073715, 0.13178977, 0.98289877, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.06369221, 0.0376657 , 0.1756953 , 0.96959992, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05916586, 0.03629163, 0.21957992, 0.95250412, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05536696, 0.03653411, 0.26343842, 0.93161339, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05229551, 0.0385548 , 0.30726557, 0.90693022, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05011316, 0.03653411, 0.35105616, 0.87845755, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.04881992, 0.05067895, 0.39480497, 0.84619877, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.07508891, 0.12075655, 0.43850681, 0.81015772, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.10515681, 0.07573553, 0.48215647, 0.77033868, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05746848, 0.12730359, 0.52574876, 0.72674639, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.07775622, 0.09076948, 0.56927848, 0.67938604, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05803427, 0.04275784, 0.61274048, 0.62826327, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.04833495, 0.05092144, 0.65612956, 0.57338415, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.03556418, 0.0499515 , 0.69944056, 0.51475523, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.04178791, 0.15882638, 0.74266834, 0.45238346, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.0671678 , 0.09626576, 0.78580776, 0.38627629, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.21475913, 0.09860976, 0.82885366, 0.31644156, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.20958616, 0.10087294, 0.87180095, 0.2428876 , 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.09707404, 0.10297446, 0.91464449, 0.16562314, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05924669, 0.10491432, 0.95737921, 0.0846574 , 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05148723, 0.1066117 , 1.        , 0.        , 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.0362108 , 0.1080666 , 0.        , 1.        , 0.44385322,\n",
+-       "        0.80300604, 1.        , 1.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 0.        ]])>"
+-      ]
+-     },
+-     "execution_count": 20,
+-     "metadata": {},
+-     "output_type": "execute_result"
++     "name": "stdout",
++     "output_type": "stream",
++     "text": [
++      "0.6981920978419323\n",
++      "67.01150291796326\n"
++     ]
+     }
+    ],
+    "source": [
+-    "global_inputs_X[24]"
++    "glob = pd.read_csv('./results/Columbia/global/3days/LSTM_summer-dawn-277.csv')\n",
++    "print(glob['rmse'].mean())\n",
++    "print(glob['mape'].mean())"
+    ]
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 16,
++   "execution_count": 7,
+    "metadata": {},
+    "outputs": [
+     {
+-     "data": {
+-      "text/plain": [
+-       "<tf.Tensor: shape=(24,), dtype=float64, numpy=\n",
+-       "array([0.05011316, 0.07492726, 0.06894601, 0.06369221, 0.05916586,\n",
+-       "       0.05536696, 0.05229551, 0.05011316, 0.04881992, 0.07508891,\n",
+-       "       0.10515681, 0.05746848, 0.07775622, 0.05803427, 0.04833495,\n",
+-       "       0.03556418, 0.04178791, 0.0671678 , 0.21475913, 0.20958616,\n",
+-       "       0.09707404, 0.05924669, 0.05148723, 0.0362108 ])>"
+-      ]
+-     },
+-     "execution_count": 16,
+-     "metadata": {},
+-     "output_type": "execute_result"
++     "name": "stdout",
++     "output_type": "stream",
++     "text": [
++      "0.697060030635504\n",
++      "61.76428919330465\n"
++     ]
+     }
+    ],
+    "source": [
+-    "global_inputs_T[0]"
+-   ]
+-  },
+-  {
+-   "cell_type": "code",
+-   "execution_count": 23,
+-   "metadata": {},
+-   "outputs": [],
+-   "source": [
+-    "results = pd.read_csv('./results/Columbia/firm-sea-117_11.csv', index_col = 0)"
++    "local = pd.read_csv('./results/Columbia/local/dayahead/LSTM_stilted-shape-233.csv')\n",
++    "print(local['rmse'].mean())\n",
++    "print(local['mape'].mean())"
+    ]
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 24,
++   "execution_count": 9,
+    "metadata": {},
+    "outputs": [
+     {
+-     "data": {
+-      "text/html": [
+-       "<div>\n",
+-       "<style scoped>\n",
+-       "    .dataframe tbody tr th:only-of-type {\n",
+-       "        vertical-align: middle;\n",
+-       "    }\n",
+-       "\n",
+-       "    .dataframe tbody tr th {\n",
+-       "        vertical-align: top;\n",
+-       "    }\n",
+-       "\n",
+-       "    .dataframe thead th {\n",
+-       "        text-align: right;\n",
+-       "    }\n",
+-       "</style>\n",
+-       "<table border=\"1\" class=\"dataframe\">\n",
+-       "  <thead>\n",
+-       "    <tr style=\"text-align: right;\">\n",
+-       "      <th></th>\n",
+-       "      <th>timestamp</th>\n",
+-       "      <th>h</th>\n",
+-       "      <th>prediction</th>\n",
+-       "      <th>actual</th>\n",
+-       "    </tr>\n",
+-       "  </thead>\n",
+-       "  <tbody>\n",
+-       "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000000000</th>\n",
+-       "      <td>2017-08-22 12:00:00</td>\n",
+-       "      <td>t+1</td>\n",
+-       "      <td>0.465304</td>\n",
+-       "      <td>0.456369</td>\n",
+-       "    </tr>\n",
+-       "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000000001</th>\n",
+-       "      <td>2017-08-22 13:00:00</td>\n",
+-       "      <td>t+1</td>\n",
+-       "      <td>0.436799</td>\n",
+-       "      <td>0.518040</td>\n",
+-       "    </tr>\n",
+-       "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000000002</th>\n",
+-       "      <td>2017-08-22 14:00:00</td>\n",
+-       "      <td>t+1</td>\n",
+-       "      <td>0.491822</td>\n",
+-       "      <td>0.419366</td>\n",
+-       "    </tr>\n",
+-       "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000000003</th>\n",
+-       "      <td>2017-08-22 15:00:00</td>\n",
+-       "      <td>t+1</td>\n",
+-       "      <td>0.544101</td>\n",
+-       "      <td>0.419366</td>\n",
+-       "    </tr>\n",
+-       "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000000004</th>\n",
+-       "      <td>2017-08-22 16:00:00</td>\n",
+-       "      <td>t+1</td>\n",
+-       "      <td>0.652825</td>\n",
+-       "      <td>0.505706</td>\n",
+-       "    </tr>\n",
+-       "    <tr>\n",
+-       "      <th>...</th>\n",
+-       "      <td>...</td>\n",
+-       "      <td>...</td>\n",
+-       "      <td>...</td>\n",
+-       "      <td>...</td>\n",
+-       "    </tr>\n",
+-       "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000104539</th>\n",
+-       "      <td>2018-02-19 19:00:00</td>\n",
+-       "      <td>t+24</td>\n",
+-       "      <td>1.129356</td>\n",
+-       "      <td>1.406110</td>\n",
+-       "    </tr>\n",
+-       "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000104540</th>\n",
+-       "      <td>2018-02-19 20:00:00</td>\n",
+-       "      <td>t+24</td>\n",
+-       "      <td>0.809294</td>\n",
+-       "      <td>0.357695</td>\n",
+-       "    </tr>\n",
+-       "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000104541</th>\n",
+-       "      <td>2018-02-19 21:00:00</td>\n",
+-       "      <td>t+24</td>\n",
+-       "      <td>0.558248</td>\n",
+-       "      <td>0.333026</td>\n",
+-       "    </tr>\n",
+-       "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000104542</th>\n",
+-       "      <td>2018-02-19 22:00:00</td>\n",
+-       "      <td>t+24</td>\n",
+-       "      <td>0.425174</td>\n",
+-       "      <td>0.308357</td>\n",
+-       "    </tr>\n",
+-       "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000104543</th>\n",
+-       "      <td>2018-02-19 23:00:00</td>\n",
+-       "      <td>t+24</td>\n",
+-       "      <td>0.333818</td>\n",
+-       "      <td>0.234352</td>\n",
+-       "    </tr>\n",
+-       "  </tbody>\n",
+-       "</table>\n",
+-       "<p>104544 rows × 4 columns</p>\n",
+-       "</div>"
+-      ],
+-      "text/plain": [
+-       "                                         timestamp     h  prediction    actual\n",
+-       "1970-01-01 00:00:00.000000000  2017-08-22 12:00:00   t+1    0.465304  0.456369\n",
+-       "1970-01-01 00:00:00.000000001  2017-08-22 13:00:00   t+1    0.436799  0.518040\n",
+-       "1970-01-01 00:00:00.000000002  2017-08-22 14:00:00   t+1    0.491822  0.419366\n",
+-       "1970-01-01 00:00:00.000000003  2017-08-22 15:00:00   t+1    0.544101  0.419366\n",
+-       "1970-01-01 00:00:00.000000004  2017-08-22 16:00:00   t+1    0.652825  0.505706\n",
+-       "...                                            ...   ...         ...       ...\n",
+-       "1970-01-01 00:00:00.000104539  2018-02-19 19:00:00  t+24    1.129356  1.406110\n",
+-       "1970-01-01 00:00:00.000104540  2018-02-19 20:00:00  t+24    0.809294  0.357695\n",
+-       "1970-01-01 00:00:00.000104541  2018-02-19 21:00:00  t+24    0.558248  0.333026\n",
+-       "1970-01-01 00:00:00.000104542  2018-02-19 22:00:00  t+24    0.425174  0.308357\n",
+-       "1970-01-01 00:00:00.000104543  2018-02-19 23:00:00  t+24    0.333818  0.234352\n",
+-       "\n",
+-       "[104544 rows x 4 columns]"
+-      ]
+-     },
+-     "execution_count": 24,
+-     "metadata": {},
+-     "output_type": "execute_result"
++     "name": "stdout",
++     "output_type": "stream",
++     "text": [
++      "0.6887304467273948\n",
++      "60.45539187322606\n"
++     ]
+     }
+    ],
+    "source": [
+-    "results"
++    "glob = pd.read_csv('./results/Columbia/global/dayahead/LSTM_azure-dragon-234.csv')\n",
++    "print(glob['rmse'].mean())\n",
++    "print(glob['mape'].mean())"
+    ]
+   },
+   {
+diff --git a/EVERGI/forecaster_buildings.py b/EVERGI/forecaster_buildings.py
+index eadae20..a3f82da 100644
+--- a/EVERGI/forecaster_buildings.py
++++ b/EVERGI/forecaster_buildings.py
+@@ -87,8 +87,8 @@ def flatten(data):
+ if __name__ == '__main__':
+     # FETCH THE DATASETS
+     tf.random.set_seed(0)
+-    dset = 'Columbia'
+-    country = 'Canada'
++    dset = 'GEP'
++    country = 'Belgium'
+     net = 'stlf'
+     HORIZON = 72
+     
+diff --git a/EVERGI/wandb/debug-internal.log b/EVERGI/wandb/debug-internal.log
+index 462d83f..3cb5472 120000
+--- a/EVERGI/wandb/debug-internal.log
++++ b/EVERGI/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210426_073419-1fhmrfyz/logs/debug-internal.log
+\ No newline at end of file
++run-20210426_092812-1bjtfe50/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/debug.log b/EVERGI/wandb/debug.log
+index 3340d1f..294a2b2 120000
+--- a/EVERGI/wandb/debug.log
++++ b/EVERGI/wandb/debug.log
+@@ -1 +1 @@
+-run-20210426_073419-1fhmrfyz/logs/debug.log
+\ No newline at end of file
++run-20210426_092812-1bjtfe50/logs/debug.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/latest-run b/EVERGI/wandb/latest-run
+index 7f8d289..e44787b 120000
+--- a/EVERGI/wandb/latest-run
++++ b/EVERGI/wandb/latest-run
+@@ -1 +1 @@
+-run-20210426_073419-1fhmrfyz
+\ No newline at end of file
++run-20210426_092812-1bjtfe50
+\ No newline at end of file

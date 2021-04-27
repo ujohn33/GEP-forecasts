@@ -35,12 +35,12 @@ def train_test_split(df, n_test, horizon):
 def MIMO_fulldata_preparation(df, n_test=4380, T=72, HORIZON=72, country='Canada'):
     df = df.merge(series_to_supervised(df), how='right', left_index=True, right_index=True)
     df = preprocess(df, country)
-    train_df, test_df = train_test_split(df, n_test, HORIZON)
+    train_df, test_df = train_test_split(df, n_test, horizon=HORIZON)
     y_scaler = MinMaxScaler()
-    y_scaler.fit(train_df[['value']])
+    y_scaler.fit(train_df[['value']])    
     long_scaler = MinMaxScaler()
-    test_df[test_df.columns] = long_scaler.fit_transform(test_df)
     train_df[train_df.columns] = long_scaler.fit_transform(train_df)
+    test_df[test_df.columns] = long_scaler.transform(test_df)
     tensor_structure = {'X':(range(-T+1, 1), train_df.columns[:1]), 'X2':(range(1, HORIZON+1), train_df.columns[1:])}
     train_inputs = TimeSeriesTensor(train_df, 'value', HORIZON, tensor_structure)
     test_inputs = TimeSeriesTensor(test_df, 'value', HORIZON, tensor_structure)
@@ -87,10 +87,10 @@ def flatten(data):
 if __name__ == '__main__':
     # FETCH THE DATASETS
     tf.random.set_seed(0)
-    dset = 'Columbia'
-    country = 'Canada'
+    dset = 'GEP'
+    country = 'Belgium'
     net = 'stlf'
-    HORIZON = 72
+    HORIZON = 24
     
     LAYERS = 1
     DROPOUT = 0.3

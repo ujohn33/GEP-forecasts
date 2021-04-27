@@ -1,0 +1,2379 @@
+diff --git a/EVERGI/Tinkering stuff.ipynb b/EVERGI/Tinkering stuff.ipynb
+index da4cf14..c281b90 100644
+--- a/EVERGI/Tinkering stuff.ipynb	
++++ b/EVERGI/Tinkering stuff.ipynb	
+@@ -2,7 +2,7 @@
+  "cells": [
+   {
+    "cell_type": "code",
+-   "execution_count": 2,
++   "execution_count": 6,
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -32,7 +32,7 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 14,
++   "execution_count": 73,
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -48,7 +48,7 @@
+     "    df = preprocess(df, country)\n",
+     "    train_df, test_df = train_test_split(df, n_test, horizon=HORIZON)\n",
+     "    y_scaler = MinMaxScaler()\n",
+-    "    y_scaler.fit(train_df[['value']])\n",
++    "    y_scaler.fit(df[['value']])\n",
+     "    long_scaler = MinMaxScaler()\n",
+     "    print(test_df.columns)\n",
+     "    test_df[test_df.columns] = long_scaler.fit_transform(test_df)\n",
+@@ -61,7 +61,7 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 5,
++   "execution_count": 79,
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -83,12 +83,30 @@
+     "    opt = tf.keras.optimizers.Adam(learning_rate=lr)\n",
+     "    # Compile model\n",
+     "    model.compile(loss='mse', optimizer=opt,metrics=['mse'])\n",
+-    "    return model"
++    "    return model\n",
++    "\n",
++    "def format_output(df):\n",
++    "    df['h'] = df['h'].str.extract('(\\d+)', expand=False).astype(int)\n",
++    "    ppivot = pd.pivot_table(df, values='prediction', index=['timestamp'], columns=['h'])\n",
++    "    ppivot = ppivot.add_prefix('h_')\n",
++    "    ppivot.index = pd.to_datetime(ppivot.index)\n",
++    "    apivot = pd.pivot_table(df, values='actual', index=['timestamp'], columns=['h'])\n",
++    "    apivot = apivot.add_prefix('h_')\n",
++    "    apivot.index = pd.to_datetime(ppivot.index)\n",
++    "    return ppivot, apivot\n",
++    "\n",
++    "def flatten(data):\n",
++    "    flat_list = []\n",
++    "    # iterating over the data\n",
++    "    for item in data:\n",
++    "        # appending elements to the flat_list\n",
++    "        flat_list += item\n",
++    "    return flat_list\n"
+    ]
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 7,
++   "execution_count": 75,
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -103,7 +121,7 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 8,
++   "execution_count": 76,
+    "metadata": {},
+    "outputs": [],
+    "source": [
+@@ -125,161 +143,607 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 15,
++   "execution_count": null,
++   "metadata": {},
++   "outputs": [],
++   "source": []
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 41,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "gep1 = pd.read_csv('../data/GEP/Consumption_1H.csv', index_col=0)"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 99,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "res = pd.read_csv('./results/GEP/magic-disco-239_0.csv', index_col=0)"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 101,
+    "metadata": {},
+    "outputs": [
+     {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      "  0%|          | 0/28 [00:00<?, ?it/s]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      "  4%|▎         | 1/28 [00:01<00:48,  1.81s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      "  7%|▋         | 2/28 [00:03<00:50,  1.94s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 11%|█         | 3/28 [00:05<00:46,  1.86s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 14%|█▍        | 4/28 [00:07<00:42,  1.77s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 18%|█▊        | 5/28 [00:08<00:39,  1.71s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 21%|██▏       | 6/28 [00:10<00:37,  1.71s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 25%|██▌       | 7/28 [00:12<00:34,  1.64s/it]"
+-     ]
+-    },
+-    {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
++     "data": {
++      "text/html": [
++       "<div>\n",
++       "<style scoped>\n",
++       "    .dataframe tbody tr th:only-of-type {\n",
++       "        vertical-align: middle;\n",
++       "    }\n",
++       "\n",
++       "    .dataframe tbody tr th {\n",
++       "        vertical-align: top;\n",
++       "    }\n",
++       "\n",
++       "    .dataframe thead th {\n",
++       "        text-align: right;\n",
++       "    }\n",
++       "</style>\n",
++       "<table border=\"1\" class=\"dataframe\">\n",
++       "  <thead>\n",
++       "    <tr style=\"text-align: right;\">\n",
++       "      <th></th>\n",
++       "      <th>h_1_actuals</th>\n",
++       "      <th>h_2_actuals</th>\n",
++       "      <th>h_3_actuals</th>\n",
++       "      <th>h_4_actuals</th>\n",
++       "      <th>h_5_actuals</th>\n",
++       "      <th>h_6_actuals</th>\n",
++       "      <th>h_7_actuals</th>\n",
++       "      <th>h_8_actuals</th>\n",
++       "      <th>h_9_actuals</th>\n",
++       "      <th>h_10_actuals</th>\n",
++       "      <th>...</th>\n",
++       "      <th>h_15_actuals</th>\n",
++       "      <th>h_16_actuals</th>\n",
++       "      <th>h_17_actuals</th>\n",
++       "      <th>h_18_actuals</th>\n",
++       "      <th>h_19_actuals</th>\n",
++       "      <th>h_20_actuals</th>\n",
++       "      <th>h_21_actuals</th>\n",
++       "      <th>h_22_actuals</th>\n",
++       "      <th>h_23_actuals</th>\n",
++       "      <th>h_24_actuals</th>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>timestamp</th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "      <th></th>\n",
++       "    </tr>\n",
++       "  </thead>\n",
++       "  <tbody>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03</th>\n",
++       "      <td>20.16</td>\n",
++       "      <td>20.37</td>\n",
++       "      <td>19.95</td>\n",
++       "      <td>20.58</td>\n",
++       "      <td>20.58</td>\n",
++       "      <td>33.39</td>\n",
++       "      <td>50.19</td>\n",
++       "      <td>55.02</td>\n",
++       "      <td>73.50</td>\n",
++       "      <td>65.52</td>\n",
++       "      <td>...</td>\n",
++       "      <td>43.89</td>\n",
++       "      <td>41.58</td>\n",
++       "      <td>38.43</td>\n",
++       "      <td>30.45</td>\n",
++       "      <td>27.30</td>\n",
++       "      <td>24.78</td>\n",
++       "      <td>24.57</td>\n",
++       "      <td>24.36</td>\n",
++       "      <td>20.37</td>\n",
++       "      <td>19.53</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-04</th>\n",
++       "      <td>19.53</td>\n",
++       "      <td>19.53</td>\n",
++       "      <td>18.48</td>\n",
++       "      <td>18.48</td>\n",
++       "      <td>18.69</td>\n",
++       "      <td>20.16</td>\n",
++       "      <td>20.79</td>\n",
++       "      <td>17.64</td>\n",
++       "      <td>17.64</td>\n",
++       "      <td>17.64</td>\n",
++       "      <td>...</td>\n",
++       "      <td>17.64</td>\n",
++       "      <td>18.06</td>\n",
++       "      <td>17.22</td>\n",
++       "      <td>18.06</td>\n",
++       "      <td>17.22</td>\n",
++       "      <td>21.42</td>\n",
++       "      <td>23.52</td>\n",
++       "      <td>23.10</td>\n",
++       "      <td>19.11</td>\n",
++       "      <td>24.78</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-05</th>\n",
++       "      <td>25.20</td>\n",
++       "      <td>24.78</td>\n",
++       "      <td>24.99</td>\n",
++       "      <td>24.78</td>\n",
++       "      <td>24.78</td>\n",
++       "      <td>42.84</td>\n",
++       "      <td>52.92</td>\n",
++       "      <td>66.99</td>\n",
++       "      <td>65.73</td>\n",
++       "      <td>77.28</td>\n",
++       "      <td>...</td>\n",
++       "      <td>50.82</td>\n",
++       "      <td>47.88</td>\n",
++       "      <td>44.73</td>\n",
++       "      <td>38.22</td>\n",
++       "      <td>31.08</td>\n",
++       "      <td>28.35</td>\n",
++       "      <td>31.50</td>\n",
++       "      <td>28.35</td>\n",
++       "      <td>24.57</td>\n",
++       "      <td>24.99</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-06</th>\n",
++       "      <td>24.99</td>\n",
++       "      <td>25.20</td>\n",
++       "      <td>24.78</td>\n",
++       "      <td>24.78</td>\n",
++       "      <td>24.78</td>\n",
++       "      <td>28.14</td>\n",
++       "      <td>46.83</td>\n",
++       "      <td>53.97</td>\n",
++       "      <td>86.10</td>\n",
++       "      <td>72.24</td>\n",
++       "      <td>...</td>\n",
++       "      <td>44.73</td>\n",
++       "      <td>40.53</td>\n",
++       "      <td>33.81</td>\n",
++       "      <td>30.03</td>\n",
++       "      <td>26.46</td>\n",
++       "      <td>24.36</td>\n",
++       "      <td>26.46</td>\n",
++       "      <td>29.19</td>\n",
++       "      <td>26.04</td>\n",
++       "      <td>24.99</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-07</th>\n",
++       "      <td>24.57</td>\n",
++       "      <td>25.20</td>\n",
++       "      <td>24.36</td>\n",
++       "      <td>25.20</td>\n",
++       "      <td>24.78</td>\n",
++       "      <td>23.73</td>\n",
++       "      <td>24.36</td>\n",
++       "      <td>23.73</td>\n",
++       "      <td>23.52</td>\n",
++       "      <td>24.15</td>\n",
++       "      <td>...</td>\n",
++       "      <td>23.73</td>\n",
++       "      <td>24.15</td>\n",
++       "      <td>23.73</td>\n",
++       "      <td>23.52</td>\n",
++       "      <td>23.73</td>\n",
++       "      <td>23.52</td>\n",
++       "      <td>24.15</td>\n",
++       "      <td>28.14</td>\n",
++       "      <td>25.20</td>\n",
++       "      <td>16.38</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>...</th>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-12-26</th>\n",
++       "      <td>15.96</td>\n",
++       "      <td>15.54</td>\n",
++       "      <td>15.75</td>\n",
++       "      <td>16.17</td>\n",
++       "      <td>15.75</td>\n",
++       "      <td>17.85</td>\n",
++       "      <td>22.89</td>\n",
++       "      <td>27.30</td>\n",
++       "      <td>30.45</td>\n",
++       "      <td>35.49</td>\n",
++       "      <td>...</td>\n",
++       "      <td>38.01</td>\n",
++       "      <td>37.59</td>\n",
++       "      <td>36.33</td>\n",
++       "      <td>28.98</td>\n",
++       "      <td>28.14</td>\n",
++       "      <td>28.77</td>\n",
++       "      <td>28.35</td>\n",
++       "      <td>21.84</td>\n",
++       "      <td>17.01</td>\n",
++       "      <td>15.75</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-12-27</th>\n",
++       "      <td>16.17</td>\n",
++       "      <td>15.75</td>\n",
++       "      <td>15.33</td>\n",
++       "      <td>15.12</td>\n",
++       "      <td>15.75</td>\n",
++       "      <td>19.53</td>\n",
++       "      <td>26.67</td>\n",
++       "      <td>37.38</td>\n",
++       "      <td>40.32</td>\n",
++       "      <td>43.68</td>\n",
++       "      <td>...</td>\n",
++       "      <td>37.17</td>\n",
++       "      <td>34.02</td>\n",
++       "      <td>36.33</td>\n",
++       "      <td>31.50</td>\n",
++       "      <td>30.03</td>\n",
++       "      <td>27.93</td>\n",
++       "      <td>27.51</td>\n",
++       "      <td>21.42</td>\n",
++       "      <td>16.59</td>\n",
++       "      <td>15.33</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-12-28</th>\n",
++       "      <td>15.54</td>\n",
++       "      <td>15.54</td>\n",
++       "      <td>16.17</td>\n",
++       "      <td>15.33</td>\n",
++       "      <td>15.54</td>\n",
++       "      <td>16.59</td>\n",
++       "      <td>19.32</td>\n",
++       "      <td>26.67</td>\n",
++       "      <td>23.94</td>\n",
++       "      <td>23.10</td>\n",
++       "      <td>...</td>\n",
++       "      <td>22.68</td>\n",
++       "      <td>24.36</td>\n",
++       "      <td>27.72</td>\n",
++       "      <td>21.42</td>\n",
++       "      <td>19.74</td>\n",
++       "      <td>19.95</td>\n",
++       "      <td>19.53</td>\n",
++       "      <td>19.95</td>\n",
++       "      <td>16.80</td>\n",
++       "      <td>15.33</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-12-29</th>\n",
++       "      <td>14.91</td>\n",
++       "      <td>15.12</td>\n",
++       "      <td>15.33</td>\n",
++       "      <td>15.75</td>\n",
++       "      <td>15.12</td>\n",
++       "      <td>15.96</td>\n",
++       "      <td>19.11</td>\n",
++       "      <td>25.62</td>\n",
++       "      <td>23.52</td>\n",
++       "      <td>22.26</td>\n",
++       "      <td>...</td>\n",
++       "      <td>22.26</td>\n",
++       "      <td>24.57</td>\n",
++       "      <td>27.30</td>\n",
++       "      <td>21.21</td>\n",
++       "      <td>19.74</td>\n",
++       "      <td>21.42</td>\n",
++       "      <td>21.00</td>\n",
++       "      <td>19.32</td>\n",
++       "      <td>16.17</td>\n",
++       "      <td>15.75</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-12-30</th>\n",
++       "      <td>15.33</td>\n",
++       "      <td>15.96</td>\n",
++       "      <td>17.01</td>\n",
++       "      <td>15.54</td>\n",
++       "      <td>15.96</td>\n",
++       "      <td>17.22</td>\n",
++       "      <td>30.87</td>\n",
++       "      <td>40.53</td>\n",
++       "      <td>41.58</td>\n",
++       "      <td>46.62</td>\n",
++       "      <td>...</td>\n",
++       "      <td>39.48</td>\n",
++       "      <td>37.38</td>\n",
++       "      <td>39.06</td>\n",
++       "      <td>34.44</td>\n",
++       "      <td>28.98</td>\n",
++       "      <td>29.19</td>\n",
++       "      <td>28.77</td>\n",
++       "      <td>22.05</td>\n",
++       "      <td>17.43</td>\n",
++       "      <td>16.38</td>\n",
++       "    </tr>\n",
++       "  </tbody>\n",
++       "</table>\n",
++       "<p>181 rows × 24 columns</p>\n",
++       "</div>"
++      ],
++      "text/plain": [
++       "            h_1_actuals  h_2_actuals  h_3_actuals  h_4_actuals  h_5_actuals  \\\n",
++       "timestamp                                                                     \n",
++       "2019-07-03        20.16        20.37        19.95        20.58        20.58   \n",
++       "2019-07-04        19.53        19.53        18.48        18.48        18.69   \n",
++       "2019-07-05        25.20        24.78        24.99        24.78        24.78   \n",
++       "2019-07-06        24.99        25.20        24.78        24.78        24.78   \n",
++       "2019-07-07        24.57        25.20        24.36        25.20        24.78   \n",
++       "...                 ...          ...          ...          ...          ...   \n",
++       "2019-12-26        15.96        15.54        15.75        16.17        15.75   \n",
++       "2019-12-27        16.17        15.75        15.33        15.12        15.75   \n",
++       "2019-12-28        15.54        15.54        16.17        15.33        15.54   \n",
++       "2019-12-29        14.91        15.12        15.33        15.75        15.12   \n",
++       "2019-12-30        15.33        15.96        17.01        15.54        15.96   \n",
++       "\n",
++       "            h_6_actuals  h_7_actuals  h_8_actuals  h_9_actuals  h_10_actuals  \\\n",
++       "timestamp                                                                      \n",
++       "2019-07-03        33.39        50.19        55.02        73.50         65.52   \n",
++       "2019-07-04        20.16        20.79        17.64        17.64         17.64   \n",
++       "2019-07-05        42.84        52.92        66.99        65.73         77.28   \n",
++       "2019-07-06        28.14        46.83        53.97        86.10         72.24   \n",
++       "2019-07-07        23.73        24.36        23.73        23.52         24.15   \n",
++       "...                 ...          ...          ...          ...           ...   \n",
++       "2019-12-26        17.85        22.89        27.30        30.45         35.49   \n",
++       "2019-12-27        19.53        26.67        37.38        40.32         43.68   \n",
++       "2019-12-28        16.59        19.32        26.67        23.94         23.10   \n",
++       "2019-12-29        15.96        19.11        25.62        23.52         22.26   \n",
++       "2019-12-30        17.22        30.87        40.53        41.58         46.62   \n",
++       "\n",
++       "            ...  h_15_actuals  h_16_actuals  h_17_actuals  h_18_actuals  \\\n",
++       "timestamp   ...                                                           \n",
++       "2019-07-03  ...         43.89         41.58         38.43         30.45   \n",
++       "2019-07-04  ...         17.64         18.06         17.22         18.06   \n",
++       "2019-07-05  ...         50.82         47.88         44.73         38.22   \n",
++       "2019-07-06  ...         44.73         40.53         33.81         30.03   \n",
++       "2019-07-07  ...         23.73         24.15         23.73         23.52   \n",
++       "...         ...           ...           ...           ...           ...   \n",
++       "2019-12-26  ...         38.01         37.59         36.33         28.98   \n",
++       "2019-12-27  ...         37.17         34.02         36.33         31.50   \n",
++       "2019-12-28  ...         22.68         24.36         27.72         21.42   \n",
++       "2019-12-29  ...         22.26         24.57         27.30         21.21   \n",
++       "2019-12-30  ...         39.48         37.38         39.06         34.44   \n",
++       "\n",
++       "            h_19_actuals  h_20_actuals  h_21_actuals  h_22_actuals  \\\n",
++       "timestamp                                                            \n",
++       "2019-07-03         27.30         24.78         24.57         24.36   \n",
++       "2019-07-04         17.22         21.42         23.52         23.10   \n",
++       "2019-07-05         31.08         28.35         31.50         28.35   \n",
++       "2019-07-06         26.46         24.36         26.46         29.19   \n",
++       "2019-07-07         23.73         23.52         24.15         28.14   \n",
++       "...                  ...           ...           ...           ...   \n",
++       "2019-12-26         28.14         28.77         28.35         21.84   \n",
++       "2019-12-27         30.03         27.93         27.51         21.42   \n",
++       "2019-12-28         19.74         19.95         19.53         19.95   \n",
++       "2019-12-29         19.74         21.42         21.00         19.32   \n",
++       "2019-12-30         28.98         29.19         28.77         22.05   \n",
++       "\n",
++       "            h_23_actuals  h_24_actuals  \n",
++       "timestamp                               \n",
++       "2019-07-03         20.37         19.53  \n",
++       "2019-07-04         19.11         24.78  \n",
++       "2019-07-05         24.57         24.99  \n",
++       "2019-07-06         26.04         24.99  \n",
++       "2019-07-07         25.20         16.38  \n",
++       "...                  ...           ...  \n",
++       "2019-12-26         17.01         15.75  \n",
++       "2019-12-27         16.59         15.33  \n",
++       "2019-12-28         16.80         15.33  \n",
++       "2019-12-29         16.17         15.75  \n",
++       "2019-12-30         17.43         16.38  \n",
++       "\n",
++       "[181 rows x 24 columns]"
++      ]
++     },
++     "execution_count": 101,
++     "metadata": {},
++     "output_type": "execute_result"
++    }
++   ],
++   "source": [
++    "res.iloc[:,:24]"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 102,
++   "metadata": {},
++   "outputs": [
+     {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 29%|██▊       | 8/28 [00:13<00:32,  1.64s/it]"
+-     ]
+-    },
++     "data": {
++      "text/html": [
++       "<div>\n",
++       "<style scoped>\n",
++       "    .dataframe tbody tr th:only-of-type {\n",
++       "        vertical-align: middle;\n",
++       "    }\n",
++       "\n",
++       "    .dataframe tbody tr th {\n",
++       "        vertical-align: top;\n",
++       "    }\n",
++       "\n",
++       "    .dataframe thead th {\n",
++       "        text-align: right;\n",
++       "    }\n",
++       "</style>\n",
++       "<table border=\"1\" class=\"dataframe\">\n",
++       "  <thead>\n",
++       "    <tr style=\"text-align: right;\">\n",
++       "      <th></th>\n",
++       "      <th>value</th>\n",
++       "    </tr>\n",
++       "  </thead>\n",
++       "  <tbody>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 00:00:00</th>\n",
++       "      <td>20.79</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 01:00:00</th>\n",
++       "      <td>20.16</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 02:00:00</th>\n",
++       "      <td>20.37</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 03:00:00</th>\n",
++       "      <td>19.95</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 04:00:00</th>\n",
++       "      <td>20.58</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 05:00:00</th>\n",
++       "      <td>20.58</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 06:00:00</th>\n",
++       "      <td>33.39</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 07:00:00</th>\n",
++       "      <td>50.19</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 08:00:00</th>\n",
++       "      <td>55.02</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 09:00:00</th>\n",
++       "      <td>73.50</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 10:00:00</th>\n",
++       "      <td>65.52</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 11:00:00</th>\n",
++       "      <td>61.95</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 12:00:00</th>\n",
++       "      <td>74.55</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 13:00:00</th>\n",
++       "      <td>69.93</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 14:00:00</th>\n",
++       "      <td>47.88</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 15:00:00</th>\n",
++       "      <td>43.89</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 16:00:00</th>\n",
++       "      <td>41.58</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 17:00:00</th>\n",
++       "      <td>38.43</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 18:00:00</th>\n",
++       "      <td>30.45</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-03 19:00:00</th>\n",
++       "      <td>27.30</td>\n",
++       "    </tr>\n",
++       "  </tbody>\n",
++       "</table>\n",
++       "</div>"
++      ],
++      "text/plain": [
++       "                     value\n",
++       "2019-07-03 00:00:00  20.79\n",
++       "2019-07-03 01:00:00  20.16\n",
++       "2019-07-03 02:00:00  20.37\n",
++       "2019-07-03 03:00:00  19.95\n",
++       "2019-07-03 04:00:00  20.58\n",
++       "2019-07-03 05:00:00  20.58\n",
++       "2019-07-03 06:00:00  33.39\n",
++       "2019-07-03 07:00:00  50.19\n",
++       "2019-07-03 08:00:00  55.02\n",
++       "2019-07-03 09:00:00  73.50\n",
++       "2019-07-03 10:00:00  65.52\n",
++       "2019-07-03 11:00:00  61.95\n",
++       "2019-07-03 12:00:00  74.55\n",
++       "2019-07-03 13:00:00  69.93\n",
++       "2019-07-03 14:00:00  47.88\n",
++       "2019-07-03 15:00:00  43.89\n",
++       "2019-07-03 16:00:00  41.58\n",
++       "2019-07-03 17:00:00  38.43\n",
++       "2019-07-03 18:00:00  30.45\n",
++       "2019-07-03 19:00:00  27.30"
++      ]
++     },
++     "execution_count": 102,
++     "metadata": {},
++     "output_type": "execute_result"
++    }
++   ],
++   "source": [
++    "gep1['2019-07-03':][:20]"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 43,
++   "metadata": {},
++   "outputs": [
+     {
+      "name": "stdout",
+      "output_type": "stream",
+@@ -289,31 +753,60 @@
+       "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+       "      dtype='object')\n"
+      ]
+-    },
+-    {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\r",
+-      " 32%|███▏      | 9/28 [00:15<00:30,  1.63s/it]"
+-     ]
+-    },
++    }
++   ],
++   "source": [
++    "train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(gep1, n_test=4380, T=HORIZON, HORIZON=HORIZON, country=country)"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 46,
++   "metadata": {},
++   "outputs": [
+     {
+-     "name": "stdout",
+-     "output_type": "stream",
+-     "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
+-     ]
+-    },
++     "data": {
++      "text/plain": [
++       "array([[24.57, 24.78, 25.41, ..., 25.41, 25.41, 25.41],\n",
++       "       [24.78, 25.41, 25.2 , ..., 25.41, 25.41, 26.04],\n",
++       "       [25.41, 25.2 , 25.2 , ..., 25.41, 26.04, 25.41],\n",
++       "       ...,\n",
++       "       [89.88, 78.75, 82.11, ..., 49.35, 66.15, 75.18],\n",
++       "       [78.75, 82.11, 86.94, ..., 66.15, 75.18, 72.03],\n",
++       "       [82.11, 86.94, 62.16, ..., 75.18, 72.03, 62.16]])"
++      ]
++     },
++     "execution_count": 46,
++     "metadata": {},
++     "output_type": "execute_result"
++    }
++   ],
++   "source": [
++    "y_scaler.inverse_transform(train_inputs.dataframe['target'])"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 77,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "datasets = [gep1]"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 80,
++   "metadata": {
++    "scrolled": true
++   },
++   "outputs": [
+     {
+      "name": "stderr",
+      "output_type": "stream",
+      "text": [
+       "\r",
+-      " 36%|███▌      | 10/28 [00:17<00:30,  1.68s/it]"
++      "  0%|          | 0/1 [00:00<?, ?it/s]"
+      ]
+     },
+     {
+@@ -330,192 +823,794 @@
+      "name": "stderr",
+      "output_type": "stream",
+      "text": [
+-      " 39%|███▉      | 11/28 [00:19<00:29,  1.74s/it]"
++      "100%|██████████| 1/1 [00:02<00:00,  2.69s/it]\n"
+      ]
+     },
+     {
+      "name": "stdout",
+      "output_type": "stream",
+      "text": [
+-      "Index(['value', 'value(t-168)', 'fractional hour_sin', 'fractional hour_cos',\n",
+-      "       'day of year_sin', 'day of year_cos', 'working day', 'week_1', 'week_2',\n",
+-      "       'week_3', 'week_4', 'week_5', 'week_6', 'week_7'],\n",
+-      "      dtype='object')\n"
++      "done with data\n",
++      "Epoch 1/100\n",
++      "23/23 [==============================] - 4s 176ms/step - loss: 0.0806 - mse: 0.0806 - val_loss: 0.0291 - val_mse: 0.0291\n",
++      "Epoch 2/100\n",
++      "23/23 [==============================] - 3s 152ms/step - loss: 0.0352 - mse: 0.0352 - val_loss: 0.0206 - val_mse: 0.0206\n",
++      "Epoch 3/100\n",
++      "23/23 [==============================] - 4s 153ms/step - loss: 0.0284 - mse: 0.0284 - val_loss: 0.0174 - val_mse: 0.0174\n",
++      "Epoch 4/100\n",
++      "23/23 [==============================] - 4s 155ms/step - loss: 0.0223 - mse: 0.0223 - val_loss: 0.0157 - val_mse: 0.0157\n",
++      "Epoch 5/100\n",
++      "23/23 [==============================] - 4s 152ms/step - loss: 0.0192 - mse: 0.0192 - val_loss: 0.0150 - val_mse: 0.0150\n",
++      "Epoch 6/100\n",
++      "23/23 [==============================] - 4s 153ms/step - loss: 0.0180 - mse: 0.0180 - val_loss: 0.0144 - val_mse: 0.0144\n",
++      "Epoch 7/100\n",
++      "23/23 [==============================] - 4s 153ms/step - loss: 0.0174 - mse: 0.0174 - val_loss: 0.0138 - val_mse: 0.0138\n",
++      "Epoch 8/100\n",
++      "23/23 [==============================] - 4s 152ms/step - loss: 0.0169 - mse: 0.0169 - val_loss: 0.0137 - val_mse: 0.0137\n",
++      "Epoch 9/100\n",
++      "23/23 [==============================] - 3s 150ms/step - loss: 0.0164 - mse: 0.0164 - val_loss: 0.0131 - val_mse: 0.0131\n",
++      "Epoch 10/100\n",
++      "23/23 [==============================] - 3s 150ms/step - loss: 0.0160 - mse: 0.0160 - val_loss: 0.0131 - val_mse: 0.0131\n",
++      "Epoch 11/100\n",
++      "23/23 [==============================] - 3s 150ms/step - loss: 0.0157 - mse: 0.0157 - val_loss: 0.0126 - val_mse: 0.0126\n",
++      "Epoch 12/100\n",
++      "23/23 [==============================] - 4s 154ms/step - loss: 0.0154 - mse: 0.0154 - val_loss: 0.0128 - val_mse: 0.0128\n",
++      "Epoch 13/100\n",
++      "23/23 [==============================] - 4s 154ms/step - loss: 0.0151 - mse: 0.0151 - val_loss: 0.0115 - val_mse: 0.0115\n",
++      "Epoch 14/100\n",
++      "23/23 [==============================] - 3s 152ms/step - loss: 0.0149 - mse: 0.0149 - val_loss: 0.0118 - val_mse: 0.0118\n",
++      "Epoch 15/100\n",
++      "23/23 [==============================] - 4s 153ms/step - loss: 0.0146 - mse: 0.0146 - val_loss: 0.0123 - val_mse: 0.0123\n",
++      "Epoch 16/100\n",
++      "23/23 [==============================] - 4s 152ms/step - loss: 0.0145 - mse: 0.0145 - val_loss: 0.0112 - val_mse: 0.0112\n",
++      "Epoch 17/100\n",
++      "23/23 [==============================] - 3s 151ms/step - loss: 0.0143 - mse: 0.0143 - val_loss: 0.0110 - val_mse: 0.0110\n",
++      "Epoch 18/100\n",
++      "23/23 [==============================] - 3s 149ms/step - loss: 0.0141 - mse: 0.0141 - val_loss: 0.0125 - val_mse: 0.0125\n",
++      "Epoch 19/100\n",
++      "23/23 [==============================] - 4s 153ms/step - loss: 0.0139 - mse: 0.0139 - val_loss: 0.0118 - val_mse: 0.0118\n",
++      "Epoch 20/100\n",
++      "23/23 [==============================] - 3s 151ms/step - loss: 0.0137 - mse: 0.0137 - val_loss: 0.0116 - val_mse: 0.0116\n",
++      "Epoch 21/100\n",
++      "23/23 [==============================] - 3s 149ms/step - loss: 0.0135 - mse: 0.0135 - val_loss: 0.0101 - val_mse: 0.0101\n",
++      "Epoch 22/100\n",
++      "23/23 [==============================] - 3s 149ms/step - loss: 0.0132 - mse: 0.0132 - val_loss: 0.0117 - val_mse: 0.0117\n",
++      "Epoch 23/100\n",
++      "23/23 [==============================] - 3s 150ms/step - loss: 0.0130 - mse: 0.0130 - val_loss: 0.0105 - val_mse: 0.0105\n",
++      "Epoch 24/100\n",
++      "23/23 [==============================] - 4s 154ms/step - loss: 0.0128 - mse: 0.0128 - val_loss: 0.0110 - val_mse: 0.0110\n",
++      "Epoch 25/100\n",
++      "23/23 [==============================] - 4s 156ms/step - loss: 0.0127 - mse: 0.0127 - val_loss: 0.0110 - val_mse: 0.0110\n",
++      "Epoch 26/100\n",
++      "23/23 [==============================] - 4s 155ms/step - loss: 0.0125 - mse: 0.0125 - val_loss: 0.0113 - val_mse: 0.0113\n",
++      "Epoch 27/100\n",
++      "23/23 [==============================] - 4s 155ms/step - loss: 0.0125 - mse: 0.0125 - val_loss: 0.0125 - val_mse: 0.0125\n",
++      "Epoch 28/100\n",
++      "23/23 [==============================] - 3s 149ms/step - loss: 0.0124 - mse: 0.0124 - val_loss: 0.0094 - val_mse: 0.0094\n",
++      "Epoch 29/100\n",
++      "23/23 [==============================] - 3s 152ms/step - loss: 0.0121 - mse: 0.0121 - val_loss: 0.0101 - val_mse: 0.0101\n",
++      "Epoch 30/100\n",
++      "23/23 [==============================] - 3s 150ms/step - loss: 0.0119 - mse: 0.0119 - val_loss: 0.0102 - val_mse: 0.0102\n",
++      "Epoch 31/100\n",
++      "23/23 [==============================] - 4s 153ms/step - loss: 0.0119 - mse: 0.0119 - val_loss: 0.0100 - val_mse: 0.0100\n",
++      "Epoch 32/100\n",
++      "23/23 [==============================] - 4s 153ms/step - loss: 0.0118 - mse: 0.0118 - val_loss: 0.0092 - val_mse: 0.0092\n",
++      "Epoch 33/100\n",
++      "23/23 [==============================] - 3s 151ms/step - loss: 0.0117 - mse: 0.0117 - val_loss: 0.0107 - val_mse: 0.0107\n",
++      "Epoch 34/100\n",
++      "23/23 [==============================] - 4s 152ms/step - loss: 0.0117 - mse: 0.0117 - val_loss: 0.0101 - val_mse: 0.0101\n",
++      "Epoch 35/100\n",
++      "23/23 [==============================] - 4s 155ms/step - loss: 0.0117 - mse: 0.0117 - val_loss: 0.0095 - val_mse: 0.0095\n",
++      "Epoch 36/100\n",
++      "23/23 [==============================] - 3s 151ms/step - loss: 0.0116 - mse: 0.0116 - val_loss: 0.0104 - val_mse: 0.0104\n",
++      "Epoch 37/100\n",
++      "23/23 [==============================] - 4s 155ms/step - loss: 0.0115 - mse: 0.0115 - val_loss: 0.0105 - val_mse: 0.0105\n",
++      "Epoch 38/100\n",
++      "23/23 [==============================] - 4s 153ms/step - loss: 0.0116 - mse: 0.0116 - val_loss: 0.0108 - val_mse: 0.0108\n",
++      "Epoch 39/100\n",
++      "23/23 [==============================] - 4s 154ms/step - loss: 0.0115 - mse: 0.0115 - val_loss: 0.0099 - val_mse: 0.0099\n",
++      "Epoch 40/100\n",
++      "23/23 [==============================] - 3s 152ms/step - loss: 0.0115 - mse: 0.0115 - val_loss: 0.0095 - val_mse: 0.0095\n",
++      "Epoch 41/100\n",
++      "23/23 [==============================] - 4s 153ms/step - loss: 0.0114 - mse: 0.0114 - val_loss: 0.0094 - val_mse: 0.0094\n",
++      "Epoch 42/100\n",
++      "23/23 [==============================] - 3s 151ms/step - loss: 0.0113 - mse: 0.0113 - val_loss: 0.0101 - val_mse: 0.0101\n"
+      ]
+-    },
++    }
++   ],
++   "source": [
++    "    dX_train = []\n",
++    "    dT_train = []\n",
++    "    dX_test = []\n",
++    "    dX_scaler = []\n",
++    "    for df in tqdm(datasets):\n",
++    "        train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON, country=country)\n",
++    "        dX_train.append(tf.concat([train_inputs['X'],train_inputs['X2']], axis=2))\n",
++    "        dT_train.append(train_inputs['target'])\n",
++    "        dX_test.append(test_inputs)\n",
++    "        dX_scaler.append(y_scaler)\n",
++    "    global_inputs_X = tf.concat(dX_train, 0)\n",
++    "    global_inputs_T = tf.concat(dT_train, 0)\n",
++    "    print('done with data')\n",
++    "    working = '.models/'+dset+'_models/global/trials'\n",
++    "\n",
++    "    if HORIZON == 72:\n",
++    "        proj_name = '3days_forcast'\n",
++    "        if not os.path.exists('./results/'+dset+'/global/3days'):\n",
++    "            os.makedirs('./results/'+dset+'/global/3days')\n",
++    "        if not os.path.exists('./models/'+dset+'_models'):\n",
++    "            os.makedirs('./models/'+dset+'_models')\n",
++    "    if HORIZON == 24:\n",
++    "        proj_name = 'dayahead'\n",
++    "        if not os.path.exists('./results/'+dset+'/global/dayahead'):\n",
++    "            os.makedirs('./results/'+dset+'/global/dayahead')\n",
++    "        if not os.path.exists('./models/'+dset+'_models'):\n",
++    "            os.makedirs('./models/'+dset+'_models')\n",
++    "\n",
++    "\n",
++    "    # full data LSTM MIMO compilation and fit\n",
++    "    LSTMIMO = build_model(l=LAYERS, drop=DROPOUT, n=NEURONS, lr=LR)\n",
++    "\n",
++    "    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=PATIENCE, mode='min')\n",
++    "\n",
++    "    history = LSTMIMO.fit(global_inputs_X, global_inputs_T, batch_size=BATCHSIZE, epochs=MAX_EPOCHS,\n",
++    "                          validation_split=0.15,\n",
++    "                          callbacks=[early_stopping], verbose=1)\n",
++    "\n",
++    "    metrics = pd.DataFrame(columns=['mae','mape', 'rmse', 'B'], index=range(28))\n",
++    "    for i,df in enumerate(datasets):\n",
++    "        concat_input = tf.concat([dX_test[i]['X'],dX_test[i]['X2']], axis=2)\n",
++    "        FD_predictions = LSTMIMO.predict(concat_input)\n",
++    "        FD_eval_df = create_evaluation_df(FD_predictions, dX_test[i], HORIZON, dX_scaler[i])\n",
++    "        preds, actuals = format_output(FD_eval_df)\n",
++    "        preds = preds[np.where(preds.index.hour == 0)[0][0]:][::24]\n",
++    "        actuals = actuals[np.where(actuals.index.hour == 0)[0][0]:][::24]\n",
++    "        full = actuals.merge(preds, how='inner', left_index=True, right_index=True, suffixes=('_actuals', '_preds'))\n",
++    "        #full.to_csv('./results/'+dset+'/'+wandb.run.name+'_'+str(i)+'.csv')\n",
++    "        preds = flatten(preds.values.tolist())\n",
++    "        actuals = flatten(actuals.values.tolist())\n",
++    "        mae = validation(preds, actuals, 'MAE')\n",
++    "        mape = validation(preds, actuals, 'MAPE')\n",
++    "        rmse = validation(preds, actuals, 'RMSE')\n",
++    "        #print('rmse {}'.format(rmse))\n",
++    "        metrics.loc[i] = pd.Series({'mae':mae, 'mape':mape, 'rmse':rmse, 'B': names[i]})"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 81,
++   "metadata": {},
++   "outputs": [
+     {
+-     "name": "stderr",
+-     "output_type": "stream",
+-     "text": [
+-      "\n"
+-     ]
+-    },
++     "data": {
++      "text/plain": [
++       "{'target': array([[0.74384236, 0.4679803 , 0.38423645, ..., 0.60098522, 0.5591133 ,\n",
++       "        0.70689655],\n",
++       "       [0.4679803 , 0.38423645, 0.3226601 , ..., 0.5591133 , 0.70689655,\n",
++       "        0.65270936],\n",
++       "       [0.38423645, 0.3226601 , 0.31034483, ..., 0.70689655, 0.65270936,\n",
++       "        0.39408867],\n",
++       "       ...,\n",
++       "       [0.091133  , 0.03694581, 0.02463054, ..., 0.01231527, 0.01477833,\n",
++       "        0.01724138],\n",
++       "       [0.03694581, 0.02463054, 0.02463054, ..., 0.01477833, 0.01724138,\n",
++       "        0.00985222],\n",
++       "       [0.02463054, 0.02463054, 0.02463054, ..., 0.01724138, 0.00985222,\n",
++       "        0.01231527]]), 'X': array([[[0.85221675],\n",
++       "        [0.56157635],\n",
++       "        [0.49261084],\n",
++       "        ...,\n",
++       "        [0.6773399 ],\n",
++       "        [0.56157635],\n",
++       "        [0.75615764]],\n",
++       "\n",
++       "       [[0.56157635],\n",
++       "        [0.49261084],\n",
++       "        [0.51231527],\n",
++       "        ...,\n",
++       "        [0.56157635],\n",
++       "        [0.75615764],\n",
++       "        [0.74384236]],\n",
++       "\n",
++       "       [[0.49261084],\n",
++       "        [0.51231527],\n",
++       "        [0.48768473],\n",
++       "        ...,\n",
++       "        [0.75615764],\n",
++       "        [0.74384236],\n",
++       "        [0.4679803 ]],\n",
++       "\n",
++       "       ...,\n",
++       "\n",
++       "       [[0.0591133 ],\n",
++       "        [0.02216749],\n",
++       "        [0.01724138],\n",
++       "        ...,\n",
++       "        [0.17241379],\n",
++       "        [0.17487685],\n",
++       "        [0.16995074]],\n",
++       "\n",
++       "       [[0.02216749],\n",
++       "        [0.01724138],\n",
++       "        [0.01231527],\n",
++       "        ...,\n",
++       "        [0.17487685],\n",
++       "        [0.16995074],\n",
++       "        [0.091133  ]],\n",
++       "\n",
++       "       [[0.01724138],\n",
++       "        [0.01231527],\n",
++       "        [0.01970443],\n",
++       "        ...,\n",
++       "        [0.16995074],\n",
++       "        [0.091133  ],\n",
++       "        [0.03694581]]]), 'X2': array([[[0.9408867 , 0.56927848, 0.67938604, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.79064039, 0.61274048, 0.62826327, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.60344828, 0.65612956, 0.57338415, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        ...,\n",
++       "        [0.71428571, 0.43850681, 0.81015772, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.68965517, 0.48215647, 0.77033868, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.69211823, 0.52574876, 0.72674639, ..., 0.        ,\n",
++       "         0.        , 0.        ]],\n",
++       "\n",
++       "       [[0.79064039, 0.61274048, 0.62826327, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.60344828, 0.65612956, 0.57338415, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.57389163, 0.69944056, 0.51475523, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        ...,\n",
++       "        [0.68965517, 0.48215647, 0.77033868, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.69211823, 0.52574876, 0.72674639, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.69704433, 0.56927848, 0.67938604, ..., 0.        ,\n",
++       "         0.        , 0.        ]],\n",
++       "\n",
++       "       [[0.60344828, 0.65612956, 0.57338415, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.57389163, 0.69944056, 0.51475523, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.51477833, 0.74266834, 0.45238346, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        ...,\n",
++       "        [0.69211823, 0.52574876, 0.72674639, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.69704433, 0.56927848, 0.67938604, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.63300493, 0.61274048, 0.62826327, ..., 0.        ,\n",
++       "         0.        , 0.        ]],\n",
++       "\n",
++       "       ...,\n",
++       "\n",
++       "       [[0.06650246, 0.95737921, 0.0846574 , ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.03940887, 1.        , 0.        , ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.02463054, 0.        , 1.        , ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        ...,\n",
++       "        [0.01724138, 0.82885366, 0.31644156, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.01724138, 0.87180095, 0.2428876 , ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.01724138, 0.91464449, 0.16562314, ..., 0.        ,\n",
++       "         0.        , 0.        ]],\n",
++       "\n",
++       "       [[0.03940887, 1.        , 0.        , ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.02463054, 0.        , 1.        , ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.0270936 , 0.04393689, 0.99809971, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        ...,\n",
++       "        [0.01724138, 0.87180095, 0.2428876 , ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.01724138, 0.91464449, 0.16562314, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.01970443, 0.95737921, 0.0846574 , ..., 0.        ,\n",
++       "         0.        , 0.        ]],\n",
++       "\n",
++       "       [[0.02463054, 0.        , 1.        , ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.0270936 , 0.04393689, 0.99809971, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.0320197 , 0.08786856, 0.99239908, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        ...,\n",
++       "        [0.01724138, 0.91464449, 0.16562314, ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.01970443, 0.95737921, 0.0846574 , ..., 0.        ,\n",
++       "         0.        , 0.        ],\n",
++       "        [0.01477833, 1.        , 0.        , ..., 0.        ,\n",
++       "         0.        , 0.        ]]])}"
++      ]
++     },
++     "execution_count": 81,
++     "metadata": {},
++     "output_type": "execute_result"
++    }
++   ],
++   "source": [
++    "dX_test[0]"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 82,
++   "metadata": {},
++   "outputs": [
+     {
+-     "ename": "KeyboardInterrupt",
+-     "evalue": "",
+-     "output_type": "error",
+-     "traceback": [
+-      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+-      "\u001b[0;31mKeyboardInterrupt\u001b[0m                         Traceback (most recent call last)",
+-      "\u001b[0;32m<ipython-input-15-ca93d4cea90e>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0mdX_scaler\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0mdf\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mtqdm\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdatasets\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 6\u001b[0;31m     \u001b[0mtrain_inputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtest_inputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0my_scaler\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mMIMO_fulldata_preparation\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdf\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mn_test\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;36m4380\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mT\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mHORIZON\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mHORIZON\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mHORIZON\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcountry\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mcountry\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      7\u001b[0m     \u001b[0mdX_train\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtf\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconcat\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mtrain_inputs\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'X'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mtrain_inputs\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'X2'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;36m2\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      8\u001b[0m     \u001b[0mdT_train\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtrain_inputs\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'target'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m<ipython-input-14-8d9dd3274805>\u001b[0m in \u001b[0;36mMIMO_fulldata_preparation\u001b[0;34m(df, n_test, T, HORIZON, country)\u001b[0m\n\u001b[1;32m     17\u001b[0m     \u001b[0mtrain_df\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mtrain_df\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcolumns\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mlong_scaler\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfit_transform\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtrain_df\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     18\u001b[0m     \u001b[0mtensor_structure\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m{\u001b[0m\u001b[0;34m'X'\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mrange\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m-\u001b[0m\u001b[0mT\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtrain_df\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcolumns\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'X2'\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mrange\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mHORIZON\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtrain_df\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcolumns\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m}\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 19\u001b[0;31m     \u001b[0mtrain_inputs\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mTimeSeriesTensor\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtrain_df\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'value'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mHORIZON\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtensor_structure\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     20\u001b[0m     \u001b[0mtest_inputs\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mTimeSeriesTensor\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtest_df\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'value'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mHORIZON\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtensor_structure\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     21\u001b[0m     \u001b[0;32mreturn\u001b[0m \u001b[0mtrain_inputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtest_inputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0my_scaler\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/evgeny/GEP-forecasts/EVERGI/src/functions.py\u001b[0m in \u001b[0;36m__init__\u001b[0;34m(self, dataset, target, H, tensor_structure, freq, drop_incomplete)\u001b[0m\n\u001b[1;32m    160\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtensor_names\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mlist\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtensor_structure\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mkeys\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    161\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 162\u001b[0;31m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdataframe\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_shift_data\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mH\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfreq\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdrop_incomplete\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    163\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdata\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_df2tensors\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdataframe\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    164\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/evgeny/GEP-forecasts/EVERGI/src/functions.py\u001b[0m in \u001b[0;36m_shift_data\u001b[0;34m(self, H, freq, drop_incomplete)\u001b[0m\n\u001b[1;32m    197\u001b[0m                         \u001b[0mperiod\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m't'\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0msign\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mshift\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    198\u001b[0m                         \u001b[0mshifted_col\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mname\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m'_'\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mcol\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m'_'\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mperiod\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 199\u001b[0;31m                         \u001b[0mdf\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mshifted_col\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdf\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mcol\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mshift\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mt\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0;34m-\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfreq\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mfreq\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    200\u001b[0m                         \u001b[0midx_tuples\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mname\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcol\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mperiod\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    201\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m__setitem__\u001b[0;34m(self, key, value)\u001b[0m\n\u001b[1;32m   3038\u001b[0m         \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3039\u001b[0m             \u001b[0;31m# set column\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3040\u001b[0;31m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_set_item\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3041\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3042\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0m_setitem_slice\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mkey\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mslice\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m_set_item\u001b[0;34m(self, key, value)\u001b[0m\n\u001b[1;32m   3114\u001b[0m         \"\"\"\n\u001b[1;32m   3115\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_ensure_valid_index\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3116\u001b[0;31m         \u001b[0mvalue\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_sanitize_column\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3117\u001b[0m         \u001b[0mNDFrame\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_set_item\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mkey\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3118\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m_sanitize_column\u001b[0;34m(self, key, value, broadcast)\u001b[0m\n\u001b[1;32m   3738\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3739\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvalue\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mSeries\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3740\u001b[0;31m             \u001b[0mvalue\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mreindexer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3741\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3742\u001b[0m         \u001b[0;32melif\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvalue\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mDataFrame\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36mreindexer\u001b[0;34m(value)\u001b[0m\n\u001b[1;32m   3718\u001b[0m             \u001b[0;31m# reindex if necessary\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3719\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3720\u001b[0;31m             \u001b[0;32mif\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mequals\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mor\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0mlen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3721\u001b[0m                 \u001b[0mvalue\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_values\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcopy\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3722\u001b[0m             \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/indexes/datetimelike.py\u001b[0m in \u001b[0;36mequals\u001b[0;34m(self, other)\u001b[0m\n\u001b[1;32m    150\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    151\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 152\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0marray_equal\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0masi8\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mother\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0masi8\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    153\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    154\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mAppender\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mIndex\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m__contains__\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m__doc__\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;32m<__array_function__ internals>\u001b[0m in \u001b[0;36marray_equal\u001b[0;34m(*args, **kwargs)\u001b[0m\n",
+-      "\u001b[0;32m~/anaconda3/envs/evgeny/lib/python3.8/site-packages/numpy/core/numeric.py\u001b[0m in \u001b[0;36marray_equal\u001b[0;34m(a1, a2)\u001b[0m\n\u001b[1;32m   2323\u001b[0m     \u001b[0;32mexcept\u001b[0m \u001b[0mException\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2324\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2325\u001b[0;31m     \u001b[0;32mif\u001b[0m \u001b[0ma1\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mshape\u001b[0m \u001b[0;34m!=\u001b[0m \u001b[0ma2\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mshape\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   2326\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2327\u001b[0m     \u001b[0;32mreturn\u001b[0m \u001b[0mbool\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0masarray\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ma1\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0ma2\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mall\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+-      "\u001b[0;31mKeyboardInterrupt\u001b[0m: "
+-     ]
++     "data": {
++      "text/html": [
++       "<div>\n",
++       "<style scoped>\n",
++       "    .dataframe tbody tr th:only-of-type {\n",
++       "        vertical-align: middle;\n",
++       "    }\n",
++       "\n",
++       "    .dataframe tbody tr th {\n",
++       "        vertical-align: top;\n",
++       "    }\n",
++       "\n",
++       "    .dataframe thead tr th {\n",
++       "        text-align: left;\n",
++       "    }\n",
++       "</style>\n",
++       "<table border=\"1\" class=\"dataframe\">\n",
++       "  <thead>\n",
++       "    <tr>\n",
++       "      <th>tensor</th>\n",
++       "      <th colspan=\"10\" halign=\"left\">target</th>\n",
++       "      <th>...</th>\n",
++       "      <th colspan=\"10\" halign=\"left\">X2</th>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>feature</th>\n",
++       "      <th colspan=\"10\" halign=\"left\">y</th>\n",
++       "      <th>...</th>\n",
++       "      <th colspan=\"10\" halign=\"left\">week_7</th>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>time step</th>\n",
++       "      <th>t+1</th>\n",
++       "      <th>t+2</th>\n",
++       "      <th>t+3</th>\n",
++       "      <th>t+4</th>\n",
++       "      <th>t+5</th>\n",
++       "      <th>t+6</th>\n",
++       "      <th>t+7</th>\n",
++       "      <th>t+8</th>\n",
++       "      <th>t+9</th>\n",
++       "      <th>t+10</th>\n",
++       "      <th>...</th>\n",
++       "      <th>t+15</th>\n",
++       "      <th>t+16</th>\n",
++       "      <th>t+17</th>\n",
++       "      <th>t+18</th>\n",
++       "      <th>t+19</th>\n",
++       "      <th>t+20</th>\n",
++       "      <th>t+21</th>\n",
++       "      <th>t+22</th>\n",
++       "      <th>t+23</th>\n",
++       "      <th>t+24</th>\n",
++       "    </tr>\n",
++       "  </thead>\n",
++       "  <tbody>\n",
++       "    <tr>\n",
++       "      <th>2014-12-13 23:00:00</th>\n",
++       "      <td>0.168345</td>\n",
++       "      <td>0.169784</td>\n",
++       "      <td>0.174101</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.168345</td>\n",
++       "      <td>...</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2014-12-14 00:00:00</th>\n",
++       "      <td>0.169784</td>\n",
++       "      <td>0.174101</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.168345</td>\n",
++       "      <td>0.139568</td>\n",
++       "      <td>...</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>0.0</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2014-12-14 01:00:00</th>\n",
++       "      <td>0.174101</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.168345</td>\n",
++       "      <td>0.139568</td>\n",
++       "      <td>0.139568</td>\n",
++       "      <td>...</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2014-12-14 02:00:00</th>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.168345</td>\n",
++       "      <td>0.139568</td>\n",
++       "      <td>0.139568</td>\n",
++       "      <td>0.138129</td>\n",
++       "      <td>...</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2014-12-14 03:00:00</th>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.172662</td>\n",
++       "      <td>0.171223</td>\n",
++       "      <td>0.168345</td>\n",
++       "      <td>0.139568</td>\n",
++       "      <td>0.139568</td>\n",
++       "      <td>0.138129</td>\n",
++       "      <td>0.138129</td>\n",
++       "      <td>...</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>1.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>...</th>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "      <td>...</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-01 07:00:00</th>\n",
++       "      <td>0.499281</td>\n",
++       "      <td>0.608633</td>\n",
++       "      <td>0.615827</td>\n",
++       "      <td>0.539568</td>\n",
++       "      <td>0.562590</td>\n",
++       "      <td>0.595683</td>\n",
++       "      <td>0.425899</td>\n",
++       "      <td>0.385612</td>\n",
++       "      <td>0.397122</td>\n",
++       "      <td>0.382734</td>\n",
++       "      <td>...</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-01 08:00:00</th>\n",
++       "      <td>0.608633</td>\n",
++       "      <td>0.615827</td>\n",
++       "      <td>0.539568</td>\n",
++       "      <td>0.562590</td>\n",
++       "      <td>0.595683</td>\n",
++       "      <td>0.425899</td>\n",
++       "      <td>0.385612</td>\n",
++       "      <td>0.397122</td>\n",
++       "      <td>0.382734</td>\n",
++       "      <td>0.307914</td>\n",
++       "      <td>...</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-01 09:00:00</th>\n",
++       "      <td>0.615827</td>\n",
++       "      <td>0.539568</td>\n",
++       "      <td>0.562590</td>\n",
++       "      <td>0.595683</td>\n",
++       "      <td>0.425899</td>\n",
++       "      <td>0.385612</td>\n",
++       "      <td>0.397122</td>\n",
++       "      <td>0.382734</td>\n",
++       "      <td>0.307914</td>\n",
++       "      <td>0.240288</td>\n",
++       "      <td>...</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-01 10:00:00</th>\n",
++       "      <td>0.539568</td>\n",
++       "      <td>0.562590</td>\n",
++       "      <td>0.595683</td>\n",
++       "      <td>0.425899</td>\n",
++       "      <td>0.385612</td>\n",
++       "      <td>0.397122</td>\n",
++       "      <td>0.382734</td>\n",
++       "      <td>0.307914</td>\n",
++       "      <td>0.240288</td>\n",
++       "      <td>0.215827</td>\n",
++       "      <td>...</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-01 11:00:00</th>\n",
++       "      <td>0.562590</td>\n",
++       "      <td>0.595683</td>\n",
++       "      <td>0.425899</td>\n",
++       "      <td>0.385612</td>\n",
++       "      <td>0.397122</td>\n",
++       "      <td>0.382734</td>\n",
++       "      <td>0.307914</td>\n",
++       "      <td>0.240288</td>\n",
++       "      <td>0.215827</td>\n",
++       "      <td>0.212950</td>\n",
++       "      <td>...</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "      <td>0.0</td>\n",
++       "    </tr>\n",
++       "  </tbody>\n",
++       "</table>\n",
++       "<p>39853 rows × 360 columns</p>\n",
++       "</div>"
++      ],
++      "text/plain": [
++       "tensor                 target                                          \\\n",
++       "feature                     y                                           \n",
++       "time step                 t+1       t+2       t+3       t+4       t+5   \n",
++       "2014-12-13 23:00:00  0.168345  0.169784  0.174101  0.172662  0.172662   \n",
++       "2014-12-14 00:00:00  0.169784  0.174101  0.172662  0.172662  0.171223   \n",
++       "2014-12-14 01:00:00  0.174101  0.172662  0.172662  0.171223  0.171223   \n",
++       "2014-12-14 02:00:00  0.172662  0.172662  0.171223  0.171223  0.172662   \n",
++       "2014-12-14 03:00:00  0.172662  0.171223  0.171223  0.172662  0.171223   \n",
++       "...                       ...       ...       ...       ...       ...   \n",
++       "2019-07-01 07:00:00  0.499281  0.608633  0.615827  0.539568  0.562590   \n",
++       "2019-07-01 08:00:00  0.608633  0.615827  0.539568  0.562590  0.595683   \n",
++       "2019-07-01 09:00:00  0.615827  0.539568  0.562590  0.595683  0.425899   \n",
++       "2019-07-01 10:00:00  0.539568  0.562590  0.595683  0.425899  0.385612   \n",
++       "2019-07-01 11:00:00  0.562590  0.595683  0.425899  0.385612  0.397122   \n",
++       "\n",
++       "tensor                                                                 ...  \\\n",
++       "feature                                                                ...   \n",
++       "time step                 t+6       t+7       t+8       t+9      t+10  ...   \n",
++       "2014-12-13 23:00:00  0.171223  0.171223  0.172662  0.171223  0.168345  ...   \n",
++       "2014-12-14 00:00:00  0.171223  0.172662  0.171223  0.168345  0.139568  ...   \n",
++       "2014-12-14 01:00:00  0.172662  0.171223  0.168345  0.139568  0.139568  ...   \n",
++       "2014-12-14 02:00:00  0.171223  0.168345  0.139568  0.139568  0.138129  ...   \n",
++       "2014-12-14 03:00:00  0.168345  0.139568  0.139568  0.138129  0.138129  ...   \n",
++       "...                       ...       ...       ...       ...       ...  ...   \n",
++       "2019-07-01 07:00:00  0.595683  0.425899  0.385612  0.397122  0.382734  ...   \n",
++       "2019-07-01 08:00:00  0.425899  0.385612  0.397122  0.382734  0.307914  ...   \n",
++       "2019-07-01 09:00:00  0.385612  0.397122  0.382734  0.307914  0.240288  ...   \n",
++       "2019-07-01 10:00:00  0.397122  0.382734  0.307914  0.240288  0.215827  ...   \n",
++       "2019-07-01 11:00:00  0.382734  0.307914  0.240288  0.215827  0.212950  ...   \n",
++       "\n",
++       "tensor                  X2                                               \n",
++       "feature             week_7                                               \n",
++       "time step             t+15 t+16 t+17 t+18 t+19 t+20 t+21 t+22 t+23 t+24  \n",
++       "2014-12-13 23:00:00    1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  \n",
++       "2014-12-14 00:00:00    1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  0.0  \n",
++       "2014-12-14 01:00:00    1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  0.0  0.0  \n",
++       "2014-12-14 02:00:00    1.0  1.0  1.0  1.0  1.0  1.0  1.0  0.0  0.0  0.0  \n",
++       "2014-12-14 03:00:00    1.0  1.0  1.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  \n",
++       "...                    ...  ...  ...  ...  ...  ...  ...  ...  ...  ...  \n",
++       "2019-07-01 07:00:00    0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  \n",
++       "2019-07-01 08:00:00    0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  \n",
++       "2019-07-01 09:00:00    0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  \n",
++       "2019-07-01 10:00:00    0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  \n",
++       "2019-07-01 11:00:00    0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  \n",
++       "\n",
++       "[39853 rows x 360 columns]"
++      ]
++     },
++     "execution_count": 82,
++     "metadata": {},
++     "output_type": "execute_result"
+     }
+    ],
+    "source": [
+-    "dX_train = []\n",
+-    "dT_train = []\n",
+-    "dX_test = []\n",
+-    "dX_scaler = []\n",
+-    "for df in tqdm(datasets):\n",
+-    "    train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON, country=country)\n",
+-    "    dX_train.append(tf.concat([train_inputs['X'],train_inputs['X2']], axis=2))\n",
+-    "    dT_train.append(train_inputs['target'])\n",
+-    "    dX_test.append(test_inputs)\n",
+-    "    dX_scaler.append(y_scaler)\n",
+-    "global_inputs_X = tf.concat(dX_train, 0)\n",
+-    "global_inputs_T = tf.concat(dT_train, 0)"
++    "train_inputs.dataframe"
+    ]
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 20,
++   "execution_count": 97,
+    "metadata": {},
+    "outputs": [
+     {
+      "data": {
+       "text/plain": [
+-       "<tf.Tensor: shape=(24, 14), dtype=float64, numpy=\n",
+-       "array([[0.05011316, 0.11542192, 0.04393689, 0.99809971, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.07492726, 0.03516004, 0.08786856, 0.99239908, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.06894601, 0.04073715, 0.13178977, 0.98289877, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.06369221, 0.0376657 , 0.1756953 , 0.96959992, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05916586, 0.03629163, 0.21957992, 0.95250412, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05536696, 0.03653411, 0.26343842, 0.93161339, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05229551, 0.0385548 , 0.30726557, 0.90693022, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05011316, 0.03653411, 0.35105616, 0.87845755, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.04881992, 0.05067895, 0.39480497, 0.84619877, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.07508891, 0.12075655, 0.43850681, 0.81015772, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.10515681, 0.07573553, 0.48215647, 0.77033868, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05746848, 0.12730359, 0.52574876, 0.72674639, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.07775622, 0.09076948, 0.56927848, 0.67938604, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05803427, 0.04275784, 0.61274048, 0.62826327, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.04833495, 0.05092144, 0.65612956, 0.57338415, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.03556418, 0.0499515 , 0.69944056, 0.51475523, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.04178791, 0.15882638, 0.74266834, 0.45238346, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.0671678 , 0.09626576, 0.78580776, 0.38627629, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.21475913, 0.09860976, 0.82885366, 0.31644156, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.20958616, 0.10087294, 0.87180095, 0.2428876 , 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.09707404, 0.10297446, 0.91464449, 0.16562314, 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05924669, 0.10491432, 0.95737921, 0.0846574 , 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.05148723, 0.1066117 , 1.        , 0.        , 0.44111344,\n",
+-       "        0.80543055, 0.        , 0.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 1.        ],\n",
+-       "       [0.0362108 , 0.1080666 , 0.        , 1.        , 0.44385322,\n",
+-       "        0.80300604, 1.        , 1.        , 0.        , 0.        ,\n",
+-       "        0.        , 0.        , 0.        , 0.        ]])>"
++       "MinMaxScaler()"
+       ]
+      },
+-     "execution_count": 20,
++     "execution_count": 97,
+      "metadata": {},
+      "output_type": "execute_result"
+     }
+    ],
+    "source": [
+-    "global_inputs_X[24]"
++    "y_scaler = MinMaxScaler()\n",
++    "#train_df, test_df = train_test_split(gep1, 4380, horizon=HORIZON)\n",
++    "y_scaler.fit(gep1[['value']])"
+    ]
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 16,
++   "execution_count": 98,
+    "metadata": {},
+    "outputs": [
+     {
+      "data": {
+       "text/plain": [
+-       "<tf.Tensor: shape=(24,), dtype=float64, numpy=\n",
+-       "array([0.05011316, 0.07492726, 0.06894601, 0.06369221, 0.05916586,\n",
+-       "       0.05536696, 0.05229551, 0.05011316, 0.04881992, 0.07508891,\n",
+-       "       0.10515681, 0.05746848, 0.07775622, 0.05803427, 0.04833495,\n",
+-       "       0.03556418, 0.04178791, 0.0671678 , 0.21475913, 0.20958616,\n",
+-       "       0.09707404, 0.05924669, 0.05148723, 0.0362108 ])>"
++       "array([[108.5637931 ,  68.30172414,  56.07931034, ...,  87.7137931 ,\n",
++       "         81.60258621, 103.17155172],\n",
++       "       [ 68.30172414,  56.07931034,  47.09224138, ...,  81.60258621,\n",
++       "        103.17155172,  95.26293103],\n",
++       "       [ 56.07931034,  47.09224138,  45.29482759, ..., 103.17155172,\n",
++       "         95.26293103,  57.51724138],\n",
++       "       ...,\n",
++       "       [ 13.30086207,   5.39224138,   3.59482759, ...,   1.79741379,\n",
++       "          2.15689655,   2.51637931],\n",
++       "       [  5.39224138,   3.59482759,   3.59482759, ...,   2.15689655,\n",
++       "          2.51637931,   1.43793103],\n",
++       "       [  3.59482759,   3.59482759,   3.59482759, ...,   2.51637931,\n",
++       "          1.43793103,   1.79741379]])"
+       ]
+      },
+-     "execution_count": 16,
++     "execution_count": 98,
+      "metadata": {},
+      "output_type": "execute_result"
+     }
+    ],
+    "source": [
+-    "global_inputs_T[0]"
++    "y_scaler.inverse_transform(test_inputs.dataframe['target'])"
+    ]
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 23,
++   "execution_count": 92,
+    "metadata": {},
+-   "outputs": [],
++   "outputs": [
++    {
++     "ename": "NameError",
++     "evalue": "name 'predictions' is not defined",
++     "output_type": "error",
++     "traceback": [
++      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
++      "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
++      "\u001b[0;32m<ipython-input-92-319be8a4ad7b>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0meval_df\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mDataFrame\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mpredictions\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcolumns\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m't+'\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mt\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0mt\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mrange\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mH\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      2\u001b[0m \u001b[0meval_df\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'timestamp'\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtest_inputs\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdataframe\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      3\u001b[0m \u001b[0meval_df\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmelt\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0meval_df\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mid_vars\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m'timestamp'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue_name\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m'prediction'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvar_name\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m'h'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0meval_df\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'actual'\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtranspose\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtest_inputs\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'target'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mravel\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0meval_df\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'prediction'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'actual'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mscaler\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0minverse_transform\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0meval_df\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'prediction'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'actual'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
++      "\u001b[0;31mNameError\u001b[0m: name 'predictions' is not defined"
++     ]
++    }
++   ],
+    "source": [
+-    "results = pd.read_csv('./results/Columbia/firm-sea-117_11.csv', index_col = 0)"
++    "    eval_df = pd.DataFrame(predictions, columns=['t+'+str(t) for t in range(1, H+1)])\n",
++    "    eval_df['timestamp'] = test_inputs.dataframe.index\n",
++    "    eval_df = pd.melt(eval_df, id_vars='timestamp', value_name='prediction', var_name='h')\n",
++    "    eval_df['actual'] = np.transpose(test_inputs['target']).ravel()\n",
++    "    eval_df[['prediction', 'actual']] = scaler.inverse_transform(eval_df[['prediction', 'actual']])"
+    ]
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 24,
++   "execution_count": 93,
+    "metadata": {},
+    "outputs": [
+     {
+@@ -547,39 +1642,39 @@
+        "  </thead>\n",
+        "  <tbody>\n",
+        "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000000000</th>\n",
+-       "      <td>2017-08-22 12:00:00</td>\n",
+-       "      <td>t+1</td>\n",
+-       "      <td>0.465304</td>\n",
+-       "      <td>0.456369</td>\n",
++       "      <th>0</th>\n",
++       "      <td>2019-07-02 12:00:00</td>\n",
++       "      <td>1</td>\n",
++       "      <td>102.265371</td>\n",
++       "      <td>108.563793</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000000001</th>\n",
+-       "      <td>2017-08-22 13:00:00</td>\n",
+-       "      <td>t+1</td>\n",
+-       "      <td>0.436799</td>\n",
+-       "      <td>0.518040</td>\n",
++       "      <th>1</th>\n",
++       "      <td>2019-07-02 13:00:00</td>\n",
++       "      <td>1</td>\n",
++       "      <td>95.926097</td>\n",
++       "      <td>68.301724</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000000002</th>\n",
+-       "      <td>2017-08-22 14:00:00</td>\n",
+-       "      <td>t+1</td>\n",
+-       "      <td>0.491822</td>\n",
+-       "      <td>0.419366</td>\n",
++       "      <th>2</th>\n",
++       "      <td>2019-07-02 14:00:00</td>\n",
++       "      <td>1</td>\n",
++       "      <td>78.223887</td>\n",
++       "      <td>56.079310</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000000003</th>\n",
+-       "      <td>2017-08-22 15:00:00</td>\n",
+-       "      <td>t+1</td>\n",
+-       "      <td>0.544101</td>\n",
+-       "      <td>0.419366</td>\n",
++       "      <th>3</th>\n",
++       "      <td>2019-07-02 15:00:00</td>\n",
++       "      <td>1</td>\n",
++       "      <td>64.765038</td>\n",
++       "      <td>47.092241</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000000004</th>\n",
+-       "      <td>2017-08-22 16:00:00</td>\n",
+-       "      <td>t+1</td>\n",
+-       "      <td>0.652825</td>\n",
+-       "      <td>0.505706</td>\n",
++       "      <th>4</th>\n",
++       "      <td>2019-07-02 16:00:00</td>\n",
++       "      <td>1</td>\n",
++       "      <td>53.796593</td>\n",
++       "      <td>45.294828</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+        "      <th>...</th>\n",
+@@ -589,39 +1684,39 @@
+        "      <td>...</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000104539</th>\n",
+-       "      <td>2018-02-19 19:00:00</td>\n",
+-       "      <td>t+24</td>\n",
+-       "      <td>1.129356</td>\n",
+-       "      <td>1.406110</td>\n",
++       "      <th>104539</th>\n",
++       "      <td>2019-12-30 19:00:00</td>\n",
++       "      <td>24</td>\n",
++       "      <td>36.210221</td>\n",
++       "      <td>1.797414</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000104540</th>\n",
+-       "      <td>2018-02-19 20:00:00</td>\n",
+-       "      <td>t+24</td>\n",
+-       "      <td>0.809294</td>\n",
+-       "      <td>0.357695</td>\n",
++       "      <th>104540</th>\n",
++       "      <td>2019-12-30 20:00:00</td>\n",
++       "      <td>24</td>\n",
++       "      <td>34.596083</td>\n",
++       "      <td>2.156897</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000104541</th>\n",
+-       "      <td>2018-02-19 21:00:00</td>\n",
+-       "      <td>t+24</td>\n",
+-       "      <td>0.558248</td>\n",
+-       "      <td>0.333026</td>\n",
++       "      <th>104541</th>\n",
++       "      <td>2019-12-30 21:00:00</td>\n",
++       "      <td>24</td>\n",
++       "      <td>31.739482</td>\n",
++       "      <td>2.516379</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000104542</th>\n",
+-       "      <td>2018-02-19 22:00:00</td>\n",
+-       "      <td>t+24</td>\n",
+-       "      <td>0.425174</td>\n",
+-       "      <td>0.308357</td>\n",
++       "      <th>104542</th>\n",
++       "      <td>2019-12-30 22:00:00</td>\n",
++       "      <td>24</td>\n",
++       "      <td>26.668916</td>\n",
++       "      <td>1.437931</td>\n",
+        "    </tr>\n",
+        "    <tr>\n",
+-       "      <th>1970-01-01 00:00:00.000104543</th>\n",
+-       "      <td>2018-02-19 23:00:00</td>\n",
+-       "      <td>t+24</td>\n",
+-       "      <td>0.333818</td>\n",
+-       "      <td>0.234352</td>\n",
++       "      <th>104543</th>\n",
++       "      <td>2019-12-30 23:00:00</td>\n",
++       "      <td>24</td>\n",
++       "      <td>20.957289</td>\n",
++       "      <td>1.797414</td>\n",
+        "    </tr>\n",
+        "  </tbody>\n",
+        "</table>\n",
+@@ -629,29 +1724,223 @@
+        "</div>"
+       ],
+       "text/plain": [
+-       "                                         timestamp     h  prediction    actual\n",
+-       "1970-01-01 00:00:00.000000000  2017-08-22 12:00:00   t+1    0.465304  0.456369\n",
+-       "1970-01-01 00:00:00.000000001  2017-08-22 13:00:00   t+1    0.436799  0.518040\n",
+-       "1970-01-01 00:00:00.000000002  2017-08-22 14:00:00   t+1    0.491822  0.419366\n",
+-       "1970-01-01 00:00:00.000000003  2017-08-22 15:00:00   t+1    0.544101  0.419366\n",
+-       "1970-01-01 00:00:00.000000004  2017-08-22 16:00:00   t+1    0.652825  0.505706\n",
+-       "...                                            ...   ...         ...       ...\n",
+-       "1970-01-01 00:00:00.000104539  2018-02-19 19:00:00  t+24    1.129356  1.406110\n",
+-       "1970-01-01 00:00:00.000104540  2018-02-19 20:00:00  t+24    0.809294  0.357695\n",
+-       "1970-01-01 00:00:00.000104541  2018-02-19 21:00:00  t+24    0.558248  0.333026\n",
+-       "1970-01-01 00:00:00.000104542  2018-02-19 22:00:00  t+24    0.425174  0.308357\n",
+-       "1970-01-01 00:00:00.000104543  2018-02-19 23:00:00  t+24    0.333818  0.234352\n",
++       "                 timestamp   h  prediction      actual\n",
++       "0      2019-07-02 12:00:00   1  102.265371  108.563793\n",
++       "1      2019-07-02 13:00:00   1   95.926097   68.301724\n",
++       "2      2019-07-02 14:00:00   1   78.223887   56.079310\n",
++       "3      2019-07-02 15:00:00   1   64.765038   47.092241\n",
++       "4      2019-07-02 16:00:00   1   53.796593   45.294828\n",
++       "...                    ...  ..         ...         ...\n",
++       "104539 2019-12-30 19:00:00  24   36.210221    1.797414\n",
++       "104540 2019-12-30 20:00:00  24   34.596083    2.156897\n",
++       "104541 2019-12-30 21:00:00  24   31.739482    2.516379\n",
++       "104542 2019-12-30 22:00:00  24   26.668916    1.437931\n",
++       "104543 2019-12-30 23:00:00  24   20.957289    1.797414\n",
+        "\n",
+        "[104544 rows x 4 columns]"
+       ]
+      },
+-     "execution_count": 24,
++     "execution_count": 93,
++     "metadata": {},
++     "output_type": "execute_result"
++    }
++   ],
++   "source": [
++    "FD_eval_df"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 94,
++   "metadata": {},
++   "outputs": [
++    {
++     "data": {
++      "text/html": [
++       "<div>\n",
++       "<style scoped>\n",
++       "    .dataframe tbody tr th:only-of-type {\n",
++       "        vertical-align: middle;\n",
++       "    }\n",
++       "\n",
++       "    .dataframe tbody tr th {\n",
++       "        vertical-align: top;\n",
++       "    }\n",
++       "\n",
++       "    .dataframe thead th {\n",
++       "        text-align: right;\n",
++       "    }\n",
++       "</style>\n",
++       "<table border=\"1\" class=\"dataframe\">\n",
++       "  <thead>\n",
++       "    <tr style=\"text-align: right;\">\n",
++       "      <th></th>\n",
++       "      <th>value</th>\n",
++       "    </tr>\n",
++       "  </thead>\n",
++       "  <tbody>\n",
++       "    <tr>\n",
++       "      <th>2019-07-02 12:00:00</th>\n",
++       "      <td>78.75</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-02 13:00:00</th>\n",
++       "      <td>77.70</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-02 14:00:00</th>\n",
++       "      <td>54.18</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-02 15:00:00</th>\n",
++       "      <td>47.04</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-07-02 16:00:00</th>\n",
++       "      <td>41.79</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>...</th>\n",
++       "      <td>...</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-12-31 19:00:00</th>\n",
++       "      <td>15.33</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-12-31 20:00:00</th>\n",
++       "      <td>15.54</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-12-31 21:00:00</th>\n",
++       "      <td>15.75</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-12-31 22:00:00</th>\n",
++       "      <td>15.12</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2019-12-31 23:00:00</th>\n",
++       "      <td>15.33</td>\n",
++       "    </tr>\n",
++       "  </tbody>\n",
++       "</table>\n",
++       "<p>4380 rows × 1 columns</p>\n",
++       "</div>"
++      ],
++      "text/plain": [
++       "                     value\n",
++       "2019-07-02 12:00:00  78.75\n",
++       "2019-07-02 13:00:00  77.70\n",
++       "2019-07-02 14:00:00  54.18\n",
++       "2019-07-02 15:00:00  47.04\n",
++       "2019-07-02 16:00:00  41.79\n",
++       "...                    ...\n",
++       "2019-12-31 19:00:00  15.33\n",
++       "2019-12-31 20:00:00  15.54\n",
++       "2019-12-31 21:00:00  15.75\n",
++       "2019-12-31 22:00:00  15.12\n",
++       "2019-12-31 23:00:00  15.33\n",
++       "\n",
++       "[4380 rows x 1 columns]"
++      ]
++     },
++     "execution_count": 94,
+      "metadata": {},
+      "output_type": "execute_result"
+     }
+    ],
+    "source": [
+-    "results"
++    "gep1['2019-07-02 12:00':]"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": null,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "dXtest"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 5,
++   "metadata": {},
++   "outputs": [
++    {
++     "name": "stdout",
++     "output_type": "stream",
++     "text": [
++      "0.7188642826751517\n",
++      "66.34746604955036\n"
++     ]
++    }
++   ],
++   "source": [
++    "local = pd.read_csv('./results/Columbia/local/3days/LSTM_ethereal-yogurt-276.csv')\n",
++    "print(local['rmse'].mean())\n",
++    "print(local['mape'].mean())"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 10,
++   "metadata": {},
++   "outputs": [
++    {
++     "name": "stdout",
++     "output_type": "stream",
++     "text": [
++      "0.6981920978419323\n",
++      "67.01150291796326\n"
++     ]
++    }
++   ],
++   "source": [
++    "glob = pd.read_csv('./results/Columbia/global/3days/LSTM_summer-dawn-277.csv')\n",
++    "print(glob['rmse'].mean())\n",
++    "print(glob['mape'].mean())"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 7,
++   "metadata": {},
++   "outputs": [
++    {
++     "name": "stdout",
++     "output_type": "stream",
++     "text": [
++      "0.697060030635504\n",
++      "61.76428919330465\n"
++     ]
++    }
++   ],
++   "source": [
++    "local = pd.read_csv('./results/Columbia/local/dayahead/LSTM_stilted-shape-233.csv')\n",
++    "print(local['rmse'].mean())\n",
++    "print(local['mape'].mean())"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 9,
++   "metadata": {},
++   "outputs": [
++    {
++     "name": "stdout",
++     "output_type": "stream",
++     "text": [
++      "0.6887304467273948\n",
++      "60.45539187322606\n"
++     ]
++    }
++   ],
++   "source": [
++    "glob = pd.read_csv('./results/Columbia/global/dayahead/LSTM_azure-dragon-234.csv')\n",
++    "print(glob['rmse'].mean())\n",
++    "print(glob['mape'].mean())"
+    ]
+   },
+   {
+diff --git a/EVERGI/forecaster_buildings.py b/EVERGI/forecaster_buildings.py
+index eadae20..92a8007 100644
+--- a/EVERGI/forecaster_buildings.py
++++ b/EVERGI/forecaster_buildings.py
+@@ -35,16 +35,18 @@ def train_test_split(df, n_test, horizon):
+ def MIMO_fulldata_preparation(df, n_test=4380, T=72, HORIZON=72, country='Canada'):
+     df = df.merge(series_to_supervised(df), how='right', left_index=True, right_index=True)
+     df = preprocess(df, country)
+-    train_df, test_df = train_test_split(df, n_test, HORIZON)
++    train_df, test_df = train_test_split(df, n_test, horizon=HORIZON)
+     y_scaler = MinMaxScaler()
+     y_scaler.fit(train_df[['value']])
++    ytest_scaler = MinMaxScaler()
++    ytest_scaler.fit(test_df[['value']])    
+     long_scaler = MinMaxScaler()
+     test_df[test_df.columns] = long_scaler.fit_transform(test_df)
+     train_df[train_df.columns] = long_scaler.fit_transform(train_df)
+     tensor_structure = {'X':(range(-T+1, 1), train_df.columns[:1]), 'X2':(range(1, HORIZON+1), train_df.columns[1:])}
+     train_inputs = TimeSeriesTensor(train_df, 'value', HORIZON, tensor_structure)
+     test_inputs = TimeSeriesTensor(test_df, 'value', HORIZON, tensor_structure)
+-    return train_inputs, test_inputs, y_scaler
++    return train_inputs, test_inputs, y_scaler, ytest_scaler
+ 
+ def build_model(l, drop, n, lr):
+     if l==1:
+@@ -87,10 +89,10 @@ def flatten(data):
+ if __name__ == '__main__':
+     # FETCH THE DATASETS
+     tf.random.set_seed(0)
+-    dset = 'Columbia'
+-    country = 'Canada'
++    dset = 'GEP'
++    country = 'Belgium'
+     net = 'stlf'
+-    HORIZON = 72
++    HORIZON = 24
+     
+     LAYERS = 1
+     DROPOUT = 0.3
+@@ -156,7 +158,7 @@ if __name__ == '__main__':
+             'patience': PATIENCE
+         })
+         config = wandb.config
+-        train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON, country=country)
++        train_inputs, test_inputs, y_scaler, ytest_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON, country=country)
+         
+         concat_input = tf.concat([train_inputs['X'],train_inputs['X2']], axis=2)
+         history = LSTMIMO.fit(concat_input, train_inputs['target'], batch_size=BATCHSIZE, epochs=MAX_EPOCHS,
+@@ -164,7 +166,7 @@ if __name__ == '__main__':
+                           callbacks=[early_stopping, WandbCallback()], verbose=1)
+         concat_input = tf.concat([test_inputs['X'],test_inputs['X2']], axis=2)
+         FD_predictions = LSTMIMO.predict(concat_input)
+-        FD_eval_df = create_evaluation_df(FD_predictions, test_inputs, HORIZON, y_scaler)
++        FD_eval_df = create_evaluation_df(FD_predictions, test_inputs, HORIZON, y_scaler, ytest_scaler)
+         preds, actuals = format_output(FD_eval_df)
+         preds = preds[np.where(preds.index.hour == 0)[0][0]:][::24]
+         actuals = actuals[np.where(actuals.index.hour == 0)[0][0]:][::24]
+diff --git a/EVERGI/forecaster_test.py b/EVERGI/forecaster_test.py
+index 47b1ad1..9777102 100644
+--- a/EVERGI/forecaster_test.py
++++ b/EVERGI/forecaster_test.py
+@@ -38,13 +38,15 @@ def MIMO_fulldata_preparation(df, n_test=4380, T=72, HORIZON=72, country='Canada
+     train_df, test_df = train_test_split(df, n_test, horizon=HORIZON)
+     y_scaler = MinMaxScaler()
+     y_scaler.fit(train_df[['value']])
++    ytest_scaler = MinMaxScaler()
++    ytest_scaler.fit(test_df[['value']])    
+     long_scaler = MinMaxScaler()
+     test_df[test_df.columns] = long_scaler.fit_transform(test_df)
+     train_df[train_df.columns] = long_scaler.fit_transform(train_df)
+     tensor_structure = {'X':(range(-T+1, 1), train_df.columns[:1]), 'X2':(range(1, HORIZON+1), train_df.columns[1:])}
+     train_inputs = TimeSeriesTensor(train_df, 'value', HORIZON, tensor_structure)
+     test_inputs = TimeSeriesTensor(test_df, 'value', HORIZON, tensor_structure)
+-    return train_inputs, test_inputs, y_scaler
++    return train_inputs, test_inputs, y_scaler, ytest_scaler
+ 
+ def build_model(l, drop, n, lr):
+     if l==1:
+@@ -89,7 +91,7 @@ if __name__ == '__main__':
+     tf.random.set_seed(0)
+     dset = 'Columbia'
+     country = 'Canada'
+-    HORIZON = 72
++    HORIZON = 24
+ 
+ 
+     net = 'stlf'
+@@ -126,12 +128,14 @@ if __name__ == '__main__':
+     dT_train = []
+     dX_test = []
+     dX_scaler = []
++    dXtest_scaler = []
+     for df in tqdm(datasets):
+-        train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON, country=country)
++        train_inputs, test_inputs, y_scaler, ytest_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON, country=country)
+         dX_train.append(tf.concat([train_inputs['X'],train_inputs['X2']], axis=2))
+         dT_train.append(train_inputs['target'])
+         dX_test.append(test_inputs)
+         dX_scaler.append(y_scaler)
++        dXtest_scaler.append(ytest_scaler)
+     global_inputs_X = tf.concat(dX_train, 0)
+     global_inputs_T = tf.concat(dT_train, 0)
+     print('done with data')
+@@ -184,7 +188,7 @@ if __name__ == '__main__':
+     for i,df in enumerate(datasets):
+         concat_input = tf.concat([dX_test[i]['X'],dX_test[i]['X2']], axis=2)
+         FD_predictions = LSTMIMO.predict(concat_input)
+-        FD_eval_df = create_evaluation_df(FD_predictions, dX_test[i], HORIZON, dX_scaler[i])
++        FD_eval_df = create_evaluation_df(FD_predictions, dX_test[i], HORIZON, dX_scaler[i], dXtest_scaler[i])
+         preds, actuals = format_output(FD_eval_df)
+         preds = preds[np.where(preds.index.hour == 0)[0][0]:][::24]
+         actuals = actuals[np.where(actuals.index.hour == 0)[0][0]:][::24]
+diff --git a/EVERGI/src/__pycache__/functions.cpython-38.pyc b/EVERGI/src/__pycache__/functions.cpython-38.pyc
+index 9a6ec2f..d968143 100644
+Binary files a/EVERGI/src/__pycache__/functions.cpython-38.pyc and b/EVERGI/src/__pycache__/functions.cpython-38.pyc differ
+diff --git a/EVERGI/src/functions.py b/EVERGI/src/functions.py
+index c3ff54f..03d15bc 100644
+--- a/EVERGI/src/functions.py
++++ b/EVERGI/src/functions.py
+@@ -23,13 +23,14 @@ def load_data(data_dir):
+     return energy
+ 
+ 
+-def create_evaluation_df(predictions, test_inputs, H, scaler):
++def create_evaluation_df(predictions, test_inputs, H, scaler, testscaler):
+     """Create a data frame for easy evaluation"""
+     eval_df = pd.DataFrame(predictions, columns=['t+'+str(t) for t in range(1, H+1)])
+     eval_df['timestamp'] = test_inputs.dataframe.index
+     eval_df = pd.melt(eval_df, id_vars='timestamp', value_name='prediction', var_name='h')
+     eval_df['actual'] = np.transpose(test_inputs['target']).ravel()
+-    eval_df[['prediction', 'actual']] = scaler.inverse_transform(eval_df[['prediction', 'actual']])
++    eval_df[['actual']] = testscaler.inverse_transform(eval_df[['actual']])
++    eval_df[['prediction']] = scaler.inverse_transform(eval_df[['prediction']])
+     return eval_df
+ 
+ # convert series to supervised learning
+diff --git a/EVERGI/wandb/debug-internal.log b/EVERGI/wandb/debug-internal.log
+index 462d83f..d43291f 120000
+--- a/EVERGI/wandb/debug-internal.log
++++ b/EVERGI/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210426_073419-1fhmrfyz/logs/debug-internal.log
+\ No newline at end of file
++run-20210426_181134-fsdtou4b/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/debug.log b/EVERGI/wandb/debug.log
+index 3340d1f..0ad7e5d 120000
+--- a/EVERGI/wandb/debug.log
++++ b/EVERGI/wandb/debug.log
+@@ -1 +1 @@
+-run-20210426_073419-1fhmrfyz/logs/debug.log
+\ No newline at end of file
++run-20210426_181134-fsdtou4b/logs/debug.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/latest-run b/EVERGI/wandb/latest-run
+index 7f8d289..c98c8ea 120000
+--- a/EVERGI/wandb/latest-run
++++ b/EVERGI/wandb/latest-run
+@@ -1 +1 @@
+-run-20210426_073419-1fhmrfyz
+\ No newline at end of file
++run-20210426_181134-fsdtou4b
+\ No newline at end of file

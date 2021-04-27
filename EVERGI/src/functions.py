@@ -59,12 +59,12 @@ def save_model(model, model_save):
 
 def load_model(model_load):
     # load json and create model
-    json_file = open('./models/'+model_load+".json", 'r')
+    json_file = open(model_load+".json", 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     model = model_from_json(loaded_model_json)
     # load weights into new model
-    model.load_weights('./models/'+model_load+".h5")
+    model.load_weights(model_load+".h5")
     print("Loaded model from disk")
     return model
 
