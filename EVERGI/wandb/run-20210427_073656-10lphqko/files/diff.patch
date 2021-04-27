@@ -1,0 +1,42 @@
+diff --git a/EVERGI/forecaster_test.py b/EVERGI/forecaster_test.py
+index e5c0a03..5a84bad 100644
+--- a/EVERGI/forecaster_test.py
++++ b/EVERGI/forecaster_test.py
+@@ -87,8 +87,8 @@ def flatten(data):
+ if __name__ == '__main__':
+     # FETCH THE DATASETS
+     tf.random.set_seed(0)
+-    dset = 'GEP'
+-    country = 'Belgium'
++    dset = 'Columbia'
++    country = 'Canada'
+     HORIZON = 72
+ 
+ 
+diff --git a/EVERGI/wandb/debug-internal.log b/EVERGI/wandb/debug-internal.log
+index 12cce5f..d9a4cc0 120000
+--- a/EVERGI/wandb/debug-internal.log
++++ b/EVERGI/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210427_072302-1t0328fv/logs/debug-internal.log
+\ No newline at end of file
++run-20210427_073656-10lphqko/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/debug.log b/EVERGI/wandb/debug.log
+index 5d67463..ac96da7 120000
+--- a/EVERGI/wandb/debug.log
++++ b/EVERGI/wandb/debug.log
+@@ -1 +1 @@
+-run-20210427_072302-1t0328fv/logs/debug.log
+\ No newline at end of file
++run-20210427_073656-10lphqko/logs/debug.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/latest-run b/EVERGI/wandb/latest-run
+index b1ebf23..aabef05 120000
+--- a/EVERGI/wandb/latest-run
++++ b/EVERGI/wandb/latest-run
+@@ -1 +1 @@
+-run-20210427_072302-1t0328fv
+\ No newline at end of file
++run-20210427_073656-10lphqko
+\ No newline at end of file
