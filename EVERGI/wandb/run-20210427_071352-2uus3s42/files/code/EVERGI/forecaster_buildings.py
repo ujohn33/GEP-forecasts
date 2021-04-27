@@ -90,7 +90,7 @@ if __name__ == '__main__':
     dset = 'GEP'
     country = 'Belgium'
     net = 'stlf'
-    HORIZON = 72
+    HORIZON = 24
     
     LAYERS = 1
     DROPOUT = 0.3
