@@ -1,0 +1,30 @@
+  4%|█▊                                                  | 1/28 [04:59<2:14:49, 299.61s/it]
+Traceback (most recent call last):
+  File "forecaster_buildings.py", line 159, in <module>
+    train_inputs, test_inputs, y_scaler = MIMO_fulldata_preparation(df, n_test=4380, T=HORIZON, HORIZON=HORIZON, country=country)
+  File "forecaster_buildings.py", line 45, in MIMO_fulldata_preparation
+    train_inputs = TimeSeriesTensor(train_df, 'value', HORIZON, tensor_structure)
+  File "/home/ubuntu/evgeny/GEP-forecasts/EVERGI/src/functions.py", line 162, in __init__
+    self.dataframe = self._shift_data(H, freq, drop_incomplete)
+  File "/home/ubuntu/evgeny/GEP-forecasts/EVERGI/src/functions.py", line 199, in _shift_data
+    df[shifted_col] = df[col].shift(t*-1, freq=freq)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py", line 3040, in __setitem__
+    self._set_item(key, value)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py", line 3116, in _set_item
+    value = self._sanitize_column(key, value)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py", line 3740, in _sanitize_column
+    value = reindexer(value)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/frame.py", line 3726, in reindexer
+    value = value.reindex(self.index)._values
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/series.py", line 4399, in reindex
+    return super().reindex(index=index, **kwargs)
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/generic.py", line 4458, in reindex
+    return self._reindex_axes(
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/generic.py", line 4473, in _reindex_axes
+    new_index, indexer = ax.reindex(
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/indexes/base.py", line 3329, in reindex
+    if self.is_unique and not getattr(self, "is_overlapping", False):
+  File "pandas/_libs/properties.pyx", line 33, in pandas._libs.properties.CachedProperty.__get__
+  File "/home/ubuntu/anaconda3/envs/evgeny/lib/python3.8/site-packages/pandas/core/indexes/base.py", line 1647, in is_unique
+    return self._engine.is_unique
+KeyboardInterrupt

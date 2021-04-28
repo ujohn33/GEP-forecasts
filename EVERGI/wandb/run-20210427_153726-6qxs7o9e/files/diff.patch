@@ -1,0 +1,54 @@
+diff --git a/EVERGI/forecaster_buildings.py b/EVERGI/forecaster_buildings.py
+index b5830f1..477c272 100644
+--- a/EVERGI/forecaster_buildings.py
++++ b/EVERGI/forecaster_buildings.py
+@@ -87,10 +87,10 @@ def flatten(data):
+ if __name__ == '__main__':
+     # FETCH THE DATASETS
+     tf.random.set_seed(0)
+-    dset = 'London'
+-    country = 'UK'
++    dset = 'Columbia'
++    country = 'Canada'
+     net = 'stlf'
+-    HORIZON = 24
++    HORIZON = 72
+     
+     LAYERS = 1
+     DROPOUT = 0.3
+@@ -98,7 +98,7 @@ if __name__ == '__main__':
+     LR = 1e-3
+     BATCHSIZE = 1500
+ 
+-    MAX_EPOCHS = 40
++    MAX_EPOCHS = 100
+     PATIENCE = 5
+ 
+     datasets = []
+diff --git a/EVERGI/wandb/debug-internal.log b/EVERGI/wandb/debug-internal.log
+index 02b8ebb..4383b34 120000
+--- a/EVERGI/wandb/debug-internal.log
++++ b/EVERGI/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210427_115626-12yy4r7k/logs/debug-internal.log
+\ No newline at end of file
++run-20210427_153726-6qxs7o9e/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/debug.log b/EVERGI/wandb/debug.log
+index 36e2d51..b737a8f 120000
+--- a/EVERGI/wandb/debug.log
++++ b/EVERGI/wandb/debug.log
+@@ -1 +1 @@
+-run-20210427_115626-12yy4r7k/logs/debug.log
+\ No newline at end of file
++run-20210427_153726-6qxs7o9e/logs/debug.log
+\ No newline at end of file
+diff --git a/EVERGI/wandb/latest-run b/EVERGI/wandb/latest-run
+index 0ea8dbe..2525e8b 120000
+--- a/EVERGI/wandb/latest-run
++++ b/EVERGI/wandb/latest-run
+@@ -1 +1 @@
+-run-20210427_115626-12yy4r7k
+\ No newline at end of file
++run-20210427_153726-6qxs7o9e
+\ No newline at end of file
